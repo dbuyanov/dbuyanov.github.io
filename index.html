@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Dmitry Buyanov | AI Automations & Agents</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #04080f;
+      --surface: #0b1220;
+      --surface2: #111c30;
+      --border: rgba(99,179,255,0.12);
+      --blue: #3b82f6;
+      --blue-bright: #60a5fa;
+      --blue-glow: rgba(59,130,246,0.35);
+      --cyan: #22d3ee;
+      --text: #e8f0fe;
+      --muted: #7a90b0;
+      --accent: #f59e0b;
+      --green: #10b981;
+      --radius: 20px;
+      --font-display: 'Syne', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* ─── CANVAS PARTICLE BG ─── */
+    #canvas-bg {
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ─── NOISE OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 1;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.022;
+    }
+
+    /* ─── GLOWING ORBS ─── */
+    .orb {
+      position: fixed; border-radius: 50%;
+      filter: blur(90px); pointer-events: none; z-index: 0;
+      animation: orbFloat 18s ease-in-out infinite;
+    }
+    .orb-1 { width: 600px; height: 600px; top: -150px; left: -100px; background: radial-gradient(circle, rgba(59,130,246,0.15), transparent 70%); }
+    .orb-2 { width: 400px; height: 400px; bottom: 10%; right: -80px; background: radial-gradient(circle, rgba(34,211,238,0.1), transparent 70%); animation-delay: -7s; }
+    .orb-3 { width: 300px; height: 300px; top: 50%; left: 40%; background: radial-gradient(circle, rgba(245,158,11,0.07), transparent 70%); animation-delay: -13s; }
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33% { transform: translate(30px,-40px) scale(1.05); }
+      66% { transform: translate(-20px,30px) scale(0.95); }
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 10px; }
+
+    /* ─── LAYOUT ─── */
+    .wrapper { position: relative; z-index: 2; }
+    .container { max-width: 1240px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* ─── LANG TOGGLE ─── */
+    .lang-toggle {
+      position: fixed; top: 24px; right: 24px; z-index: 1000;
+      display: flex; gap: 4px;
+      background: rgba(11,18,32,0.85);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 5px;
+      box-shadow: 0 0 30px rgba(59,130,246,0.08);
+    }
+    .lang-option {
+      display: flex; align-items: center; gap: 5px;
+      padding: 6px 14px; border-radius: 40px;
+      font-family: var(--font-display); font-size: 0.78rem; font-weight: 700;
+      cursor: pointer; transition: all 0.25s; color: var(--muted);
+      user-select: none;
+    }
+    .lang-option.active { background: var(--blue); color: white; box-shadow: 0 0 15px var(--blue-glow); }
+    .lang-option:not(.active):hover { color: var(--text); }
+
+    /* ─── HERO ─── */
+    .hero-section {
+      min-height: 100vh; display: flex; flex-direction: column;
+      justify-content: center; align-items: center; text-align: center;
+      padding: 6rem 1.5rem 4rem; position: relative;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(59,130,246,0.1);
+      border: 1px solid rgba(59,130,246,0.3);
+      border-radius: 50px; padding: 8px 20px;
+      font-family: var(--font-display); font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue-bright);
+      margin-bottom: 2.2rem;
+      animation: fadeSlideUp 0.8s ease-out both;
+    }
+    .hero-eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); animation: blink 2s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .hero-title {
+      font-family: var(--font-display); font-size: clamp(2.6rem, 7vw, 5.5rem);
+      font-weight: 800; line-height: 1.1; letter-spacing: -0.02em;
+      margin-bottom: 1.8rem;
+      animation: fadeSlideUp 0.8s 0.15s ease-out both;
+    }
+    .hero-title .line { display: block; }
+    .hero-title .gradient-text {
+      background: linear-gradient(135deg, #60a5fa 0%, #22d3ee 40%, #a78bfa 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      position: relative;
+    }
+    .hero-title .gradient-text::after {
+      content: '';
+      position: absolute; bottom: -4px; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, #3b82f6, #22d3ee, transparent);
+      border-radius: 2px;
+    }
+    .hero-subtitle {
+      max-width: 680px; font-size: 1.15rem; line-height: 1.65;
+      color: #8fa8c8; margin-bottom: 2.8rem;
+      animation: fadeSlideUp 0.8s 0.3s ease-out both;
+    }
+    .hero-subtitle strong { color: var(--text); }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; animation: fadeSlideUp 0.8s 0.45s ease-out both; }
+    .btn-primary {
+      background: var(--blue); color: white;
+      border: none; padding: 1rem 2.2rem; border-radius: 50px;
+      font-family: var(--font-display); font-size: 1rem; font-weight: 700;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 10px;
+      transition: all 0.3s; position: relative; overflow: hidden;
+      box-shadow: 0 0 40px rgba(59,130,246,0.3);
+    }
+    .btn-primary::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+      opacity: 0; transition: 0.3s;
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 50px rgba(59,130,246,0.45); }
+    .btn-primary:hover::before { opacity: 1; }
+    .btn-secondary {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border); padding: 1rem 2.2rem; border-radius: 50px;
+      font-family: var(--font-display); font-size: 1rem; font-weight: 600;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+      transition: all 0.3s;
+    }
+    .btn-secondary:hover { border-color: var(--blue); color: var(--blue-bright); transform: translateY(-3px); }
+
+    /* ─── STATS BAR ─── */
+    .stats-bar {
+      display: flex; flex-wrap: wrap; gap: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden; margin: 5rem 0;
+      animation: fadeSlideUp 0.8s 0.6s ease-out both;
+    }
+    .stat-item {
+      flex: 1; min-width: 180px;
+      padding: 2rem 1.5rem; text-align: center;
+      border-right: 1px solid var(--border);
+      position: relative; overflow: hidden;
+      transition: background 0.3s;
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-item:hover { background: var(--surface2); }
+    .stat-item::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--blue), transparent);
+      transform: scaleX(0); transition: 0.4s;
+    }
+    .stat-item:hover::before { transform: scaleX(1); }
+    .stat-num {
+      font-family: var(--font-display); font-size: 2.5rem; font-weight: 800;
+      background: linear-gradient(135deg, var(--blue-bright), var(--cyan));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      line-height: 1;
+    }
+    .stat-label { font-size: 0.82rem; color: var(--muted); margin-top: 0.4rem; letter-spacing: 0.05em; }
+
+    /* ─── SECTION HEADINGS ─── */
+    .section-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--font-display); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase; color: var(--blue-bright);
+      margin-bottom: 1.2rem;
+    }
+    .section-label::before { content: ''; width: 24px; height: 1px; background: var(--blue); }
+    .section-title {
+      font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 800; line-height: 1.2; margin-bottom: 1.2rem;
+    }
+    .section-desc { color: var(--muted); font-size: 1.05rem; line-height: 1.65; max-width: 580px; }
+
+    /* ─── PAIN SECTION ─── */
+    .pain-section { padding: 5rem 0; }
+    .pain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+    .pain-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      transition: all 0.35s;
+      position: relative; overflow: hidden;
+    }
+    .pain-card::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 50% 0%, rgba(59,130,246,0.07), transparent 60%);
+      opacity: 0; transition: 0.35s;
+    }
+    .pain-card:hover { transform: translateY(-8px); border-color: rgba(99,179,255,0.3); }
+    .pain-card:hover::after { opacity: 1; }
+    .pain-card-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: rgba(59,130,246,0.12);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; color: var(--blue-bright); margin-bottom: 1.2rem;
+    }
+    .pain-card h3 { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; margin-bottom: 0.7rem; }
+    .pain-card p { color: var(--muted); font-size: 0.92rem; line-height: 1.6; }
+    .pain-card .tag { display: inline-block; margin-top: 1rem; padding: 4px 12px; border-radius: 40px; font-size: 0.75rem; font-weight: 600; background: rgba(239,68,68,0.1); color: #f87171; }
+
+    /* ─── ABOUT ─── */
+    .about-section { padding: 5rem 0; }
+    .about-wrap {
+      display: flex; flex-wrap: wrap; gap: 4rem; align-items: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 28px; padding: 3rem;
+      position: relative; overflow: hidden;
+    }
+    .about-wrap::before {
+      content: ''; position: absolute; top: 0; right: 0;
+      width: 350px; height: 350px;
+      background: radial-gradient(circle, rgba(59,130,246,0.08), transparent 60%);
+      pointer-events: none;
+    }
+    .about-img-wrap { flex: 0 0 auto; position: relative; }
+    .about-img-wrap img {
+      width: 200px; height: 200px; border-radius: 24px; object-fit: cover;
+      border: 2px solid rgba(59,130,246,0.3);
+      box-shadow: 0 0 60px rgba(59,130,246,0.15);
+    }
+    .about-badge-float {
+      position: absolute; bottom: -12px; right: -12px;
+      background: var(--blue); color: white; border-radius: 12px;
+      padding: 8px 14px; font-family: var(--font-display); font-size: 0.78rem; font-weight: 700;
+      border: 2px solid var(--bg);
+      white-space: nowrap;
+    }
+    .about-text { flex: 1; min-width: 260px; }
+    .about-text h2 { font-family: var(--font-display); font-size: 2rem; font-weight: 800; margin-bottom: 0.3rem; }
+    .about-text .age { color: var(--blue-bright); font-size: 1rem; font-weight: 400; }
+    .about-text p { color: #9db4cc; line-height: 1.7; margin-top: 1rem; font-size: 0.97rem; }
+    .about-text p strong { color: var(--text); }
+    .about-offer {
+      margin-top: 1.5rem;
+      background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(251,191,36,0.05));
+      border: 1px solid rgba(245,158,11,0.3);
+      border-radius: 14px; padding: 1rem 1.4rem;
+    }
+    .about-offer .offer-label { font-family: var(--font-display); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; color: var(--accent); text-transform: uppercase; }
+    .about-offer p { color: #d4aa60; font-size: 0.9rem; margin-top: 0.3rem; }
+    .about-offer p strong { color: var(--accent); }
+
+    /* ─── VALUE PROPS ─── */
+    .value-section { padding: 5rem 0; }
+    .value-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+    .value-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.8rem;
+      transition: all 0.35s; text-align: center;
+    }
+    .value-card:hover { border-color: rgba(99,179,255,0.3); transform: translateY(-6px); background: var(--surface2); }
+    .value-card-icon {
+      width: 60px; height: 60px; border-radius: 18px;
+      background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(34,211,238,0.08));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; color: var(--blue-bright); margin: 0 auto 1.2rem;
+    }
+    .value-card h4 { font-family: var(--font-display); font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .value-card p { color: var(--muted); font-size: 0.85rem; line-height: 1.55; }
+
+    /* ─── ROI STRIP ─── */
+    .roi-strip {
+      background: linear-gradient(135deg, var(--surface2), var(--surface));
+      border: 1px solid var(--border);
+      border-radius: 24px; padding: 2.5rem 3rem; margin: 2rem 0;
+    }
+    .roi-strip h3 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; margin-bottom: 1.5rem; text-align: center; }
+    .roi-items { display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; }
+    .roi-item { display: flex; align-items: center; gap: 10px; font-size: 0.95rem; }
+    .roi-item .from { color: var(--muted); text-decoration: line-through; }
+    .roi-item .arrow { color: var(--blue); font-size: 1.1rem; }
+    .roi-item .to { color: var(--green); font-weight: 700; font-family: var(--font-display); }
+
+    /* ─── PORTFOLIO ACCORDION ─── */
+    .portfolio-section { padding: 5rem 0; }
+    .accordion-item { margin-bottom: 1.5rem; }
+    .accordion-header {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.4rem 2rem;
+      cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center;
+      transition: all 0.3s; user-select: none;
+      position: relative; overflow: hidden;
+    }
+    .accordion-header::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(90deg, rgba(59,130,246,0.05), transparent);
+      opacity: 0; transition: 0.3s;
+    }
+    .accordion-header:hover::before { opacity: 1; }
+    .accordion-header:hover { border-color: rgba(99,179,255,0.3); }
+    .accordion-header.open-header { border-radius: 18px 18px 0 0; border-bottom-color: transparent; background: var(--surface2); }
+    .accordion-title { font-family: var(--font-display); font-size: 1.3rem; font-weight: 800; display: flex; align-items: center; gap: 12px; }
+    .accordion-tag { font-size: 0.7rem; padding: 4px 10px; border-radius: 40px; background: rgba(59,130,246,0.15); color: var(--blue-bright); font-weight: 700; letter-spacing: 0.08em; }
+    .accordion-chevron { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--muted); transition: all 0.35s; flex-shrink: 0; }
+    .accordion-header:hover .accordion-chevron { border-color: var(--blue); color: var(--blue-bright); }
+    .accordion-header.open-header .accordion-chevron { background: var(--blue); border-color: var(--blue); color: white; transform: rotate(180deg); }
+    .accordion-body {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      background: var(--surface2);
+      border: 1px solid var(--border); border-top: none;
+      border-radius: 0 0 18px 18px;
+    }
+    .accordion-body.open { max-height: 4000px; }
+    .accordion-inner { padding: 2rem; }
+
+    /* ─── PORTFOLIO GRID ─── */
+    .port-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+    .port-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 18px; overflow: hidden;
+      transition: all 0.3s;
+    }
+    .port-card:hover { transform: translateY(-6px); border-color: rgba(99,179,255,0.25); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+    .port-card-media {
+      width: 100%; aspect-ratio: 16/9; position: relative; overflow: hidden;
+      background: var(--surface);
+    }
+    .port-card-media iframe,
+    .port-card-media img {
+      width: 100%; height: 100%; display: block; object-fit: cover;
+    }
+    .port-media-stack { display: flex; flex-direction: column; }
+    .port-media-item { position: relative; }
+    .port-media-item img { width: 100%; display: block; object-fit: cover; height: 160px; }
+    .port-media-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(4,8,15,0.9));
+      padding: 1.5rem 1rem 0.7rem;
+      font-size: 0.78rem; font-weight: 600; color: var(--muted);
+    }
+    .port-card-head {
+      padding: 1rem 1.2rem 0.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .port-card-head h4 { font-family: var(--font-display); font-size: 1rem; font-weight: 800; color: var(--text); margin-bottom: 0.3rem; }
+    .port-card-desc { padding: 0 1.2rem 1.2rem; font-size: 0.83rem; color: var(--muted); line-height: 1.55; }
+
+    /* ─── CONTACT ─── */
+    .contact-section { padding: 5rem 0 3rem; }
+    .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem; margin-top: 3rem; }
+    .contact-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.8rem;
+      text-align: center; text-decoration: none; color: var(--text);
+      transition: all 0.35s; display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+      position: relative; overflow: hidden;
+    }
+    .contact-card::before {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+      transform: scaleX(0); transition: 0.35s;
+    }
+    .contact-card.tg::before { background: #2AABEE; }
+    .contact-card.wa::before { background: #25D366; }
+    .contact-card.em::before { background: var(--blue); }
+    .contact-card.li::before { background: #0A66C2; }
+    .contact-card:hover { transform: translateY(-8px); border-color: rgba(99,179,255,0.3); background: var(--surface2); }
+    .contact-card:hover::before { transform: scaleX(1); }
+    .contact-card .cc-icon { font-size: 2.2rem; }
+    .contact-card.tg .cc-icon { color: #2AABEE; }
+    .contact-card.wa .cc-icon { color: #25D366; }
+    .contact-card.em .cc-icon { color: var(--blue-bright); }
+    .contact-card.li .cc-icon { color: #60a5fa; }
+    .contact-card h4 { font-family: var(--font-display); font-size: 1rem; font-weight: 700; }
+    .contact-card p { font-size: 0.8rem; color: var(--muted); }
+    .contact-note { text-align: center; color: var(--muted); font-size: 0.85rem; margin-top: 1.5rem; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 1.5rem; text-align: center;
+      color: var(--muted); font-size: 0.82rem;
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(40px);
+      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ─── TICKER ─── */
+    .ticker-wrap { overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1rem 0; margin: 2rem 0; }
+    .ticker-inner { display: flex; gap: 3rem; white-space: nowrap; animation: ticker 20s linear infinite; }
+    .ticker-inner:hover { animation-play-state: paused; }
+    .ticker-item { font-family: var(--font-display); font-size: 0.85rem; font-weight: 700; letter-spacing: 0.08em; color: var(--muted); display: flex; align-items: center; gap: 10px; }
+    .ticker-item .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--blue); }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ─── MOBILE ─── */
+    @media (max-width: 700px) {
+      .lang-toggle { top: 12px; right: 12px; }
+      .lang-option { padding: 5px 10px; font-size: 0.72rem; }
+      .about-wrap { padding: 2rem 1.5rem; gap: 2rem; }
+      .accordion-title { font-size: 1.05rem; }
+      .roi-strip { padding: 1.8rem 1.5rem; }
+      .stats-bar { border-radius: 16px; }
+      .stat-item { padding: 1.4rem 1rem; }
+      .stat-num { font-size: 1.9rem; }
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas-bg"></canvas>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<!-- LANG TOGGLE -->
+<div class="lang-toggle" id="langToggle">
+  <div class="lang-option" data-lang="en">EN</div>
+  <div class="lang-option" data-lang="ro">RO</div>
+  <div class="lang-option" data-lang="ru">РУ</div>
+</div>
+
+<div class="wrapper">
+
+  <!-- ─── HERO ─── -->
+  <section class="hero-section">
+    <div class="container" style="display:flex;flex-direction:column;align-items:center;">
+      <div class="hero-eyebrow"><span class="dot"></span><span data-t="badge">AI Automation Architect</span></div>
+      <h1 class="hero-title">
+        <span class="line" data-t="heroLine1">Your business is bleeding</span>
+        <span class="line gradient-text" data-t="heroLine2">time & money every day.</span>
+        <span class="line" data-t="heroLine3">I stop the leak with AI.</span>
+      </h1>
+      <p class="hero-subtitle"><span data-t="heroSub">I design <strong>AI agents & intelligent automations</strong> that eliminate costly manual work — saving companies <strong>up to 80% on operational costs</strong> and reclaiming 20+ hours every week. Your team stops drowning in routine and starts driving real growth.</span></p>
+      <div class="hero-actions">
+        <button class="btn-primary" id="ctaBtn"><i class="fas fa-rocket"></i> <span data-t="ctaBtn">Get my free audit →</span></button>
+        <button class="btn-secondary" id="portfolioBtn"><i class="fas fa-play-circle"></i> <span data-t="seeWork">See my work</span></button>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+
+    <!-- STATS BAR -->
+    <div class="stats-bar reveal">
+      <div class="stat-item"><div class="stat-num" id="counter-40">0</div><div class="stat-label" data-t="stat1l">AI Agents Built</div></div>
+      <div class="stat-item"><div class="stat-num" id="counter-2000">0</div><div class="stat-label" data-t="stat2l">Work Hours Saved</div></div>
+      <div class="stat-item"><div class="stat-num" id="counter-80">0</div><div class="stat-label" data-t="stat3l">Max Cost Reduction</div></div>
+      <div class="stat-item"><div class="stat-num">24/7</div><div class="stat-label" data-t="stat4l">AI Never Sleeps</div></div>
+    </div>
+
+    <!-- TICKER -->
+    <div class="ticker-wrap">
+      <div class="ticker-inner" id="tickerInner"></div>
+    </div>
+
+    <!-- ─── PAIN ─── -->
+    <section class="pain-section">
+      <div class="section-label" data-t="painLabel">The problem</div>
+      <h2 class="section-title" data-t="painTitle">Your team is stuck in the machine</h2>
+      <p class="section-desc" data-t="painDesc">Every hour your people spend on repetitive tasks is an hour NOT spent on growth. Here's what AI eliminates — starting week one.</p>
+      <div class="pain-grid">
+        <div class="pain-card reveal reveal-delay-1">
+          <div class="pain-card-icon"><i class="fas fa-dollar-sign"></i></div>
+          <h3 data-t="pain1t">$15,000+/month in salary</h3>
+          <p data-t="pain1d">You're paying full-time wages for data entry, manual reporting, CRM cleanup, and copy-paste work that AI handles in seconds — for a fraction of the cost.</p>
+          <span class="tag" data-t="pain1tag">💸 Wasted budget</span>
+        </div>
+        <div class="pain-card reveal reveal-delay-2">
+          <div class="pain-card-icon"><i class="fas fa-hourglass-half"></i></div>
+          <h3 data-t="pain2t">60% of the workday: pure routine</h3>
+          <p data-t="pain2d">Emails, lead filtering, scheduling, ticket sorting — it's not strategy, it's survival. Your best people are buried under tasks a smart system can handle automatically.</p>
+          <span class="tag" data-t="pain2tag">⏳ Stolen hours</span>
+        </div>
+        <div class="pain-card reveal reveal-delay-3">
+          <div class="pain-card-icon"><i class="fas fa-chart-line"></i></div>
+          <h3 data-t="pain3t">Competitors moving faster</h3>
+          <p data-t="pain3d">While you're manually processing, AI-powered businesses are already responding to leads, closing deals, and generating reports — all in real time, all without lifting a finger.</p>
+          <span class="tag" data-t="pain3tag">🚀 Falling behind</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── ABOUT ─── -->
+    <section class="about-section" id="about">
+      <div class="about-wrap reveal">
+        <div class="about-img-wrap">
+          <img src="your-instagram-photo.jpg" alt="Dmitry Buyanov" onerror="this.src='https://placehold.co/400x400/0b1220/3b82f6?text=DB'">
+          <div class="about-badge-float">⚡ 40+ Projects</div>
+        </div>
+        <div class="about-text">
+          <h2 data-t="aboutName">Dmitry Buyanov <span class="age" data-t="aboutAge">— 22 y.o. AI Architect</span></h2>
+          <p data-t="aboutP1">I've spent the last 2 years deep in the automation trenches — building <strong>40+ production AI agents</strong> for companies across Russia, Ukraine, Kazakhstan, and Belarus. Together we've recovered <strong>2,000+ work hours</strong> and slashed operational costs by up to <strong>80%</strong>. Real systems. Real ROI.</p>
+          <p style="margin-top:0.8rem;" data-t="aboutP2">Now I'm bringing that same power to the <strong>European market</strong>. I know what breaks, what works, and how to ship fast — without charging agency prices.</p>
+          <div class="about-offer">
+            <div class="offer-label" data-t="offerLabel">🔥 Limited Launch Offer</div>
+            <p data-t="offerText">First <strong>10 European clients</strong> get up to <strong>50% off</strong> — elite AI automation at startup prices. I'm building my EU portfolio. Your timing is perfect.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── VALUE PROPS ─── -->
+    <section class="value-section">
+      <div class="section-label" data-t="valueLabel">Why it matters</div>
+      <h2 class="section-title" data-t="valueTitle">What you actually get</h2>
+      <div class="value-grid">
+        <div class="value-card reveal reveal-delay-1">
+          <div class="value-card-icon"><i class="fas fa-clock"></i></div>
+          <h4 data-t="v1t">20+ hours back per week</h4>
+          <p data-t="v1d">Every automated task is an hour your team reclaims for strategy, sales, and things that actually move the needle.</p>
+        </div>
+        <div class="value-card reveal reveal-delay-2">
+          <div class="value-card-icon"><i class="fas fa-users"></i></div>
+          <h4 data-t="v2t">Scale without headcount</h4>
+          <p data-t="v2d">Handle 10× the volume with the same team. AI agents are your tireless, always-available digital workforce.</p>
+        </div>
+        <div class="value-card reveal reveal-delay-3">
+          <div class="value-card-icon"><i class="fas fa-bolt"></i></div>
+          <h4 data-t="v3t">Runs 24/7, never burns out</h4>
+          <p data-t="v3d">No sick days, no mistakes from fatigue, no overtime cost. Your automated systems keep working while you sleep.</p>
+        </div>
+        <div class="value-card reveal reveal-delay-4">
+          <div class="value-card-icon"><i class="fas fa-chart-pie"></i></div>
+          <h4 data-t="v4t">Data, not guesswork</h4>
+          <p data-t="v4d">Real-time dashboards and automated reports so you always know exactly what's happening — no chasing for updates.</p>
+        </div>
+      </div>
+
+      <!-- ROI STRIP -->
+      <div class="roi-strip reveal" style="margin-top:3rem;">
+        <h3 data-t="roiTitle">🚀 What AI replaces — and what you gain</h3>
+        <div class="roi-items">
+          <div class="roi-item">
+            <span class="from" data-t="r1from">$5k/mo operator</span>
+            <span class="arrow">→</span>
+            <span class="to" data-t="r1to">$800 AI agent</span>
+          </div>
+          <div class="roi-item">
+            <span class="from" data-t="r2from">30h/wk manual work</span>
+            <span class="arrow">→</span>
+            <span class="to" data-t="r2to">1h weekly review</span>
+          </div>
+          <div class="roi-item">
+            <span class="from" data-t="r3from">Slow lead follow-up</span>
+            <span class="arrow">→</span>
+            <span class="to" data-t="r3to">Instant AI response</span>
+          </div>
+          <div class="roi-item">
+            <span class="from" data-t="r4from">Missed insights</span>
+            <span class="arrow">→</span>
+            <span class="to" data-t="r4to">Automated reports</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── PORTFOLIO ─── -->
+    <section class="portfolio-section" id="portfolio">
+      <div class="section-label" data-t="portLabel">Live work</div>
+      <h2 class="section-title" data-t="portTitle">Real automations. Real ROI.</h2>
+      <p class="section-desc" data-t="portDesc">Each case below is a live system, not a demo. Average payback period: under 3 weeks.</p>
+
+      <!-- ACCORDION: AUTOMATIONS -->
+      <div class="accordion-item" style="margin-top:2.5rem;">
+        <div class="accordion-header" id="hAuto">
+          <div class="accordion-title">
+            🤖 <span data-t="autoTitle">AI AUTOMATIONS</span>
+            <span class="accordion-tag" data-t="autoTag">3 CASES</span>
+          </div>
+          <div class="accordion-chevron"><i class="fas fa-chevron-down"></i></div>
+        </div>
+        <div class="accordion-body" id="bAuto">
+          <div class="accordion-inner">
+            <div class="port-grid">
+              <!-- Case 1 -->
+              <div class="port-card reveal">
+                <div class="port-card-head">
+                  <h4 data-t="a1name">⚡ Lead Autopilot</h4>
+                </div>
+                <div class="port-card-desc" data-t="a1desc">Form submission triggers AI: reads data → logs to Google Sheets → alerts via Telegram → sends a hyper-personalized email reply — all in under 90 seconds, 24/7.</div>
+                <div class="port-media-stack">
+                  <div class="port-media-item">
+                    <img src="1_n8n.jpg" alt="n8n workflow" onerror="this.src='https://placehold.co/600x220/0b1220/3b82f6?text=n8n+Workflow'">
+                    <div class="port-media-label" data-t="a1s1">🔧 n8n: webhook → AI classifier → routing logic</div>
+                  </div>
+                  <div class="port-media-item">
+                    <img src="1_gmail.jpg" alt="AI email" onerror="this.src='https://placehold.co/600x220/0b1220/22d3ee?text=AI+Email+Reply'">
+                    <div class="port-media-label" data-t="a1s2">📧 AI-personalized email sent to lead automatically</div>
+                  </div>
+                  <div class="port-media-item">
+                    <img src="1_tz.jpg" alt="Client review" onerror="this.src='https://placehold.co/600x220/0b1220/10b981?text=Client+TZ+%26+Review'">
+                    <div class="port-media-label" data-t="a1s3">⭐ Client brief + review (saved 40h/month)</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Case 2 -->
+              <div class="port-card reveal reveal-delay-1">
+                <div class="port-card-head">
+                  <h4 data-t="a2name">🎥 Meeting Secretary</h4>
+                </div>
+                <div class="port-card-desc" data-t="a2desc">Every meeting auto-transcribed, summarized by LLM, and turned into action items — pushed to Notion and Slack before the coffee gets cold.</div>
+                <div class="port-media-stack">
+                  <div class="port-media-item">
+                    <img src="2_n8n.jpg" alt="n8n meeting" onerror="this.src='https://placehold.co/600x220/0b1220/3b82f6?text=n8n+Meeting+Flow'">
+                    <div class="port-media-label" data-t="a2s1">⚙️ n8n: Zoom audio → OpenAI → Notion push</div>
+                  </div>
+                  <div class="port-media-item">
+                    <img src="2_docs.jpg" alt="Google Doc" onerror="this.src='https://placehold.co/600x220/0b1220/22d3ee?text=Google+Docs+Summary'">
+                    <div class="port-media-label" data-t="a2s2">📄 Structured notes + next-step tasks in Google Docs</div>
+                  </div>
+                  <div class="port-media-item">
+                    <img src="2_tz.jpg" alt="Review" onerror="this.src='https://placehold.co/600x220/0b1220/10b981?text=Review+%26+TZ'">
+                    <div class="port-media-label" data-t="a2s3">⭐ Client specification + 5-star review</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Case 3 -->
+              <div class="port-card reveal reveal-delay-2">
+                <div class="port-card-head">
+                  <h4 data-t="a3name">📬 Smart Email Sorter</h4>
+                </div>
+                <div class="port-card-desc" data-t="a3desc">Gmail connected to AI that reads, classifies (invoice / complaint / lead), drafts a reply or fires a Telegram alert — inbox zero without touching a single email manually.</div>
+                <div class="port-media-stack">
+                  <div class="port-media-item">
+                    <img src="3_n8n.jpg" alt="n8n email" onerror="this.src='https://placehold.co/600x220/0b1220/3b82f6?text=n8n+Email+Flow'">
+                    <div class="port-media-label" data-t="a3s1">🧩 n8n IMAP trigger + GPT-4 classifier + routing</div>
+                  </div>
+                  <div class="port-media-item">
+                    <img src="3_docs.jpg" alt="Stats" onerror="this.src='https://placehold.co/600x220/0b1220/22d3ee?text=Sheets+Stats'">
+                    <div class="port-media-label" data-t="a3s2">📊 Real-time stats in Sheets + filtered Gmail inbox</div>
+                  </div>
+                  <div class="port-media-item">
+                    <img src="3_tz.jpg" alt="TZ" onerror="this.src='https://placehold.co/600x220/0b1220/10b981?text=Client+TZ'">
+                    <div class="port-media-label" data-t="a3s3">📌 Client brief + feedback (saved 25h/month)</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACCORDION: AGENTS -->
+      <div class="accordion-item">
+        <div class="accordion-header" id="hAgents">
+          <div class="accordion-title">
+            🧠 <span data-t="agentsTitle">AI AGENTS</span>
+            <span class="accordion-tag" data-t="agentsTag">2 CASES</span>
+          </div>
+          <div class="accordion-chevron"><i class="fas fa-chevron-down"></i></div>
+        </div>
+        <div class="accordion-body" id="bAgents">
+          <div class="accordion-inner">
+            <div class="port-grid">
+              <!-- Agent 1 -->
+              <div class="port-card reveal">
+                <div class="port-card-head">
+                  <h4 data-t="ag1name">📊 Daily Business Intelligence Briefing</h4>
+                </div>
+                <div class="port-card-desc" data-t="ag1desc">An autonomous agent that runs every morning — scrapes relevant data sources, processes KPIs through an LLM, and emails a crisp executive briefing. Your team starts the day informed, not overwhelmed.</div>
+                <div class="port-media-stack">
+                  <div class="port-media-item">
+                    <img src="agent1_n8n.jpg" alt="n8n BI agent" onerror="this.src='https://placehold.co/600x220/0b1220/3b82f6?text=n8n+BI+Agent+Flow'">
+                    <div class="port-media-label" data-t="ag1s1">🔧 n8n: scheduled trigger → data pull → LLM synthesis → send</div>
+                  </div>
+                  <div class="port-media-item">
+                    <img src="agent1_s.jpg" alt="Email briefing" onerror="this.src='https://placehold.co/600x220/0b1220/22d3ee?text=Email+Briefing+Output'">
+                    <div class="port-media-label" data-t="ag1s2">📧 Daily briefing email delivered to inbox every morning</div>
+                  </div>
+                  <div class="port-media-item">
+                    <img src="agent1_tz.jpg" alt="Client review" onerror="this.src='https://placehold.co/600x220/0b1220/10b981?text=Client+TZ+%26+Review'">
+                    <div class="port-media-label" data-t="ag1s3">📋 Client brief + review (saves 2h daily across team)</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Agent 2 -->
+              <div class="port-card reveal reveal-delay-1">
+                <div class="port-card-head">
+                  <h4 data-t="ag2name">✉️ Smart Email Triage & Auto-Reply Agent</h4>
+                </div>
+                <div class="port-card-desc" data-t="ag2desc">Connects to your inbox, reads every email, classifies intent, drafts context-aware replies for approval or sends automatically based on confidence — turning email from a black hole into a handled asset.</div>
+                <div class="port-media-stack">
+                  <div class="port-media-item">
+                    <img src="agent2_n8n.jpg" alt="n8n email agent" onerror="this.src='https://placehold.co/600x220/0b1220/3b82f6?text=n8n+Email+Agent'">
+                    <div class="port-media-label" data-t="ag2s1">🕸️ n8n: IMAP → intent detection → reply generation → Gmail</div>
+                  </div>
+                  <div class="port-media-item">
+                    <img src="agent2_gmail.jpg" alt="Email inbox" onerror="this.src='https://placehold.co/600x220/0b1220/22d3ee?text=Clean+Inbox+Output'">
+                    <div class="port-media-label" data-t="ag2s2">📬 Auto-drafted or sent replies with classification tags</div>
+                  </div>
+                  <div class="port-media-item">
+                    <img src="agent2_tz.jpg" alt="TZ and review" onerror="this.src='https://placehold.co/600x220/0b1220/10b981?text=Client+TZ+%26+Review'">
+                    <div class="port-media-label" data-t="ag2s3">📌 Client brief + review (30h/month reclaimed)</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p style="text-align:center;color:var(--muted);font-size:0.85rem;margin-top:1.5rem;" data-t="portFoot">Every case above is a deployed, live system — not a concept. Average ROI achieved within 3 weeks.</p>
+    </section>
+
+    <!-- ─── CONTACT ─── -->
+    <section class="contact-section" id="contact">
+      <div style="text-align:center;">
+        <div class="section-label" style="justify-content:center;" data-t="contactLabel">Let's build</div>
+        <h2 class="section-title" data-t="contactTitle">Ready to stop the bleeding?</h2>
+        <p class="section-desc" style="margin:0 auto;" data-t="contactDesc">Tell me your biggest time-drain and I'll map out exactly how AI can eliminate it. Free consultation, no pressure. Pick your channel:</p>
+      </div>
+      <div class="contact-grid">
+        <a href="https://t.me/buyanovdmitriy" target="_blank" class="contact-card tg reveal reveal-delay-1">
+          <i class="fab fa-telegram cc-icon"></i>
+          <h4>Telegram</h4>
+          <p>@buyanovdmitriy</p>
+        </a>
+        <a href="https://wa.me/40743027858" target="_blank" class="contact-card wa reveal reveal-delay-2">
+          <i class="fab fa-whatsapp cc-icon"></i>
+          <h4>WhatsApp</h4>
+          <p>+40 743 027 858</p>
+        </a>
+        <a href="mailto:buyanov.vv@proton.me" class="contact-card em reveal reveal-delay-3">
+          <i class="fas fa-envelope cc-icon"></i>
+          <h4>Email</h4>
+          <p>buyanov.vv@proton.me</p>
+        </a>
+        <a href="https://www.linkedin.com/in/dmitry-buyanov/" target="_blank" class="contact-card li reveal reveal-delay-4">
+          <i class="fab fa-linkedin cc-icon"></i>
+          <h4>LinkedIn</h4>
+          <p>in/dmitry-buyanov</p>
+        </a>
+      </div>
+      <p class="contact-note" data-t="contactNote">⚡ I respond within 12 hours. Let's automate your business.</p>
+    </section>
+
+  </div>
+
+  <footer>
+    <span data-t="footer">© 2025 Dmitry Buyanov — AI Automation Architect. Stop paying for manual work.</span>
+  </footer>
+</div>
+
+<script>
+// ─── TRANSLATIONS ───
+const T = {
+  en: {
+    badge:"AI Automation Architect",
+    heroLine1:"Your business is bleeding",
+    heroLine2:"time & money every day.",
+    heroLine3:"I stop the leak with AI.",
+    heroSub:"I design <strong>AI agents & intelligent automations</strong> that eliminate costly manual work — saving companies <strong>up to 80% on operational costs</strong> and reclaiming 20+ hours every week. Your team stops drowning in routine and starts driving real growth.",
+    ctaBtn:"Get my free audit →",
+    seeWork:"See my work",
+    stat1l:"AI Agents Built",stat2l:"Work Hours Saved",stat3l:"Max Cost Reduction",stat4l:"AI Never Sleeps",
+    painLabel:"The problem",painTitle:"Your team is stuck in the machine",
+    painDesc:"Every hour your people spend on repetitive tasks is an hour NOT spent on growth. Here's what AI eliminates — starting week one.",
+    pain1t:"$15,000+/month in salary",pain1d:"You're paying full-time wages for data entry, manual reporting, CRM cleanup, and copy-paste work that AI handles in seconds — for a fraction of the cost.",pain1tag:"💸 Wasted budget",
+    pain2t:"60% of the workday: pure routine",pain2d:"Emails, lead filtering, scheduling, ticket sorting — it's not strategy, it's survival. Your best people are buried under tasks a smart system can handle automatically.",pain2tag:"⏳ Stolen hours",
+    pain3t:"Competitors moving faster",pain3d:"While you're manually processing, AI-powered businesses are already responding to leads, closing deals, and generating reports — all in real time, all without lifting a finger.",pain3tag:"🚀 Falling behind",
+    aboutName:"Dmitry Buyanov",aboutAge:"— 22 y.o. AI Architect",
+    aboutP1:"I've spent the last 2 years deep in the automation trenches — building <strong>40+ production AI agents</strong> for companies across Russia, Ukraine, Kazakhstan, and Belarus. Together we've recovered <strong>2,000+ work hours</strong> and slashed operational costs by up to <strong>80%</strong>. Real systems. Real ROI.",
+    aboutP2:"Now I'm bringing that same power to the <strong>European market</strong>. I know what breaks, what works, and how to ship fast — without charging agency prices.",
+    offerLabel:"🔥 Limited Launch Offer",offerText:"First <strong>10 European clients</strong> get up to <strong>50% off</strong> — elite AI automation at startup prices. I'm building my EU portfolio. Your timing is perfect.",
+    valueLabel:"Why it matters",valueTitle:"What you actually get",
+    v1t:"20+ hours back per week",v1d:"Every automated task is an hour your team reclaims for strategy, sales, and things that actually move the needle.",
+    v2t:"Scale without headcount",v2d:"Handle 10× the volume with the same team. AI agents are your tireless, always-available digital workforce.",
+    v3t:"Runs 24/7, never burns out",v3d:"No sick days, no mistakes from fatigue, no overtime cost. Your automated systems keep working while you sleep.",
+    v4t:"Data, not guesswork",v4d:"Real-time dashboards and automated reports so you always know exactly what's happening — no chasing for updates.",
+    roiTitle:"🚀 What AI replaces — and what you gain",
+    r1from:"$5k/mo operator",r1to:"$800 AI agent",r2from:"30h/wk manual work",r2to:"1h weekly review",
+    r3from:"Slow lead follow-up",r3to:"Instant AI response",r4from:"Missed insights",r4to:"Automated reports",
+    portLabel:"Live work",portTitle:"Real automations. Real ROI.",portDesc:"Each case below is a live system, not a demo. Average payback period: under 3 weeks.",
+    autoTitle:"AI AUTOMATIONS",autoTag:"3 CASES",
+    a1name:"⚡ Lead Autopilot",a1desc:"Form submission triggers AI: reads data → logs to Google Sheets → alerts via Telegram → sends a hyper-personalized email reply — all in under 90 seconds, 24/7.",
+    a1s1:"🔧 n8n: webhook → AI classifier → routing logic",a1s2:"📧 AI-personalized email sent to lead automatically",a1s3:"⭐ Client brief + review (saved 40h/month)",
+    a2name:"🎥 Meeting Secretary",a2desc:"Every meeting auto-transcribed, summarized by LLM, and turned into action items — pushed to Notion and Slack before the coffee gets cold.",
+    a2s1:"⚙️ n8n: Zoom audio → OpenAI → Notion push",a2s2:"📄 Structured notes + next-step tasks in Google Docs",a2s3:"⭐ Client specification + 5-star review",
+    a3name:"📬 Smart Email Sorter",a3desc:"Gmail connected to AI that reads, classifies (invoice / complaint / lead), drafts a reply or fires a Telegram alert — inbox zero without touching a single email manually.",
+    a3s1:"🧩 n8n IMAP trigger + GPT-4 classifier + routing",a3s2:"📊 Real-time stats in Sheets + filtered Gmail inbox",a3s3:"📌 Client brief + feedback (saved 25h/month)",
+    agentsTitle:"AI AGENTS",agentsTag:"2 CASES",
+    ag1name:"📊 Daily Business Intelligence Briefing",ag1desc:"An autonomous agent that runs every morning — scrapes relevant data sources, processes KPIs through an LLM, and emails a crisp executive briefing. Your team starts the day informed, not overwhelmed.",
+    ag1s1:"🔧 n8n: scheduled trigger → data pull → LLM synthesis → send",ag1s2:"📧 Daily briefing email delivered to inbox every morning",ag1s3:"📋 Client brief + review (saves 2h daily across team)",
+    ag2name:"✉️ Smart Email Triage & Auto-Reply Agent",ag2desc:"Connects to your inbox, reads every email, classifies intent, drafts context-aware replies for approval or sends automatically based on confidence — turning email from a black hole into a handled asset.",
+    ag2s1:"🕸️ n8n: IMAP → intent detection → reply generation → Gmail",ag2s2:"📬 Auto-drafted or sent replies with classification tags",ag2s3:"📌 Client brief + review (30h/month reclaimed)",
+    portFoot:"Every case above is a deployed, live system — not a concept. Average ROI achieved within 3 weeks.",
+    contactLabel:"Let's build",contactTitle:"Ready to stop the bleeding?",contactDesc:"Tell me your biggest time-drain and I'll map out exactly how AI can eliminate it. Free consultation, no pressure. Pick your channel:",
+    contactNote:"⚡ I respond within 12 hours. Let's automate your business.",
+    footer:"© 2025 Dmitry Buyanov — AI Automation Architect. Stop paying for manual work.",
+    tickers:["80% cost reduction","40+ agents deployed","2000+ hours saved","24/7 operation","Lead autopilot","Meeting secretary","Email triage","Business intelligence","CRM automation","AI-powered growth"]
+  },
+  ro: {
+    badge:"Arhitect Automatizări AI",
+    heroLine1:"Afacerea ta pierde",
+    heroLine2:"timp și bani în fiecare zi.",
+    heroLine3:"Eu opresc scurgerea cu AI.",
+    heroSub:"Construiesc <strong>agenți AI și automatizări inteligente</strong> care elimină munca manuală costisitoare — economisind companiilor <strong>până la 80% din costuri operaționale</strong> și recuperând 20+ ore pe săptămână. Echipa ta iese din rutină și se concentrează pe creștere.",
+    ctaBtn:"Obține auditul meu gratuit →",
+    seeWork:"Vezi portofoliul",
+    stat1l:"Agenți AI Construiți",stat2l:"Ore de Muncă Economisite",stat3l:"Reducere Maximă Costuri",stat4l:"AI Nu Doarme Niciodată",
+    painLabel:"Problema",painTitle:"Echipa ta e blocată în rutină",
+    painDesc:"Fiecare oră petrecută pe sarcini repetitive este o oră pierdută pentru creștere. Asta elimină AI — chiar din prima săptămână.",
+    pain1t:"$15.000+/lună în salarii irosите",pain1d:"Plătești salarii întregi pentru introducere date, raportare manuală, curățare CRM — muncă pe care AI o face în secunde, la o fracțiune din cost.",pain1tag:"💸 Buget irosit",
+    pain2t:"60% din ziua de lucru: pură rutină",pain2d:"Emailuri, filtrare lead-uri, programări, sortare tickete — nu e strategie, e supraviețuire. Oamenii tăi buni sunt îngropați sub sarcini pe care un sistem inteligent le rezolvă automat.",pain2tag:"⏳ Ore furate",
+    pain3t:"Concurenții se mișcă mai repede",pain3d:"În timp ce procesezi manual, afacerile AI răspund deja la lead-uri, închid deals și generează rapoarte — în timp real, fără să ridice un deget.",pain3tag:"🚀 Rămâi în urmă",
+    aboutName:"Dmitry Buyanov",aboutAge:"— Arhitect AI, 22 ani",
+    aboutP1:"Am petrecut ultimii 2 ani în automatizări — construind <strong>40+ agenți AI</strong> pentru companii din Rusia, Ucraina, Kazahstan și Belarus. Împreună am recuperat <strong>2.000+ ore de muncă</strong> și am redus costurile cu până la <strong>80%</strong>. Sisteme reale. ROI real.",
+    aboutP2:"Acum aduc aceeași putere pe <strong>piața europeană</strong>. Știu ce funcționează și livrez rapid — fără prețuri de agenție.",
+    offerLabel:"🔥 Ofertă Limitată de Lansare",offerText:"Primii <strong>10 clienți europeni</strong> primesc până la <strong>50% reducere</strong> — automatizare AI de elită la prețuri de startup. Îmi construiesc portofoliul EU. Momentul tău e perfect.",
+    valueLabel:"De ce contează",valueTitle:"Ce primești concret",
+    v1t:"20+ ore înapoi pe săptămână",v1d:"Fiecare sarcină automatizată este o oră pe care echipa ta o recâștigă pentru strategie și vânzări.",
+    v2t:"Scalare fără angajări",v2d:"Gestionează de 10× mai mult cu aceeași echipă. Agenții AI sunt forța ta de muncă nelimitată.",
+    v3t:"Funcționează 24/7, fără epuizare",v3d:"Fără concedii medicale, fără greșeli din oboseală. Sistemele tale lucrează cât tu dormi.",
+    v4t:"Date, nu presupuneri",v4d:"Dashboarduri în timp real și rapoarte automate — mereu știi exact ce se întâmplă.",
+    roiTitle:"🚀 Ce înlocuiește AI — și ce câștigi",
+    r1from:"Operator $5k/lună",r1to:"Agent AI $800",r2from:"30h/săpt muncă manuală",r2to:"1h revizuire săptămânală",
+    r3from:"Follow-up lent la lead-uri",r3to:"Răspuns AI instant",r4from:"Insight-uri ratate",r4to:"Rapoarte automate",
+    portLabel:"Muncă reală",portTitle:"Automatizări reale. ROI real.",portDesc:"Fiecare caz de mai jos este un sistem live, nu o demonstrație. Perioadă medie de recuperare: sub 3 săptămâni.",
+    autoTitle:"AUTOMATIZĂRI AI",autoTag:"3 CAZURI",
+    a1name:"⚡ Autopilot Lead-uri",a1desc:"Formularul declanșează AI: citește datele → înregistrează în Sheets → alertă Telegram → trimite email personalizat — totul în sub 90 de secunde, 24/7.",
+    a1s1:"🔧 n8n: webhook → clasificator AI → rutare",a1s2:"📧 Email personalizat trimis automat lead-ului",a1s3:"⭐ Brief client + review (economisit 40h/lună)",
+    a2name:"🎥 Secretar de Întâlniri",a2desc:"Fiecare întâlnire transcrisă automat, rezumată de LLM și transformată în acțiuni — trimise în Notion și Slack înainte să se răcească cafeaua.",
+    a2s1:"⚙️ n8n: audio Zoom → OpenAI → Notion",a2s2:"📄 Note structurate + acțiuni în Google Docs",a2s3:"⭐ Specificații client + recenzie 5 stele",
+    a3name:"📬 Clasificator Inteligent Email",a3desc:"Gmail conectat la AI care citește, clasifică (factură / reclamație / lead), redactează răspuns sau trimite alertă Telegram — inbox zero fără a atinge manual un email.",
+    a3s1:"🧩 n8n trigger IMAP + clasificator GPT-4",a3s2:"📊 Statistici în Sheets + Gmail filtrat",a3s3:"📌 Brief client + feedback (economisit 25h/lună)",
+    agentsTitle:"AGENȚI AI",agentsTag:"2 CAZURI",
+    ag1name:"📊 Daily Business Intelligence Briefing",ag1desc:"Un agent autonom care rulează în fiecare dimineață — extrage date relevante, procesează KPI-uri prin LLM și trimite un briefing executiv clar. Echipa ta începe ziua informată, nu copleșită.",
+    ag1s1:"🔧 n8n: trigger programat → extragere date → sinteză LLM → trimitere",ag1s2:"📧 Email de briefing livrat în inbox în fiecare dimineață",ag1s3:"📋 Brief client + review (economisește 2h zilnic echipei)",
+    ag2name:"✉️ Smart Email Triage & Auto-Reply Agent",ag2desc:"Se conectează la căsuța ta, citește fiecare email, clasifică intenția, redactează răspunsuri contextuale pentru aprobare sau trimite automat în funcție de încredere — transformând emailul dintr-o gaură neagră într-un activ gestionat.",
+    ag2s1:"🕸️ n8n: IMAP → detectare intenție → generare răspuns → Gmail",ag2s2:"📬 Răspunsuri auto-redactate sau trimise cu etichete de clasificare",ag2s3:"📌 Brief client + review (30h/lună recâștigate)",
+    portFoot:"Fiecare caz de mai sus este un sistem desfășurat, live — nu un concept. ROI mediu atins în 3 săptămâni.",
+    contactLabel:"Să construim",contactTitle:"Gata să oprești pierderea?",contactDesc:"Spune-mi cel mai mare consumator de timp al tău și voi mapa exact cum poate AI să îl elimine. Consultație gratuită, fără presiune. Alege canalul:",
+    contactNote:"⚡ Răspund în 12 ore. Hai să automatizăm afacerea ta.",
+    footer:"© 2025 Dmitry Buyanov — Arhitect Automatizări AI. Nu mai plăti pentru muncă manuală.",
+    tickers:["80% reducere costuri","40+ agenți deployați","2000+ ore economisite","Funcționare 24/7","Autopilot lead-uri","Secretar de întâlniri","Triaj email","Business intelligence","Automatizare CRM","Creștere cu AI"]
+  },
+  ru: {
+    badge:"Архитектор AI-автоматизаций",
+    heroLine1:"Твой бизнес теряет",
+    heroLine2:"время и деньги каждый день.",
+    heroLine3:"Я останавливаю утечку с помощью AI.",
+    heroSub:"Я создаю <strong>AI-агентов и интеллектуальные автоматизации</strong>, которые устраняют дорогостоящий ручной труд — экономя компаниям <strong>до 80% операционных расходов</strong> и возвращая 20+ часов каждую неделю. Твоя команда выходит из рутины и начинает двигать бизнес вперёд.",
+    ctaBtn:"Получить бесплатный аудит →",
+    seeWork:"Посмотреть работы",
+    stat1l:"Создано AI-агентов",stat2l:"Сохранено рабочих часов",stat3l:"Максимальное снижение затрат",stat4l:"AI никогда не спит",
+    painLabel:"Проблема",painTitle:"Твоя команда застряла в рутине",
+    painDesc:"Каждый час, потраченный на повторяющиеся задачи — это час, не потраченный на рост. Вот что AI устраняет уже с первой недели.",
+    pain1t:"$15 000+/месяц — на зарплаты впустую",pain1d:"Ты платишь полные зарплаты за ввод данных, ручные отчёты, чистку CRM — то, что AI делает за секунды и в разы дешевле.",pain1tag:"💸 Слитый бюджет",
+    pain2t:"60% рабочего дня — чистая рутина",pain2d:"Почта, фильтрация лидов, расписания, повторяющиеся тикеты — это не стратегия, это выживание. Лучшие люди закопаны в задачах, которые умная система решает автоматически.",pain2tag:"⏳ Украденные часы",
+    pain3t:"Конкуренты движутся быстрее",pain3d:"Пока ты обрабатываешь вручную, AI-компании уже отвечают лидам, закрывают сделки и генерируют отчёты — в реальном времени, без единого клика.",pain3tag:"🚀 Ты отстаёшь",
+    aboutName:"Дмитрий Буянов",aboutAge:"— Архитектор AI, 22 года",
+    aboutP1:"Последние 2 года я провёл в автоматизациях — создав <strong>40+ production AI-агентов</strong> для компаний из России, Украины, Казахстана и Беларуси. Вместе мы вернули <strong>2 000+ рабочих часов</strong> и сократили операционные расходы до <strong>80%</strong>. Живые системы. Реальный ROI.",
+    aboutP2:"Теперь я выхожу на <strong>европейский рынок</strong>. Я знаю, что ломается, что работает и как делать быстро — без агентских ценников.",
+    offerLabel:"🔥 Ограниченное предложение",offerText:"Первые <strong>10 европейских клиентов</strong> получают скидку до <strong>50%</strong> — элитная AI-автоматизация по стартап-ценам. Я собираю EU-портфолио. Твой момент — сейчас.",
+    valueLabel:"Почему это важно",valueTitle:"Что ты получаешь",
+    v1t:"20+ часов в неделю обратно",v1d:"Каждая автоматизированная задача — это час, который твоя команда тратит на стратегию и продажи, а не на рутину.",
+    v2t:"Масштаб без найма",v2d:"В 10 раз больше объёма той же командой. AI-агенты — твоя неограниченная рабочая сила.",
+    v3t:"Работает 24/7, не выгорает",v3d:"Нет больничных, нет ошибок от усталости, нет сверхурочных. Системы работают пока ты спишь.",
+    v4t:"Данные, а не догадки",v4d:"Дашборды в реальном времени и автоматические отчёты — ты всегда знаешь, что происходит.",
+    roiTitle:"🚀 Что AI заменяет — и что ты получаешь",
+    r1from:"Оператор $5к/мес",r1to:"AI-агент $800",r2from:"30ч/нед ручной работы",r2to:"1ч проверки в неделю",
+    r3from:"Медленный фолоу-ап по лидам",r3to:"Мгновенный AI-ответ",r4from:"Упущенные инсайты",r4to:"Автоматические отчёты",
+    portLabel:"Реальные работы",portTitle:"Живые автоматизации. Реальный ROI.",portDesc:"Каждый кейс ниже — это работающая система, не демо. Средний срок окупаемости: до 3 недель.",
+    autoTitle:"AI АВТОМАТИЗАЦИИ",autoTag:"3 КЕЙСА",
+    a1name:"⚡ Автопилот лидов",a1desc:"Заявка запускает AI: читает данные → логирует в Sheets → уведомляет Telegram → отправляет гиперперсонализированный email — всё за 90 секунд, 24/7.",
+    a1s1:"🔧 n8n: вебхук → AI-классификатор → маршрутизация",a1s2:"📧 AI-письмо лиду отправляется автоматически",a1s3:"⭐ ТЗ клиента + отзыв (сэкономлено 40ч/мес)",
+    a2name:"🎥 Секретарь встреч",a2desc:"Каждая встреча автоматически расшифрована, резюмирована LLM и превращена в задачи — отправлены в Notion и Slack пока кофе ещё горячий.",
+    a2s1:"⚙️ n8n: аудио Zoom → OpenAI → Notion",a2s2:"📄 Структурированный конспект + задачи в Google Docs",a2s3:"⭐ Техзадание клиента + отзыв 5 звёзд",
+    a3name:"📬 Умный сортировщик писем",a3desc:"Gmail подключён к AI, который читает, классифицирует (счёт / жалоба / лид), пишет черновик или отправляет алерт в Telegram — нулевой инбокс без ручного труда.",
+    a3s1:"🧩 n8n IMAP-триггер + GPT-4 классификатор",a3s2:"📊 Статистика в Sheets + отфильтрованный Gmail",a3s3:"📌 ТЗ клиента + отзыв (сэкономлено 25ч/мес)",
+    agentsTitle:"AI АГЕНТЫ",agentsTag:"2 КЕЙСА",
+    ag1name:"📊 Daily Business Intelligence Briefing",ag1desc:"Автономный агент, запускающийся каждое утро — собирает данные из нужных источников, обрабатывает KPI через LLM и отправляет чёткий брифинг руководству. Команда начинает день информированной, а не перегруженной.",
+    ag1s1:"🔧 n8n: расписание → сбор данных → синтез LLM → отправка",ag1s2:"📧 Ежедневный брифинг-письмо в инбокс каждое утро",ag1s3:"📋 ТЗ клиента + отзыв (экономит 2ч ежедневно на команду)",
+    ag2name:"✉️ Smart Email Triage & Auto-Reply Agent",ag2desc:"Подключается к почте, читает каждое письмо, определяет намерение, пишет контекстные ответы на согласование или отправляет автоматически — превращая почту из чёрной дыры в управляемый актив.",
+    ag2s1:"🕸️ n8n: IMAP → определение намерения → генерация ответа → Gmail",ag2s2:"📬 Авточерновики или отправленные письма с тегами классификации",ag2s3:"📌 ТЗ клиента + отзыв (возвращено 30ч/мес)",
+    portFoot:"Каждый кейс выше — это задеплоенная, живая система — не концепт. Средний ROI достигается за 3 недели.",
+    contactLabel:"Давай строить",contactTitle:"Готов остановить утечку?",contactDesc:"Расскажи мне о своей главной потере времени, и я покажу, как AI может её устранить. Бесплатная консультация, без давления. Выбери канал:",
+    contactNote:"⚡ Отвечаю в течение 12 часов. Давай автоматизируем твой бизнес.",
+    footer:"© 2025 Дмитрий Буянов — Архитектор AI-автоматизаций. Хватит платить за ручной труд.",
+    tickers:["Снижение затрат 80%","40+ агентов в продакшне","2000+ часов сохранено","Работа 24/7","Автопилот лидов","Секретарь встреч","Триаж почты","Бизнес-аналитика","Автоматизация CRM","Рост с AI"]
+  }
+};
+
+let lang = 'en';
+
+function applyLang(l) {
+  lang = l;
+  const d = T[l];
+  document.querySelectorAll('[data-t]').forEach(el => {
+    const k = el.dataset.t;
+    if (!d[k]) return;
+    const htmlKeys = ['heroSub','aboutP1','aboutP2','offerText'];
+    if (htmlKeys.includes(k)) el.innerHTML = d[k];
+    else el.textContent = d[k];
+  });
+  document.querySelectorAll('.lang-option').forEach(o => o.classList.toggle('active', o.dataset.lang === l));
+  buildTicker(d.tickers);
+}
+
+function buildTicker(items) {
+  const ti = document.getElementById('tickerInner');
+  const doubled = [...items, ...items];
+  ti.innerHTML = doubled.map(t => `<span class="ticker-item"><span class="dot"></span>${t}</span>`).join('');
+}
+
+// IP detect
+async function detectLang() {
+  try {
+    const r = await fetch('https://ipapi.co/json/');
+    const d = await r.json();
+    const cis = ['RU','UA','BY','KZ','AM','AZ','KG','MD','TJ','TM','UZ','GE'];
+    if (cis.includes(d.country_code)) { applyLang('ru'); return; }
+  } catch(e) {}
+  const bl = navigator.language || '';
+  if (bl.startsWith('ro')) { applyLang('ro'); return; }
+  applyLang('en');
+}
+
+// Lang toggle
+document.getElementById('langToggle').addEventListener('click', e => {
+  const opt = e.target.closest('.lang-option');
+  if (opt && opt.dataset.lang !== lang) applyLang(opt.dataset.lang);
+});
+
+// Accordion
+function setupAccordion(headerId, bodyId) {
+  const h = document.getElementById(headerId);
+  const b = document.getElementById(bodyId);
+  h.addEventListener('click', () => {
+    const open = b.classList.contains('open');
+    b.classList.toggle('open', !open);
+    h.classList.toggle('open-header', !open);
+  });
+}
+setupAccordion('hAuto','bAuto');
+setupAccordion('hAgents','bAgents');
+// open automations by default
+setTimeout(() => {
+  document.getElementById('bAuto').classList.add('open');
+  document.getElementById('hAuto').classList.add('open-header');
+}, 400);
+
+// CTA scroll
+document.getElementById('ctaBtn').addEventListener('click', () => {
+  document.getElementById('contact').scrollIntoView({ behavior:'smooth' });
+});
+document.getElementById('portfolioBtn').addEventListener('click', () => {
+  document.getElementById('portfolio').scrollIntoView({ behavior:'smooth' });
+});
+
+// Scroll reveal
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// Counter animation
+function animateCounter(id, target, suffix='', duration=2000) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const start = performance.now();
+  function step(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.floor(ease * target) + suffix;
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+const statsObs = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting) {
+    animateCounter('counter-40', 40, '+');
+    animateCounter('counter-2000', 2000, '+');
+    animateCounter('counter-80', 80, '%');
+    statsObs.disconnect();
+  }
+}, { threshold: 0.5 });
+const statsEl = document.querySelector('.stats-bar');
+if (statsEl) statsObs.observe(statsEl);
+
+// ─── PARTICLE CANVAS ───
+const canvas = document.getElementById('canvas-bg');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.r = Math.random() * 1.2 + 0.3;
+    this.vx = (Math.random() - 0.5) * 0.3;
+    this.vy = (Math.random() - 0.5) * 0.3;
+    this.a = Math.random() * 0.5 + 0.1;
+  }
+  update() {
+    this.x += this.vx; this.y += this.vy;
+    if (this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(96,165,250,${this.a})`;
+    ctx.fill();
+  }
+}
+for (let i = 0; i < 120; i++) particles.push(new Particle());
+
+function drawConnections() {
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 100) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(59,130,246,${0.06 * (1 - dist/100)})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function animCanvas() {
+  ctx.clearRect(0, 0, W, H);
+  particles.forEach(p => { p.update(); p.draw(); });
+  drawConnections();
+  requestAnimationFrame(animCanvas);
+}
+animCanvas();
+
+// Init
+detectLang();
+</script>
+</body>
+</html>
