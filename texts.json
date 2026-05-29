@@ -1,0 +1,716 @@
+{
+  "en": {
+    "agency": "Aucta AI",
+    "tagline": "AI Automation for Your Business.",
+    "tagline2": "Built from scratch. Live in 14 days.",
+    "contact_label": "Contacts",
+    "page_label": "p.",
+    "cover_title_1": "AI Automation",
+    "cover_title_2": "that sets you free.",
+    "cover_sub": "Real automation. Zero cost for first clients.",
+    "cover_year": "2026",
+    "p2_label": "About",
+    "p2_title": "Who's behind Aucta AI",
+    "p2_intro": "Hi, I'm Yan. I'm 18 and I've been deep in programming since I was 15. Over the last couple of years I've shifted my focus entirely to AI and automation — studying how businesses across Europe are using it to grow without growing their costs. Now I'm launching Aucta AI: a hands-on automation agency. I build and deploy AI workflows that actually work — chatbots, lead pipelines, CRM automation, RAG systems. My first clients get everything built for free. No catch — I need the case studies, you need the automation.",
+    "p2_for_whom_title": "Who this is for",
+    "p2_for_whom": "Small and medium businesses in Europe that are tired of doing things manually. If your team spends hours on repetitive tasks — answering the same questions, copying data between tools, chasing follow-ups — automation can fix that in days.",
+    "p2_principles_title": "How I work",
+    "p2_principles": [
+      {
+        "icon": "check",
+        "title": "Proven solutions only",
+        "desc": "I only build automations that are already working in real businesses. We calculate the exact time saved before writing a single line of code."
+      },
+      {
+        "icon": "plug",
+        "title": "Zero disruption to your current setup",
+        "desc": "I integrate with the tools you already use — CRM, email, messengers. Nothing gets replaced, only enhanced and connected."
+      },
+      {
+        "icon": "chart",
+        "title": "Results measured in hours and euros",
+        "desc": "Every automation comes with a before/after estimate: hours per week freed up and what that's worth in actual salary cost."
+      }
+    ],
+    "p3_label": "The Problem",
+    "p3_title": "What's quietly killing your efficiency",
+    "p3_pains": [
+      {
+        "title": "Hours lost to repetitive work",
+        "desc": "Your team answers the same questions, copies data by hand, sends the same emails. This consumes 30–40% of working time every single day."
+      },
+      {
+        "title": "Leads go cold while you sleep",
+        "desc": "A lead comes in Friday evening. It gets processed Monday morning. By then they've already signed with a competitor who responded in minutes."
+      },
+      {
+        "title": "Data scattered across tools",
+        "desc": "CRM, email, WhatsApp, spreadsheets — no one has the full picture. Things get missed. Deals fall through the cracks."
+      },
+      {
+        "title": "Growth requires more headcount",
+        "desc": "Every time you scale, you need to hire. 100 more clients means more support staff, more managers, more costs. AI automation breaks this pattern."
+      }
+    ],
+    "p4_label": "What we build",
+    "p4_title": "AI automations for real business problems",
+    "p4_sub": "Each solution is built specifically for your workflow — not a generic off-the-shelf product.",
+    "services": [
+      {
+        "title": "AI Chatbots",
+        "desc": "Bots for your website, WhatsApp and Instagram powered by OpenAI or Claude. They qualify leads, answer questions, and book meetings 24/7.",
+        "flow": ["Client writes", "LLM replies", "Lead to CRM"]
+      },
+      {
+        "title": "Lead Pipeline Automation",
+        "desc": "Every lead from your site or ads gets instantly classified, added to CRM, and assigned to the right manager. Response time: seconds, not hours.",
+        "flow": ["Form / Ad", "AI classify", "CRM + alert"]
+      },
+      {
+        "title": "Email Intelligence",
+        "desc": "Connect Gmail or Outlook: auto-categorize emails (lead, invoice, complaint), draft replies, summarize long threads, send instant alerts.",
+        "flow": ["Email in", "AI analysis", "Reply / alert"]
+      },
+      {
+        "title": "Meeting Transcription",
+        "desc": "Every call gets transcribed by Whisper, an LLM extracts action items and decisions, then sends them to Notion or Slack. Nothing gets forgotten.",
+        "flow": ["Call record", "Whisper+LLM", "Notion/Slack"]
+      },
+      {
+        "title": "RAG Knowledge Bot",
+        "desc": "Upload your docs, FAQs, and price lists — the bot answers based on your exact data. Perfect for support, employee onboarding, and client consulting.",
+        "flow": ["Question", "Doc search", "Exact answer"]
+      },
+      {
+        "title": "CRM Automation",
+        "desc": "HubSpot, Pipedrive, Bitrix24 — deals update automatically, follow-ups get scheduled, reports generate themselves. Your team works with clients, not spreadsheets.",
+        "flow": ["Event trigger", "n8n fires", "CRM updated"]
+      },
+      {
+        "title": "AI Content Engine",
+        "desc": "Brief → AI draft → human review → scheduled publish. Your content calendar never slips. Works for Instagram, LinkedIn, blogs, newsletters.",
+        "flow": ["Brief/topic", "AI draft", "Publish"]
+      },
+      {
+        "title": "Document Data Extraction",
+        "desc": "PDFs, contracts, catalogs — LLM reads and structures the data into your database or spreadsheet in seconds. No more manual copy-paste.",
+        "flow": ["PDF/doc", "LLM parse", "Database"]
+      }
+    ],
+    "p7_label": "How it works",
+    "p7_title": "From first conversation to live automation",
+    "p7_steps": [
+      {
+        "num": "01",
+        "title": "Free discovery call",
+        "desc": "We talk about your business. I map your current workflow and find the 2–3 biggest automation opportunities. 30 minutes, no cost, no obligations."
+      },
+      {
+        "num": "02",
+        "title": "Automation blueprint",
+        "desc": "I design exactly what gets automated — how it connects to your tools and how many hours per week it will save. You approve before anything is built."
+      },
+      {
+        "num": "03",
+        "title": "Build and integrate",
+        "desc": "I build the automation using n8n, Make, or custom code and connect it to your systems. Typical delivery: 5–14 days."
+      },
+      {
+        "num": "04",
+        "title": "Live testing with your team",
+        "desc": "We test with real scenarios — not demo data. I refine until it works perfectly in your actual environment."
+      },
+      {
+        "num": "05",
+        "title": "Handoff and ongoing support",
+        "desc": "You get full access, documentation, and support. If anything breaks or needs adjustment, I fix it."
+      }
+    ],
+    "p8_label": "Real Examples",
+    "p8_title": "How European businesses automate today",
+    "p8_sub": "These are real automation patterns already running in European companies. I can build the same for you.",
+    "cases": [
+      {
+        "type": "Logistics startup, Berlin",
+        "now": "3 managers processing 200+ orders/day in spreadsheets. Status emails sent manually. Constant delays and errors.",
+        "auto": "n8n workflow: order received → status updated → customer email sent → Slack alert to team. Zero manual steps.",
+        "effect": "120 hours/month freed. Zero manual data entry. Customer satisfaction significantly improved."
+      },
+      {
+        "type": "Fashion brand, Amsterdam",
+        "now": "Instagram DM inquiries unanswered. WhatsApp support overwhelmed. Sales team spending 4h/day on basic questions.",
+        "auto": "AI chatbot on Instagram + WhatsApp answers product questions, qualifies buyers, books consultations automatically.",
+        "effect": "200+ messages/day handled automatically. Team focuses on closing, not answering. 3× conversion."
+      },
+      {
+        "type": "SaaS company, Paris",
+        "now": "Customer onboarding takes 5 days of back-and-forth emails. Support tickets repeat the same questions. Team overwhelmed.",
+        "auto": "RAG bot trained on product docs answers 80% of support questions. Automated onboarding email sequence on signup.",
+        "effect": "Onboarding cut from 5 days to 1. Support tickets down 60%. Team handles only complex issues."
+      },
+      {
+        "type": "Marketing agency, Bucharest",
+        "now": "8 client content calendars managed manually. Deadlines missed. Creation bottleneck at senior copywriter.",
+        "auto": "AI generates first drafts from briefs. Human reviews and approves. Auto-schedules to social platforms.",
+        "effect": "4× content output. Zero missed deadlines. Team refocused on strategy and client relationships."
+      },
+      {
+        "type": "Private clinic, Vienna",
+        "now": "Appointments booked by phone only. 25% no-show rate. Receptionist spends 3h/day on scheduling and reminders.",
+        "auto": "WhatsApp bot accepts bookings 24/7, confirms instantly, sends reminders 24h and 2h before the appointment.",
+        "effect": "No-shows down from 25% to 8%. 15 hours/week of admin time freed. Patients book at midnight."
+      }
+    ],
+    "p10_label": "Technology",
+    "p10_title": "The stack we build on",
+    "p10_sub": "Proven tools. No unnecessary complexity. No vendor lock-in.",
+    "tech_groups": [
+      {
+        "group": "AI Models",
+        "tech_items": ["OpenAI GPT-4o", "Anthropic Claude", "Whisper (ASR)"]
+      },
+      {
+        "group": "Automation",
+        "tech_items": ["n8n", "Make (Integromat)", "Python"]
+      },
+      {
+        "group": "CRM & Business",
+        "tech_items": ["HubSpot", "Pipedrive", "Bitrix24"]
+      },
+      {
+        "group": "Communication",
+        "tech_items": ["WhatsApp Business API", "Instagram Graph API", "Gmail / Outlook API"]
+      }
+    ],
+    "p11_label": "Pricing",
+    "p11_title": "Right now — it's free",
+    "p11_sub": "I'm building my first automations at zero cost to earn real case studies and references. You get a fully working automation. I get a portfolio piece. Everyone wins.",
+    "packages": [
+      {
+        "name": "First Client Offer",
+        "price": "FREE",
+        "highlight": true,
+        "desc": "Full automation built and deployed at zero cost — for first clients only",
+        "features": [
+          "Complete custom automation build",
+          "Integration with your existing tools",
+          "5–14 day delivery",
+          "Live testing with your team",
+          "30 days of support included",
+          "You keep everything — forever"
+        ]
+      },
+      {
+        "name": "Standard",
+        "price": "from €500",
+        "desc": "One automation with full integration — after the pilot period",
+        "features": [
+          "AI chatbot or lead pipeline",
+          "Integration with 1–2 systems",
+          "Up to 5 automation scenarios",
+          "Testing and deployment",
+          "2 weeks of support"
+        ]
+      },
+      {
+        "name": "Advanced",
+        "price": "from €2,000",
+        "desc": "Multiple automations + RAG or AI agent — future pricing",
+        "features": [
+          "3+ process automations",
+          "RAG system on your knowledge base",
+          "Multi-system integrations",
+          "Team documentation and training",
+          "3 months support and development"
+        ]
+      }
+    ],
+    "p11_pilot": "The free offer is for a limited number of first clients. Once I have 3–5 case studies, pricing moves to market rates. If you're reading this, the offer is still active — reach out today.",
+    "p12_label": "Get Started",
+    "p12_title": "Let's build your first automation — for free",
+    "p12_sub": "Tell me what takes the most time in your business. In 30 minutes I'll map exactly what can be automated and how quickly.",
+    "p12_cta": "Message on WhatsApp",
+    "p12_free": "100% free for first clients. No obligations.",
+    "footer_contact": "byyan08.info@gmail.com  ·  @by.yan08",
+    "wa": "+40 743 027 858",
+    "email": "byyan08.info@gmail.com",
+    "instagram": "@by.yan08",
+    "location": "Cluj-Napoca, Romania"
+  },
+  "ru": {
+    "agency": "Aucta AI",
+    "tagline": "ИИ-автоматизация для вашего бизнеса.",
+    "tagline2": "С нуля. Запуск за 14 дней.",
+    "contact_label": "Контакты",
+    "page_label": "стр.",
+    "cover_title_1": "ИИ-автоматизация,",
+    "cover_title_2": "которая освобождает.",
+    "cover_sub": "Реальные автоматизации. Первым клиентам — бесплатно.",
+    "cover_year": "2026",
+    "p2_label": "О проекте",
+    "p2_title": "Кто стоит за Aucta AI",
+    "p2_intro": "Привет, меня зовут Ян. Мне 18 лет, я занимаюсь программированием с 15 лет. Последние пару лет полностью сосредоточился на ИИ и автоматизации — изучаю, как бизнесы по всей Европе используют это для роста без увеличения затрат. Сейчас запускаю Aucta AI — агентство практической автоматизации. Я строю и внедряю ИИ-рабочие процессы, которые реально работают: чат-боты, воронки лидов, автоматизацию CRM, RAG-системы. Первые клиенты получают всё бесплатно. Без подвоха — мне нужны кейсы, вам — автоматизация.",
+    "p2_for_whom_title": "Для кого это",
+    "p2_for_whom": "Малый и средний бизнес в Европе, уставший делать всё вручную. Если ваша команда тратит часы на повторяющиеся задачи — отвечает на одни и те же вопросы, копирует данные между системами, гоняется за follow-up'ами — автоматизация исправит это за считанные дни.",
+    "p2_principles_title": "Как я работаю",
+    "p2_principles": [
+      {
+        "icon": "check",
+        "title": "Только проверенные решения",
+        "desc": "Строю только автоматизации, которые уже работают в реальных бизнесах. Считаем точную экономию времени до написания первой строки кода."
+      },
+      {
+        "icon": "plug",
+        "title": "Без ломки вашего текущего процесса",
+        "desc": "Встраиваюсь в инструменты, которые вы уже используете: CRM, почта, мессенджеры. Ничто не заменяется — всё соединяется и усиливается."
+      },
+      {
+        "icon": "chart",
+        "title": "Результат в часах и деньгах",
+        "desc": "Каждая автоматизация сопровождается расчётом: сколько часов в неделю освобождается и сколько это стоит в реальных зарплатных деньгах."
+      }
+    ],
+    "p3_label": "Проблема",
+    "p3_title": "Что тихо убивает эффективность вашего бизнеса",
+    "p3_pains": [
+      {
+        "title": "Часы уходят на повторяющуюся работу",
+        "desc": "Ваша команда отвечает на одни и те же вопросы, копирует данные вручную, отправляет одни и те же письма. Это съедает 30–40% рабочего времени каждый день."
+      },
+      {
+        "title": "Лиды остывают пока вы спите",
+        "desc": "Заявка приходит в пятницу вечером. Обрабатывается в понедельник утром. К этому моменту клиент уже подписал договор с конкурентом, ответившим за минуты."
+      },
+      {
+        "title": "Данные разбросаны по инструментам",
+        "desc": "CRM, почта, WhatsApp, таблицы — у никого нет полной картины. Что-то теряется. Сделки проваливаются сквозь щели."
+      },
+      {
+        "title": "Рост требует найма новых людей",
+        "desc": "Каждое масштабирование = новые сотрудники. 100 новых клиентов — больше поддержки, больше менеджеров, больше расходов. ИИ-автоматизация разрывает этот шаблон."
+      }
+    ],
+    "p4_label": "Что мы строим",
+    "p4_title": "ИИ-автоматизации для реальных задач бизнеса",
+    "p4_sub": "Каждое решение строится под ваш процесс — не шаблонный продукт с полки.",
+    "services": [
+      {
+        "title": "ИИ-чатботы",
+        "desc": "Боты для сайта, WhatsApp и Instagram на базе OpenAI или Claude. Квалифицируют лидов, отвечают на вопросы и записывают на встречи 24/7.",
+        "flow": ["Клиент пишет", "LLM отвечает", "Лид в CRM"]
+      },
+      {
+        "title": "Автоматизация воронки лидов",
+        "desc": "Каждый лид с сайта или рекламы мгновенно классифицируется, попадает в CRM и назначается нужному менеджеру. Время ответа — секунды, не часы.",
+        "flow": ["Форма / реклама", "ИИ-классификация", "CRM + алерт"]
+      },
+      {
+        "title": "Умная обработка email",
+        "desc": "Подключение к Gmail или Outlook: автокатегоризация писем (лид, счёт, жалоба), черновики ответов, суммаризация длинных цепочек, мгновенные алерты.",
+        "flow": ["Email входящий", "ИИ-анализ", "Ответ / алерт"]
+      },
+      {
+        "title": "Транскрибация звонков",
+        "desc": "Каждый звонок расшифровывается Whisper, LLM выделяет задачи и договорённости и отправляет в Notion или Slack. Ничто не забывается.",
+        "flow": ["Запись звонка", "Whisper+LLM", "Notion/Slack"]
+      },
+      {
+        "title": "RAG-бот по документам",
+        "desc": "Загружаете документы, FAQ, прайсы — бот отвечает строго по вашим данным. Идеально для поддержки, онбординга сотрудников и консультаций клиентов.",
+        "flow": ["Вопрос", "Поиск в базе", "Точный ответ"]
+      },
+      {
+        "title": "Автоматизация CRM",
+        "desc": "HubSpot, Pipedrive, Bitrix24 — сделки обновляются автоматически, follow-up'ы планируются сами, отчёты генерируются без усилий. Менеджеры работают с людьми.",
+        "flow": ["Событие", "Триггер n8n", "CRM обновлён"]
+      },
+      {
+        "title": "Контент-машина на ИИ",
+        "desc": "Бриф → черновик ИИ → проверка человеком → автопубликация по расписанию. Контент-план никогда не срывается. Работает для Instagram, блогов, рассылок.",
+        "flow": ["Бриф/тема", "Черновик ИИ", "Публикация"]
+      },
+      {
+        "title": "Извлечение данных из документов",
+        "desc": "PDF, договоры, каталоги — LLM читает и структурирует данные в вашу базу или таблицу за секунды. Никакого ручного копирования.",
+        "flow": ["PDF/документ", "LLM-парсинг", "База данных"]
+      }
+    ],
+    "p7_label": "Как это работает",
+    "p7_title": "От первого разговора до живой автоматизации",
+    "p7_steps": [
+      {
+        "num": "01",
+        "title": "Бесплатный разведывательный звонок",
+        "desc": "Разбираем ваш бизнес. Картографирую текущие процессы и нахожу 2–3 главные точки для автоматизации. 30 минут, бесплатно, без обязательств."
+      },
+      {
+        "num": "02",
+        "title": "Схема автоматизации",
+        "desc": "Разрабатываю точный план: что автоматизируется, как подключается к вашим инструментам, сколько часов в неделю экономится. Вы утверждаете до начала работы."
+      },
+      {
+        "num": "03",
+        "title": "Разработка и интеграция",
+        "desc": "Строю автоматизацию на n8n, Make или кастомном коде и подключаю к вашим системам. Типичный срок: 5–14 дней."
+      },
+      {
+        "num": "04",
+        "title": "Живое тестирование с вашей командой",
+        "desc": "Тестируем на реальных сценариях — не демо-данных. Дорабатываю до тех пор, пока не работает идеально в вашей реальной среде."
+      },
+      {
+        "num": "05",
+        "title": "Передача и постоянная поддержка",
+        "desc": "Получаете полный доступ, документацию и поддержку. Если что-то сломается или понадобится корректировка — я исправлю."
+      }
+    ],
+    "p8_label": "Реальные примеры",
+    "p8_title": "Как европейские бизнесы автоматизируются сегодня",
+    "p8_sub": "Это реальные паттерны автоматизации, уже работающие в европейских компаниях. Я могу построить то же самое для вас.",
+    "cases": [
+      {
+        "type": "Логистический стартап, Берлин",
+        "now": "3 менеджера вручную обрабатывают 200+ заказов в день в таблицах. Письма о статусе отправляются вручную. Постоянные задержки и ошибки.",
+        "auto": "Рабочий процесс n8n: заказ получен → статус обновлён → письмо клиенту отправлено → алерт в Slack. Ни одного ручного шага.",
+        "effect": "120 часов в месяц освобождено. Ноль ручного ввода данных. Удовлетворённость клиентов значительно выросла."
+      },
+      {
+        "type": "Бренд одежды, Амстердам",
+        "now": "Запросы в Instagram DM не отвечаются. Поддержка в WhatsApp перегружена. Команда продаж тратит 4ч/день на элементарные вопросы.",
+        "auto": "ИИ-чатбот в Instagram + WhatsApp отвечает на вопросы о продуктах, квалифицирует покупателей, автоматически записывает на консультации.",
+        "effect": "200+ сообщений в день обрабатываются автоматически. Команда занимается продажами, а не ответами. Конверсия ×3."
+      },
+      {
+        "type": "SaaS-компания, Париж",
+        "now": "Онбординг клиентов занимает 5 дней переписки. Тикеты поддержки повторяют одни и те же вопросы. Команда перегружена.",
+        "auto": "RAG-бот, обученный на документации продукта, отвечает на 80% обращений. Автоматическая серия писем при регистрации.",
+        "effect": "Онбординг сокращён с 5 дней до 1. Тикеты поддержки упали на 60%. Команда занимается только сложными случаями."
+      },
+      {
+        "type": "Маркетинговое агентство, Бухарест",
+        "now": "8 контент-планов для клиентов ведутся вручную. Дедлайны срываются. Узкое место — старший копирайтер.",
+        "auto": "ИИ генерирует первые черновики по брифам. Человек проверяет и утверждает. Автопубликация в социальные сети.",
+        "effect": "Объём контента вырос в 4 раза. Ни одного пропущенного дедлайна. Команда переключилась на стратегию и клиентов."
+      },
+      {
+        "type": "Частная клиника, Вена",
+        "now": "Запись только по телефону. Неявки — 25%. Ресепшн тратит 3ч/день на планирование и напоминания.",
+        "auto": "WhatsApp-бот принимает запись 24/7, мгновенно подтверждает, отправляет напоминания за 24ч и за 2ч до приёма.",
+        "effect": "Неявки снизились с 25% до 8%. Освобождено 15 часов/неделю административной работы. Пациенты записываются в полночь."
+      }
+    ],
+    "p10_label": "Технологии",
+    "p10_title": "Стек, на котором мы строим",
+    "p10_sub": "Проверенные инструменты. Никакой лишней сложности. Никакой привязки к вендору.",
+    "tech_groups": [
+      {
+        "group": "ИИ-модели",
+        "tech_items": ["OpenAI GPT-4o", "Anthropic Claude", "Whisper (ASR)"]
+      },
+      {
+        "group": "Автоматизация",
+        "tech_items": ["n8n", "Make (Integromat)", "Python"]
+      },
+      {
+        "group": "CRM и бизнес",
+        "tech_items": ["HubSpot", "Pipedrive", "Bitrix24"]
+      },
+      {
+        "group": "Коммуникации",
+        "tech_items": ["WhatsApp Business API", "Instagram Graph API", "Gmail / Outlook API"]
+      }
+    ],
+    "p11_label": "Стоимость",
+    "p11_title": "Прямо сейчас — это бесплатно",
+    "p11_sub": "Первые автоматизации строю бесплатно, чтобы заработать реальные кейсы и рекомендации. Вы получаете рабочую автоматизацию. Я — портфолио. Все в выигрыше.",
+    "packages": [
+      {
+        "name": "Первый клиент",
+        "price": "БЕСПЛАТНО",
+        "highlight": true,
+        "desc": "Полная автоматизация под ключ без оплаты — только для первых клиентов",
+        "features": [
+          "Полная кастомная разработка автоматизации",
+          "Интеграция с вашими существующими инструментами",
+          "Запуск за 5–14 дней",
+          "Живое тестирование с вашей командой",
+          "30 дней поддержки включено",
+          "Всё остаётся у вас — навсегда"
+        ]
+      },
+      {
+        "name": "Стандарт",
+        "price": "от €500",
+        "desc": "Одна автоматизация с полной интеграцией — после пилотного периода",
+        "features": [
+          "ИИ-чатбот или воронка лидов",
+          "Интеграция с 1–2 системами",
+          "До 5 сценариев автоматизации",
+          "Тестирование и запуск",
+          "2 недели поддержки"
+        ]
+      },
+      {
+        "name": "Расширенный",
+        "price": "от €2 000",
+        "desc": "Несколько автоматизаций + RAG или ИИ-агент — будущие цены",
+        "features": [
+          "3+ процесса автоматизированы",
+          "RAG-система на базе знаний компании",
+          "Интеграция с несколькими системами",
+          "Документация и обучение команды",
+          "3 месяца поддержки и развития"
+        ]
+      }
+    ],
+    "p11_pilot": "Бесплатное предложение действует для ограниченного числа первых клиентов. Как только наберётся 3–5 кейсов, цены перейдут на рыночный уровень. Если вы читаете это — предложение ещё актуально. Пишите сейчас.",
+    "p12_label": "Следующий шаг",
+    "p12_title": "Давайте создадим вашу первую автоматизацию — бесплатно",
+    "p12_sub": "Расскажите, что отнимает больше всего времени в вашем бизнесе. За 30 минут покажу, что именно можно автоматизировать и как быстро.",
+    "p12_cta": "Написать в WhatsApp",
+    "p12_free": "100% бесплатно для первых клиентов. Без обязательств.",
+    "footer_contact": "byyan08.info@gmail.com  ·  @by.yan08",
+    "wa": "+40 743 027 858",
+    "email": "byyan08.info@gmail.com",
+    "instagram": "@by.yan08",
+    "location": "Cluj-Napoca, Romania"
+  },
+  "ro": {
+    "agency": "Aucta AI",
+    "tagline": "Automatizare AI pentru afacerea ta.",
+    "tagline2": "Construit de la zero. Live în 14 zile.",
+    "contact_label": "Contacte",
+    "page_label": "p.",
+    "cover_title_1": "Automatizare AI",
+    "cover_title_2": "care te eliberează.",
+    "cover_sub": "Automatizare reală. Gratuit pentru primii clienți.",
+    "cover_year": "2026",
+    "p2_label": "Despre noi",
+    "p2_title": "Cine se află în spatele Aucta AI",
+    "p2_intro": "Bună, sunt Yan. Am 18 ani și mă ocup de programare de la 15 ani. În ultimii doi ani m-am concentrat complet pe AI și automatizare — studiind cum afacerile din toată Europa folosesc asta pentru a crește fără a-și crește costurile. Acum lansez Aucta AI: o agenție de automatizare practică. Construiesc și implementez fluxuri AI care chiar funcționează — chatboți, pipeline-uri de lead-uri, automatizare CRM, sisteme RAG. Primii mei clienți primesc totul gratuit. Fără capcane — eu am nevoie de studii de caz, tu ai nevoie de automatizare.",
+    "p2_for_whom_title": "Pentru cine este asta",
+    "p2_for_whom": "Întreprinderi mici și mijlocii din Europa care sunt sătule să facă totul manual. Dacă echipa ta petrece ore pe sarcini repetitive — răspunde la aceleași întrebări, copiază date între instrumente, urmărește follow-up-uri — automatizarea poate rezolva asta în câteva zile.",
+    "p2_principles_title": "Cum lucrez",
+    "p2_principles": [
+      {
+        "icon": "check",
+        "title": "Doar soluții dovedite",
+        "desc": "Construiesc doar automatizări care funcționează deja în afaceri reale. Calculăm economia exactă de timp înainte de a scrie o singură linie de cod."
+      },
+      {
+        "icon": "plug",
+        "title": "Zero perturbări la configurația ta actuală",
+        "desc": "Mă integrez cu instrumentele pe care le folosești deja — CRM, email, mesagerie. Nimic nu se înlocuiește, totul se conectează și se îmbunătățește."
+      },
+      {
+        "icon": "chart",
+        "title": "Rezultate măsurate în ore și euro",
+        "desc": "Fiecare automatizare vine cu o estimare înainte/după: ore pe săptămână eliberate și cât valorează asta în costuri salariale reale."
+      }
+    ],
+    "p3_label": "Problema",
+    "p3_title": "Ce îți omoară în liniște eficiența",
+    "p3_pains": [
+      {
+        "title": "Ore pierdute pe muncă repetitivă",
+        "desc": "Echipa ta răspunde la aceleași întrebări, copiază date manual, trimite aceleași emailuri. Asta consumă 30–40% din timpul de lucru în fiecare zi."
+      },
+      {
+        "title": "Lead-urile se răcesc cât dormi",
+        "desc": "Un lead vine vineri seara. Este procesat luni dimineața. Între timp a semnat deja cu un concurent care a răspuns în minute."
+      },
+      {
+        "title": "Date împrăștiate în prea multe locuri",
+        "desc": "CRM, email, WhatsApp, foi de calcul — nimeni nu are imaginea completă. Lucruri se pierd. Tranzacțiile cad prin crăpături."
+      },
+      {
+        "title": "Creșterea necesită angajări noi",
+        "desc": "De fiecare dată când scalezi, trebuie să angajezi. 100 de clienți noi = mai mult suport, mai mulți manageri, mai multe costuri. AI automatizarea rupe acest tipar."
+      }
+    ],
+    "p4_label": "Ce construim",
+    "p4_title": "Automatizări AI pentru probleme reale de business",
+    "p4_sub": "Fiecare soluție este construită specific pentru fluxul tău — nu un produs generic de pe raft.",
+    "services": [
+      {
+        "title": "Chatboți AI",
+        "desc": "Boți pentru site, WhatsApp și Instagram bazați pe OpenAI sau Claude. Califică lead-uri, răspund la întrebări și programează întâlniri 24/7.",
+        "flow": ["Client scrie", "LLM răspunde", "Lead în CRM"]
+      },
+      {
+        "title": "Automatizare pipeline lead-uri",
+        "desc": "Fiecare lead de pe site sau reclame este imediat clasificat, adăugat în CRM și atribuit managerului potrivit. Timp de răspuns: secunde, nu ore.",
+        "flow": ["Formular / Reclamă", "Clasificare AI", "CRM + alertă"]
+      },
+      {
+        "title": "Inteligență email",
+        "desc": "Conectare Gmail sau Outlook: auto-categorisare emailuri (lead, factură, reclamație), ciorne răspunsuri, sumarizare fire lungi, alerte instant.",
+        "flow": ["Email primit", "Analiză AI", "Răspuns / alertă"]
+      },
+      {
+        "title": "Transcriere apeluri",
+        "desc": "Fiecare apel este transcris de Whisper, un LLM extrage acțiunile și deciziile și le trimite în Notion sau Slack. Nimic nu se uită.",
+        "flow": ["Înregistrare", "Whisper+LLM", "Notion/Slack"]
+      },
+      {
+        "title": "Bot RAG pe documente",
+        "desc": "Încarci documentele, FAQ-urile și listele de prețuri — botul răspunde exact pe baza datelor tale. Perfect pentru suport, onboarding și consultații.",
+        "flow": ["Întrebare", "Căutare doc", "Răspuns exact"]
+      },
+      {
+        "title": "Automatizare CRM",
+        "desc": "HubSpot, Pipedrive, Bitrix24 — tranzacțiile se actualizează automat, follow-up-urile se planifică singure, rapoartele se generează fără efort.",
+        "flow": ["Eveniment", "Trigger n8n", "CRM actualizat"]
+      },
+      {
+        "title": "Motor de conținut AI",
+        "desc": "Brief → ciornă AI → verificare umană → publicare programată. Calendarul de conținut nu se mai rupe niciodată. Funcționează pentru Instagram, bloguri, newslettere.",
+        "flow": ["Brief/temă", "Ciornă AI", "Publicare"]
+      },
+      {
+        "title": "Extragere date din documente",
+        "desc": "PDF-uri, contracte, cataloage — LLM citește și structurează datele în baza ta sau foaia de calcul în secunde. Fără copy-paste manual.",
+        "flow": ["PDF/document", "Parsare LLM", "Bază de date"]
+      }
+    ],
+    "p7_label": "Cum funcționează",
+    "p7_title": "De la prima conversație la automatizare live",
+    "p7_steps": [
+      {
+        "num": "01",
+        "title": "Apel de descoperire gratuit",
+        "desc": "Discutăm despre afacerea ta. Cartografiez fluxul actual și găsesc cele 2–3 oportunități principale de automatizare. 30 minute, gratuit, fără obligații."
+      },
+      {
+        "num": "02",
+        "title": "Planul automatizării",
+        "desc": "Proiectez exact ce se automatizează — cum se conectează la instrumentele tale și câte ore pe săptămână se economisesc. Tu aprobi înainte să se construiască ceva."
+      },
+      {
+        "num": "03",
+        "title": "Construire și integrare",
+        "desc": "Construiesc automatizarea folosind n8n, Make sau cod custom și o conectez la sistemele tale. Livrare tipică: 5–14 zile."
+      },
+      {
+        "num": "04",
+        "title": "Testare live cu echipa ta",
+        "desc": "Testăm cu scenarii reale — nu date demo. Rafinăm până funcționează perfect în mediul tău real."
+      },
+      {
+        "num": "05",
+        "title": "Predare și suport continuu",
+        "desc": "Primești acces complet, documentație și suport. Dacă ceva se strică sau necesită ajustări, remediez."
+      }
+    ],
+    "p8_label": "Exemple reale",
+    "p8_title": "Cum automatizează afacerile europene astăzi",
+    "p8_sub": "Acestea sunt tipare reale de automatizare deja rulate în companii europene. Pot construi același lucru pentru tine.",
+    "cases": [
+      {
+        "type": "Startup logistică, Berlin",
+        "now": "3 manageri procesează manual 200+ comenzi/zi în foi de calcul. Emailuri de status trimise manual. Întârzieri și erori constante.",
+        "auto": "Flux n8n: comandă primită → status actualizat → email client trimis → alertă Slack la echipă. Zero pași manuali.",
+        "effect": "120 ore/lună eliberate. Zero introducere manuală de date. Satisfacția clienților crescută semnificativ."
+      },
+      {
+        "type": "Brand de modă, Amsterdam",
+        "now": "Cereri în Instagram DM fără răspuns. Suport WhatsApp copleșit. Echipa de vânzări petrece 4h/zi pe întrebări de bază.",
+        "auto": "Chatbot AI pe Instagram + WhatsApp răspunde la întrebări despre produse, califică cumpărători, programează consultații automat.",
+        "effect": "200+ mesaje/zi gestionate automat. Echipa se concentrează pe vânzare, nu pe răspunsuri. Conversie de 3×."
+      },
+      {
+        "type": "Companie SaaS, Paris",
+        "now": "Onboarding clienți durează 5 zile de emailuri dus-întors. Tichetele de suport repetă aceleași întrebări. Echipa copleșită.",
+        "auto": "Bot RAG antrenat pe documentația produsului răspunde la 80% din solicitări. Secvență de emailuri de onboarding automată la înregistrare.",
+        "effect": "Onboarding redus de la 5 zile la 1. Tichete de suport scăzute cu 60%. Echipa gestionează doar cazuri complexe."
+      },
+      {
+        "type": "Agenție marketing, București",
+        "now": "8 calendare de conținut pentru clienți gestionate manual. Termene depășite. Blocaj la copywriter-ul senior.",
+        "auto": "AI generează primele ciorne din briefuri. Omul verifică și aprobă. Publicare automată pe rețelele sociale.",
+        "effect": "Output conținut de 4×. Zero termene depășite. Echipa refocusată pe strategie și relații cu clienții."
+      },
+      {
+        "type": "Clinică privată, Viena",
+        "now": "Programări doar prin telefon. Rată neprezentare 25%. Recepționera petrece 3h/zi pe programare și memento-uri.",
+        "auto": "Bot WhatsApp acceptă programări 24/7, confirmă instant, trimite memento-uri cu 24h și 2h înainte de programare.",
+        "effect": "Neprezentări scăzute de la 25% la 8%. 15 ore/săptămână de timp admin eliberate. Pacienții se programează la miezul nopții."
+      }
+    ],
+    "p10_label": "Tehnologii",
+    "p10_title": "Stiva pe care construim",
+    "p10_sub": "Instrumente dovedite. Fără complexitate inutilă. Fără dependență de vendor.",
+    "tech_groups": [
+      {
+        "group": "Modele AI",
+        "tech_items": ["OpenAI GPT-4o", "Anthropic Claude", "Whisper (ASR)"]
+      },
+      {
+        "group": "Automatizare",
+        "tech_items": ["n8n", "Make (Integromat)", "Python"]
+      },
+      {
+        "group": "CRM și Business",
+        "tech_items": ["HubSpot", "Pipedrive", "Bitrix24"]
+      },
+      {
+        "group": "Comunicare",
+        "tech_items": ["WhatsApp Business API", "Instagram Graph API", "Gmail / Outlook API"]
+      }
+    ],
+    "p11_label": "Prețuri",
+    "p11_title": "Acum — este gratuit",
+    "p11_sub": "Construiesc primele automatizări la cost zero pentru a câștiga studii de caz și referințe reale. Tu primești o automatizare funcțională. Eu primesc un element de portofoliu. Toți câștigăm.",
+    "packages": [
+      {
+        "name": "Ofertă primul client",
+        "price": "GRATUIT",
+        "highlight": true,
+        "desc": "Automatizare completă construită și implementată fără costuri — doar pentru primii clienți",
+        "features": [
+          "Construire completă automatizare custom",
+          "Integrare cu instrumentele tale existente",
+          "Livrare în 5–14 zile",
+          "Testare live cu echipa ta",
+          "30 zile suport inclus",
+          "Păstrezi totul — pentru totdeauna"
+        ]
+      },
+      {
+        "name": "Standard",
+        "price": "de la €500",
+        "desc": "O automatizare cu integrare completă — după perioada pilot",
+        "features": [
+          "Chatbot AI sau pipeline lead-uri",
+          "Integrare cu 1–2 sisteme",
+          "Până la 5 scenarii de automatizare",
+          "Testare și lansare",
+          "2 săptămâni suport"
+        ]
+      },
+      {
+        "name": "Avansat",
+        "price": "de la €2.000",
+        "desc": "Automatizări multiple + RAG sau agent AI — prețuri viitoare",
+        "features": [
+          "3+ procese automatizate",
+          "Sistem RAG pe baza de cunoștințe",
+          "Integrări cu sisteme multiple",
+          "Documentație și formare echipă",
+          "3 luni suport și dezvoltare"
+        ]
+      }
+    ],
+    "p11_pilot": "Oferta gratuită este pentru un număr limitat de primi clienți. Odată ce am 3–5 studii de caz, prețurile trec la nivelul pieței. Dacă citești asta — oferta este încă activă. Contactează-mă acum.",
+    "p12_label": "Primul pas",
+    "p12_title": "Să construim prima ta automatizare — gratuit",
+    "p12_sub": "Spune-mi ce consumă cel mai mult timp în afacerea ta. În 30 de minute îți arăt exact ce poate fi automatizat și cât de repede.",
+    "p12_cta": "Scrie pe WhatsApp",
+    "p12_free": "100% gratuit pentru primii clienți. Fără obligații.",
+    "footer_contact": "byyan08.info@gmail.com  ·  @by.yan08",
+    "wa": "+40 743 027 858",
+    "email": "byyan08.info@gmail.com",
+    "instagram": "@by.yan08",
+    "location": "Cluj-Napoca, România"
+  }
+}
