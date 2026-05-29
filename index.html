@@ -221,7 +221,7 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;
 .mcl:hover{background:rgba(239,68,68,.2);color:#f87171;border-color:rgba(239,68,68,.4)}
 
 /* GALLERY */
-.mgal{position:relative;aspect-ratio:16/9;overflow:hidden;border-radius:14px;margin:1.4rem 1.4rem 0;cursor:zoom-in}
+.mgal{position:relative;aspect-ratio:16/9;overflow:hidden;border-radius:14px;margin:1.4rem 1.4rem 0}
 .gslides{display:flex;transition:transform .4s ease;height:100%}
 .gslide{min-width:100%;height:100%}
 .gslide img{width:100%;height:100%;object-fit:cover;display:block}
@@ -282,25 +282,17 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;
 .cbinfo span{font-size:.72rem;color:var(--muted)}
 
 /* LIGHTBOX */
-.lb{position:fixed;inset:0;z-index:5000;background:rgba(0,0,0,.96);
-  display:flex;align-items:center;justify-content:center;
-  opacity:0;pointer-events:none;transition:opacity .25s}
-.lb.open{opacity:1;pointer-events:all}
-.lb-stage{width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.lb-stage img{max-width:90vw;max-height:90vh;object-fit:contain;
-  transform-origin:center;transition:none;cursor:grab;user-select:none}
-.lb-stage img.dragging{cursor:grabbing}
-.lb-bar{position:fixed;top:0;left:0;right:0;padding:1rem 1.5rem;
-  display:flex;align-items:center;justify-content:space-between;
-  background:linear-gradient(rgba(0,0,0,.7),transparent)}
-.lb-hint{position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);
-  font-size:.75rem;color:rgba(255,255,255,.4);pointer-events:none}
-.lb-btn{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.2);
-  background:rgba(0,0,0,.6);color:#fff;display:flex;align-items:center;justify-content:center;
-  cursor:pointer;transition:all .2s;font-size:.85rem}
-.lb-btn:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.4)}
-.lb-btns{display:flex;gap:.5rem}
-.lb-zoom{font-size:.75rem;color:rgba(255,255,255,.5);font-family:var(--fd);font-weight:700}
+
+
+
+
+
+
+
+
+
+
+
 
 /* AI IMPACT SECTION */
 .impact-s{padding:5rem 0}
@@ -536,21 +528,6 @@ footer{border-top:1px solid var(--border);padding:1.8rem 1.5rem;text-align:cente
   <div class="lang-option" data-lang="en">EN</div>
   <div class="lang-option" data-lang="ro">RO</div>
   <div class="lang-option" data-lang="ru">РУ</div>
-</div>
-
-<!-- LIGHTBOX -->
-<div class="lb" id="lb">
-  <div class="lb-bar">
-    <div class="lb-zoom" id="lbZoomLbl">100%</div>
-    <div class="lb-btns">
-      <button class="lb-btn" onclick="lbZ(.3)" title="Zoom in"><i class="fas fa-magnifying-glass-plus"></i></button>
-      <button class="lb-btn" onclick="lbZ(-.3)" title="Zoom out"><i class="fas fa-magnifying-glass-minus"></i></button>
-      <button class="lb-btn" onclick="lbReset()" title="Reset"><i class="fas fa-compress"></i></button>
-      <button class="lb-btn" onclick="closeLb()" title="Close"><i class="fas fa-xmark"></i></button>
-    </div>
-  </div>
-  <div class="lb-stage" id="lbStage"><img id="lbImg" src="" alt=""></div>
-  <div class="lb-hint" id="lbHint">Scroll to zoom · Drag to pan · Double-click to reset</div>
 </div>
 
 <!-- MODAL -->
@@ -795,9 +772,9 @@ const TG_CHAT = 'YOUR_CHAT_ID';
 // ── PRODUCT (single agency card) ──
 const PRODUCTS = [
   {id:'p1',fa:'fa-robot',col:'#3b82f6',isOffer:true,isCustom:true,
-   cover:'offer-cover.jpg',
+   cover:'obl.png',
    ytId:'YOUR_YOUTUBE_ID',
-   imgs:['offer-cover.jpg'],
+   imgs:['obl.png'],
    en:{name:'AI Automation for Your Business',cat:'Custom AI Agency',tag:'Free Offer',
      desc:'We study your workflow, pinpoint the highest-ROI automation opportunities, and build a custom AI system that runs 24/7. Lead handling, email, content, reports — all on autopilot while you focus on growth.',
      feats:['Free business audit & roadmap','100% custom-built automation','n8n + AI agents','Connects to your existing tools','Live in 5–14 days','Ongoing support & updates']},
@@ -1063,8 +1040,7 @@ function openModal(pid){
       <div id="mMediaInner" style="width:100%;height:100%">
         <img id="mCoverImg" src="${coverSrc}"
           alt="${pd.name}"
-          onclick="openLb(this.src)"
-          style="width:100%;height:100%;object-fit:cover;display:block;cursor:zoom-in"
+          style="width:100%;height:100%;object-fit:cover;display:block"
           onerror="this.src='https://placehold.co/960x540/0b1220/3b82f6?text=Aucta+AI'">
       </div>
       ${hasYt ? `
@@ -1157,70 +1133,16 @@ function swTab(tab,pid){
     sl.style.transform='translateX(0)'; dt.style.display='none';
   } else {
     showVid=false;
-    sl.innerHTML=p.imgs.map(img=>`<div class="gslide"><img src="${img}" alt="" onclick="openLb(this.src)" onerror="this.src='https://placehold.co/960x540/111c30/60a5fa?text=Preview'"></div>`).join('');
+    sl.innerHTML=p.imgs.map(img=>`<div class="gslide"><img src="${img}" alt="" onerror="this.src='https://placehold.co/960x540/111c30/60a5fa?text=Preview'"></div>`).join('');
     dt.style.display='flex'; gGo(curSlide);
   }
 }
 
 document.getElementById('mcl').addEventListener('click',closeModal);
 document.getElementById('modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeLb();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 
 // ── LIGHTBOX ──
-let lbScale=1,lbX=0,lbY=0,lbDrag=false,lbSX,lbSY;
-
-function openLb(src){
-  const img=document.getElementById('lbImg');
-  img.src=src; lbScale=1; lbX=0; lbY=0;
-  updLb();
-  document.getElementById('lb').classList.add('open');
-}
-function closeLb(){document.getElementById('lb').classList.remove('open');}
-function lbZ(delta){
-  lbScale=Math.max(.5,Math.min(6,lbScale+delta));
-  if(lbScale===1){lbX=0;lbY=0;}
-  updLb();
-}
-function lbReset(){lbScale=1;lbX=0;lbY=0;updLb();}
-function updLb(){
-  const img=document.getElementById('lbImg');
-  img.style.transform=`translate(${lbX}px,${lbY}px) scale(${lbScale})`;
-  document.getElementById('lbZoomLbl').textContent=Math.round(lbScale*100)+'%';
-  img.style.cursor=lbScale>1?'grab':'zoom-in';
-}
-
-const lbStage=document.getElementById('lbStage');
-const lbImg=document.getElementById('lbImg');
-
-lbStage.addEventListener('wheel',e=>{
-  e.preventDefault();
-  lbZ(e.deltaY<0?.25:-.25);
-},{passive:false});
-
-lbStage.addEventListener('dblclick',lbReset);
-document.getElementById('lb').addEventListener('click',e=>{if(e.target===e.currentTarget||e.target===lbStage)closeLb();});
-
-lbImg.addEventListener('mousedown',e=>{
-  if(lbScale>1){lbDrag=true;lbSX=e.clientX-lbX;lbSY=e.clientY-lbY;lbImg.classList.add('dragging');}
-  e.preventDefault();
-});
-document.addEventListener('mousemove',e=>{
-  if(lbDrag){lbX=e.clientX-lbSX;lbY=e.clientY-lbSY;updLb();}
-});
-document.addEventListener('mouseup',()=>{lbDrag=false;lbImg.classList.remove('dragging');});
-
-// Touch pinch
-let ltDist=null;
-lbStage.addEventListener('touchstart',e=>{
-  if(e.touches.length===2){ltDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);}
-},{passive:true});
-lbStage.addEventListener('touchmove',e=>{
-  if(e.touches.length===2 && ltDist){
-    const nd=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
-    lbScale=Math.max(.5,Math.min(6,lbScale*(nd/ltDist)));
-    ltDist=nd; updLb(); e.preventDefault();
-  }
-},{passive:false});
 
 // ── SCROLL REVEAL ──
 const rvObs=new IntersectionObserver(entries=>{
