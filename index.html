@@ -1,1090 +1,1416 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="htmlRoot">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Dmitry Buyanov | AI Automations & Agents</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #04080f;
-      --surface: #0b1220;
-      --surface2: #111c30;
-      --border: rgba(99,179,255,0.12);
-      --blue: #3b82f6;
-      --blue-bright: #60a5fa;
-      --blue-glow: rgba(59,130,246,0.35);
-      --cyan: #22d3ee;
-      --text: #e8f0fe;
-      --muted: #7a90b0;
-      --accent: #f59e0b;
-      --green: #10b981;
-      --radius: 20px;
-      --font-display: 'Syne', sans-serif;
-      --font-body: 'DM Sans', sans-serif;
-    }
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: var(--font-body);
-      background: var(--bg);
-      color: var(--text);
-      overflow-x: hidden;
-      position: relative;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Yan | Aucta AI — Automation Agency</title>
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#04080f;--surface:#0b1220;--surface2:#111c30;
+  --border:rgba(99,179,255,0.12);--blue:#3b82f6;--blue-bright:#60a5fa;
+  --blue-glow:rgba(59,130,246,0.35);--cyan:#22d3ee;--purple:#a78bfa;
+  --text:#e8f0fe;--muted:#7a90b0;--accent:#f59e0b;--green:#10b981;
+  --radius:20px;--fd:'Syne',sans-serif;--fb:'DM Sans',sans-serif;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);overflow-x:hidden}
+h1,h2,h3,h4,h5,p,span,div,button,a{overflow-wrap:break-word;word-break:break-word}
 
-    /* ─── CANVAS PARTICLE BG ─── */
-    #canvas-bg {
-      position: fixed; inset: 0; z-index: 0;
-      pointer-events: none;
-    }
+/* CANVAS */
+#cvs{position:fixed;inset:0;z-index:0;pointer-events:none}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:.022}
+.orb{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0;animation:orbF 18s ease-in-out infinite}
+.o1{width:700px;height:700px;top:-200px;left:-150px;background:radial-gradient(circle,rgba(59,130,246,.18),transparent 70%)}
+.o2{width:500px;height:500px;bottom:5%;right:-100px;background:radial-gradient(circle,rgba(34,211,238,.12),transparent 70%);animation-delay:-7s}
+.o3{width:400px;height:400px;top:40%;left:35%;background:radial-gradient(circle,rgba(167,139,250,.08),transparent 70%);animation-delay:-13s}
+.o4{width:300px;height:300px;top:70%;left:60%;background:radial-gradient(circle,rgba(245,158,11,.06),transparent 70%);animation-delay:-5s}
+@keyframes orbF{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(40px,-50px) scale(1.06)}66%{transform:translate(-30px,35px) scale(.94)}}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--blue),var(--purple));border-radius:10px}
+.wrapper{position:relative;z-index:2}
+.container{max-width:1280px;margin:0 auto;padding:0 1.5rem}
 
-    /* ─── NOISE OVERLAY ─── */
-    body::before {
-      content: '';
-      position: fixed; inset: 0; z-index: 1;
-      pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-      opacity: 0.022;
-    }
+/* LANG */
+.lang-toggle{position:fixed;top:24px;right:24px;z-index:1000;display:flex;gap:4px;
+  background:rgba(11,18,32,.92);backdrop-filter:blur(20px);border:1px solid var(--border);
+  border-radius:50px;padding:5px;box-shadow:0 0 30px rgba(59,130,246,.1)}
+.lang-option{padding:6px 14px;border-radius:40px;font-family:var(--fd);font-size:.78rem;font-weight:700;
+  cursor:pointer;transition:all .25s;color:var(--muted);user-select:none}
+.lang-option.active{background:var(--blue);color:#fff;box-shadow:0 0 15px var(--blue-glow)}
+.lang-option:not(.active):hover{color:var(--text)}
 
-    /* ─── GLOWING ORBS ─── */
-    .orb {
-      position: fixed; border-radius: 50%;
-      filter: blur(90px); pointer-events: none; z-index: 0;
-      animation: orbFloat 18s ease-in-out infinite;
-    }
-    .orb-1 { width: 600px; height: 600px; top: -150px; left: -100px; background: radial-gradient(circle, rgba(59,130,246,0.15), transparent 70%); }
-    .orb-2 { width: 400px; height: 400px; bottom: 10%; right: -80px; background: radial-gradient(circle, rgba(34,211,238,0.1), transparent 70%); animation-delay: -7s; }
-    .orb-3 { width: 300px; height: 300px; top: 50%; left: 40%; background: radial-gradient(circle, rgba(245,158,11,0.07), transparent 70%); animation-delay: -13s; }
-    @keyframes orbFloat {
-      0%, 100% { transform: translate(0,0) scale(1); }
-      33% { transform: translate(30px,-40px) scale(1.05); }
-      66% { transform: translate(-20px,30px) scale(0.95); }
-    }
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  align-items:center;text-align:center;padding:6rem 1.5rem 4rem;position:relative;overflow:hidden}
+.hf{position:absolute;pointer-events:none;animation:hfloat 6s ease-in-out infinite}
+.hf:nth-child(1){top:15%;left:8%}.hf:nth-child(2){top:22%;right:9%;animation-delay:-2s}
+.hf:nth-child(3){bottom:28%;left:11%;animation-delay:-4s}.hf:nth-child(4){bottom:22%;right:7%;animation-delay:-1s}
+.chip{background:rgba(11,18,32,.85);backdrop-filter:blur(10px);border:1px solid var(--border);
+  border-radius:50px;padding:7px 15px;font-size:.78rem;font-weight:600;color:var(--blue-bright);
+  white-space:nowrap;box-shadow:0 4px 20px rgba(59,130,246,.1);display:flex;align-items:center;gap:7px}
+@keyframes hfloat{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-12px) rotate(1deg)}}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(59,130,246,.1);
+  border:1px solid rgba(59,130,246,.3);border-radius:50px;padding:8px 20px;
+  font-family:var(--fd);font-size:.78rem;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--blue-bright);margin-bottom:2rem;animation:fsup .8s ease-out both}
+.edot{width:6px;height:6px;border-radius:50%;background:var(--cyan);
+  box-shadow:0 0 8px var(--cyan);animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.htitle{font-family:var(--fd);font-size:clamp(2.6rem,7vw,5.8rem);font-weight:800;
+  line-height:1.06;letter-spacing:-.02em;margin-bottom:1.8rem;animation:fsup .8s .15s ease-out both}
+.htitle .line{display:block}
+.gt{background:linear-gradient(135deg,#60a5fa 0%,#22d3ee 40%,#a78bfa 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;position:relative}
+.gt::after{content:'';position:absolute;bottom:-3px;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,#3b82f6,#22d3ee,transparent);border-radius:2px}
+.hsub{max-width:660px;font-size:1.12rem;line-height:1.68;color:#8fa8c8;
+  margin-bottom:3rem;animation:fsup .8s .3s ease-out both}
+.hsub strong{color:var(--text)}
+.hbtns{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;animation:fsup .8s .45s ease-out both}
+.btnp{background:linear-gradient(135deg,var(--blue),#5b21b6);color:#fff;border:none;
+  padding:1rem 2.2rem;border-radius:50px;font-family:var(--fd);font-size:.95rem;font-weight:700;
+  cursor:pointer;display:inline-flex;align-items:center;gap:9px;transition:all .3s;
+  position:relative;overflow:hidden;box-shadow:0 0 40px rgba(59,130,246,.35)}
+.btnp::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.18),transparent);opacity:0;transition:.3s}
+.btnp:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 8px 50px rgba(59,130,246,.5)}
+.btnp:hover::before{opacity:1}
+.btns{background:transparent;color:var(--text);border:1px solid var(--border);
+  padding:1rem 2.2rem;border-radius:50px;font-family:var(--fd);font-size:.95rem;font-weight:600;
+  cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .3s}
+.btns:hover{border-color:var(--blue);color:var(--blue-bright);transform:translateY(-3px)}
 
-    /* ─── SCROLLBAR ─── */
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 10px; }
+/* STATS */
+.sbar{display:flex;flex-wrap:wrap;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;margin:4rem 0 2rem;animation:fsup .8s .6s ease-out both}
+.si{flex:1;min-width:150px;padding:1.8rem 1.2rem;text-align:center;
+  border-right:1px solid var(--border);position:relative;overflow:hidden;transition:background .3s}
+.si:last-child{border-right:none}
+.si:hover{background:var(--surface2)}
+.si::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--blue),var(--cyan),transparent);
+  transform:scaleX(0);transition:.4s}
+.si:hover::before{transform:scaleX(1)}
+.snum{font-family:var(--fd);font-size:2.3rem;font-weight:800;
+  background:linear-gradient(135deg,var(--blue-bright),var(--cyan));
+  -webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
+.slbl{font-size:.78rem;color:var(--muted);margin-top:.4rem;letter-spacing:.05em}
 
-    /* ─── LAYOUT ─── */
-    .wrapper { position: relative; z-index: 2; }
-    .container { max-width: 1240px; margin: 0 auto; padding: 0 1.5rem; }
+/* TICKER */
+.tkw{overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:.85rem 0;margin-bottom:2rem}
+.tki{display:flex;gap:3rem;white-space:nowrap;animation:tk 28s linear infinite}
+.tki:hover{animation-play-state:paused}
+.tkt{font-family:var(--fd);font-size:.8rem;font-weight:700;letter-spacing:.08em;
+  color:var(--muted);display:flex;align-items:center;gap:9px}
+.tkd{width:5px;height:5px;border-radius:50%;background:var(--blue)}
+@keyframes tk{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes fsup{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
 
-    /* ─── LANG TOGGLE ─── */
-    .lang-toggle {
-      position: fixed; top: 24px; right: 24px; z-index: 1000;
-      display: flex; gap: 4px;
-      background: rgba(11,18,32,0.85);
-      backdrop-filter: blur(20px);
-      border: 1px solid var(--border);
-      border-radius: 50px;
-      padding: 5px;
-      box-shadow: 0 0 30px rgba(59,130,246,0.08);
-    }
-    .lang-option {
-      display: flex; align-items: center; gap: 5px;
-      padding: 6px 14px; border-radius: 40px;
-      font-family: var(--font-display); font-size: 0.78rem; font-weight: 700;
-      cursor: pointer; transition: all 0.25s; color: var(--muted);
-      user-select: none;
-    }
-    .lang-option.active { background: var(--blue); color: white; box-shadow: 0 0 15px var(--blue-glow); }
-    .lang-option:not(.active):hover { color: var(--text); }
+/* SECTION */
+.slabel{display:inline-flex;align-items:center;gap:8px;font-family:var(--fd);font-size:.72rem;font-weight:700;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--blue-bright);margin-bottom:.9rem}
+.slabel::before{content:'';width:22px;height:1px;background:var(--blue)}
+.stitle{font-family:var(--fd);font-size:clamp(1.8rem,4vw,3rem);font-weight:800;line-height:1.15;margin-bottom:.9rem}
+.sdesc{color:var(--muted);font-size:1rem;line-height:1.65}
 
-    /* ─── HERO ─── */
-    .hero-section {
-      min-height: 100vh; display: flex; flex-direction: column;
-      justify-content: center; align-items: center; text-align: center;
-      padding: 6rem 1.5rem 4rem; position: relative;
-    }
-    .hero-eyebrow {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(59,130,246,0.1);
-      border: 1px solid rgba(59,130,246,0.3);
-      border-radius: 50px; padding: 8px 20px;
-      font-family: var(--font-display); font-size: 0.78rem; font-weight: 700;
-      letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue-bright);
-      margin-bottom: 2.2rem;
-      animation: fadeSlideUp 0.8s ease-out both;
-    }
-    .hero-eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); animation: blink 2s ease-in-out infinite; }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+/* SHOP */
+.shop-s{padding:3.5rem 0 5rem}
+.shop-hd{text-align:center;margin-bottom:3.5rem}
 
-    .hero-title {
-      font-family: var(--font-display); font-size: clamp(2.6rem, 7vw, 5.5rem);
-      font-weight: 800; line-height: 1.1; letter-spacing: -0.02em;
-      margin-bottom: 1.8rem;
-      animation: fadeSlideUp 0.8s 0.15s ease-out both;
-    }
-    .hero-title .line { display: block; }
-    .hero-title .gradient-text {
-      background: linear-gradient(135deg, #60a5fa 0%, #22d3ee 40%, #a78bfa 100%);
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-      position: relative;
-    }
-    .hero-title .gradient-text::after {
-      content: '';
-      position: absolute; bottom: -4px; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, #3b82f6, #22d3ee, transparent);
-      border-radius: 2px;
-    }
-    .hero-subtitle {
-      max-width: 680px; font-size: 1.15rem; line-height: 1.65;
-      color: #8fa8c8; margin-bottom: 2.8rem;
-      animation: fadeSlideUp 0.8s 0.3s ease-out both;
-    }
-    .hero-subtitle strong { color: var(--text); }
-    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; animation: fadeSlideUp 0.8s 0.45s ease-out both; }
-    .btn-primary {
-      background: var(--blue); color: white;
-      border: none; padding: 1rem 2.2rem; border-radius: 50px;
-      font-family: var(--font-display); font-size: 1rem; font-weight: 700;
-      cursor: pointer; display: inline-flex; align-items: center; gap: 10px;
-      transition: all 0.3s; position: relative; overflow: hidden;
-      box-shadow: 0 0 40px rgba(59,130,246,0.3);
-    }
-    .btn-primary::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
-      opacity: 0; transition: 0.3s;
-    }
-    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 50px rgba(59,130,246,0.45); }
-    .btn-primary:hover::before { opacity: 1; }
-    .btn-secondary {
-      background: transparent; color: var(--text);
-      border: 1px solid var(--border); padding: 1rem 2.2rem; border-radius: 50px;
-      font-family: var(--font-display); font-size: 1rem; font-weight: 600;
-      cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
-      transition: all 0.3s;
-    }
-    .btn-secondary:hover { border-color: var(--blue); color: var(--blue-bright); transform: translateY(-3px); }
+/* DEAL BANNER */
+.deal-banner{display:flex;align-items:flex-start;gap:16px;
+  background:linear-gradient(135deg,rgba(245,158,11,.13),rgba(239,68,68,.06));
+  border:1px solid rgba(245,158,11,.4);border-radius:20px;padding:1.5rem 2rem;
+  margin:2rem auto 0;max-width:800px;text-align:left;position:relative;overflow:hidden}
+.deal-banner::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(245,158,11,.07),transparent);
+  animation:shim 3s ease-in-out infinite;pointer-events:none}
+@keyframes shim{0%,100%{opacity:0}50%{opacity:1}}
+.deal-ico{font-size:2rem;flex-shrink:0;color:var(--accent);animation:fp 2s ease-in-out infinite}
+@keyframes fp{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+.deal-txt strong{display:block;font-family:var(--fd);font-size:1rem;font-weight:800;color:var(--accent);margin-bottom:.4rem}
+.deal-txt p{color:#d4a84b;font-size:.9rem;line-height:1.65;position:relative;z-index:1}
 
-    /* ─── STATS BAR ─── */
-    .stats-bar {
-      display: flex; flex-wrap: wrap; gap: 0;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden; margin: 5rem 0;
-      animation: fadeSlideUp 0.8s 0.6s ease-out both;
-    }
-    .stat-item {
-      flex: 1; min-width: 180px;
-      padding: 2rem 1.5rem; text-align: center;
-      border-right: 1px solid var(--border);
-      position: relative; overflow: hidden;
-      transition: background 0.3s;
-    }
-    .stat-item:last-child { border-right: none; }
-    .stat-item:hover { background: var(--surface2); }
-    .stat-item::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, transparent, var(--blue), transparent);
-      transform: scaleX(0); transition: 0.4s;
-    }
-    .stat-item:hover::before { transform: scaleX(1); }
-    .stat-num {
-      font-family: var(--font-display); font-size: 2.5rem; font-weight: 800;
-      background: linear-gradient(135deg, var(--blue-bright), var(--cyan));
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-      line-height: 1;
-    }
-    .stat-label { font-size: 0.82rem; color: var(--muted); margin-top: 0.4rem; letter-spacing: 0.05em; }
+/* PRODUCT GRID — strict 3 cols */
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem}
 
-    /* ─── SECTION HEADINGS ─── */
-    .section-label {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-family: var(--font-display); font-size: 0.72rem; font-weight: 700;
-      letter-spacing: 0.15em; text-transform: uppercase; color: var(--blue-bright);
-      margin-bottom: 1.2rem;
-    }
-    .section-label::before { content: ''; width: 24px; height: 1px; background: var(--blue); }
-    .section-title {
-      font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 3rem);
-      font-weight: 800; line-height: 1.2; margin-bottom: 1.2rem;
-    }
-    .section-desc { color: var(--muted); font-size: 1.05rem; line-height: 1.65; max-width: 580px; }
+/* PRODUCT CARD */
+.pcard{background:var(--surface);border:1px solid var(--border);border-radius:22px;
+  overflow:hidden;transition:all .4s cubic-bezier(.175,.885,.32,1.275);
+  cursor:pointer;position:relative;display:flex;flex-direction:column}
+.pcard::after{content:'';position:absolute;inset:0;border-radius:22px;
+  background:linear-gradient(135deg,rgba(59,130,246,.05),rgba(167,139,250,.05));
+  opacity:0;transition:.4s;pointer-events:none}
+.pcard:hover{transform:translateY(-10px) scale(1.015);
+  border-color:rgba(99,179,255,.4);
+  box-shadow:0 28px 55px rgba(0,0,0,.4),0 0 35px rgba(59,130,246,.1)}
+.pcard:hover::after{opacity:1}
 
-    /* ─── PAIN SECTION ─── */
-    .pain-section { padding: 5rem 0; }
-    .pain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
-    .pain-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 2rem;
-      transition: all 0.35s;
-      position: relative; overflow: hidden;
-    }
-    .pain-card::after {
-      content: ''; position: absolute; inset: 0;
-      background: radial-gradient(circle at 50% 0%, rgba(59,130,246,0.07), transparent 60%);
-      opacity: 0; transition: 0.35s;
-    }
-    .pain-card:hover { transform: translateY(-8px); border-color: rgba(99,179,255,0.3); }
-    .pain-card:hover::after { opacity: 1; }
-    .pain-card-icon {
-      width: 52px; height: 52px; border-radius: 14px;
-      background: rgba(59,130,246,0.12);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem; color: var(--blue-bright); margin-bottom: 1.2rem;
-    }
-    .pain-card h3 { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; margin-bottom: 0.7rem; }
-    .pain-card p { color: var(--muted); font-size: 0.92rem; line-height: 1.6; }
-    .pain-card .tag { display: inline-block; margin-top: 1rem; padding: 4px 12px; border-radius: 40px; font-size: 0.75rem; font-weight: 600; background: rgba(239,68,68,0.1); color: #f87171; }
+/* CARD MEDIA */
+.cmedia{position:relative;aspect-ratio:16/9;overflow:hidden;background:var(--surface2)}
+.cmedia img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;display:block}
+.pcard:hover .cmedia img{transform:scale(1.06)}
+.cmov{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 35%,rgba(4,8,15,.96))}
+.cnum{position:absolute;top:.9rem;left:.9rem;
+  width:34px;height:34px;border-radius:10px;
+  background:rgba(4,8,15,.8);backdrop-filter:blur(10px);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--fd);font-size:.68rem;font-weight:800;color:var(--muted)}
+.ccat{position:absolute;top:.9rem;right:.9rem;
+  background:rgba(11,18,32,.9);backdrop-filter:blur(10px);border:1px solid var(--border);
+  border-radius:40px;padding:3px 11px;font-family:var(--fd);font-size:.65rem;font-weight:700;
+  letter-spacing:.07em;color:var(--blue-bright);text-transform:uppercase}
+.chot{position:absolute;bottom:.9rem;left:.9rem;
+  display:flex;align-items:center;gap:5px;
+  background:linear-gradient(135deg,#f59e0b,#ef4444);border-radius:40px;padding:4px 11px;
+  font-family:var(--fd);font-size:.67rem;font-weight:700;color:#fff;
+  animation:pbadge 2s ease-in-out infinite}
+@keyframes pbadge{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.4)}50%{box-shadow:0 0 0 7px rgba(245,158,11,0)}}
 
-    /* ─── ABOUT ─── */
-    .about-section { padding: 5rem 0; }
-    .about-wrap {
-      display: flex; flex-wrap: wrap; gap: 4rem; align-items: center;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 28px; padding: 3rem;
-      position: relative; overflow: hidden;
-    }
-    .about-wrap::before {
-      content: ''; position: absolute; top: 0; right: 0;
-      width: 350px; height: 350px;
-      background: radial-gradient(circle, rgba(59,130,246,0.08), transparent 60%);
-      pointer-events: none;
-    }
-    .about-img-wrap { flex: 0 0 auto; position: relative; }
-    .about-img-wrap img {
-      width: 200px; height: 200px; border-radius: 24px; object-fit: cover;
-      border: 2px solid rgba(59,130,246,0.3);
-      box-shadow: 0 0 60px rgba(59,130,246,0.15);
-    }
-    .about-badge-float {
-      position: absolute; bottom: -12px; right: -12px;
-      background: var(--blue); color: white; border-radius: 12px;
-      padding: 8px 14px; font-family: var(--font-display); font-size: 0.78rem; font-weight: 700;
-      border: 2px solid var(--bg);
-      white-space: nowrap;
-    }
-    .about-text { flex: 1; min-width: 260px; }
-    .about-text h2 { font-family: var(--font-display); font-size: 2rem; font-weight: 800; margin-bottom: 0.3rem; }
-    .about-text .age { color: var(--blue-bright); font-size: 1rem; font-weight: 400; }
-    .about-text p { color: #9db4cc; line-height: 1.7; margin-top: 1rem; font-size: 0.97rem; }
-    .about-text p strong { color: var(--text); }
-    .about-offer {
-      margin-top: 1.5rem;
-      background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(251,191,36,0.05));
-      border: 1px solid rgba(245,158,11,0.3);
-      border-radius: 14px; padding: 1rem 1.4rem;
-    }
-    .about-offer .offer-label { font-family: var(--font-display); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; color: var(--accent); text-transform: uppercase; }
-    .about-offer p { color: #d4aa60; font-size: 0.9rem; margin-top: 0.3rem; }
-    .about-offer p strong { color: var(--accent); }
+/* CARD BODY */
+.cbody{padding:1.3rem;flex:1;display:flex;flex-direction:column;gap:.5rem}
+.cico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;
+  justify-content:center;font-size:.95rem;flex-shrink:0}
+.ctop{display:flex;align-items:center;gap:.7rem}
+.ctitle{font-family:var(--fd);font-size:1.05rem;font-weight:800;color:var(--text);line-height:1.2}
+.cdesc{color:var(--muted);font-size:.83rem;line-height:1.58;flex:1}
+.cfeats{display:flex;flex-wrap:wrap;gap:5px}
+.cft{background:rgba(59,130,246,.09);border:1px solid rgba(59,130,246,.18);
+  border-radius:40px;padding:2px 9px;font-size:.67rem;font-weight:600;color:var(--blue-bright)}
+.cfoot{display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin-top:auto;padding-top:.3rem}
+.ctrial{font-size:.72rem;color:var(--green);font-weight:600;display:flex;align-items:center;gap:4px}
+.ccta{background:linear-gradient(135deg,var(--blue),#5b21b6);color:#fff;border:none;
+  padding:.65rem 1.3rem;border-radius:50px;font-family:var(--fd);font-size:.8rem;font-weight:700;
+  cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .3s;
+  box-shadow:0 4px 18px rgba(59,130,246,.22);white-space:nowrap;flex-shrink:0}
+.ccta:hover{transform:scale(1.06);box-shadow:0 8px 28px rgba(59,130,246,.4)}
+.ccta.gold{background:linear-gradient(135deg,var(--accent),#d97706);box-shadow:0 4px 18px rgba(245,158,11,.22)}
+.ccta.gold:hover{box-shadow:0 8px 28px rgba(245,158,11,.4)}
 
-    /* ─── VALUE PROPS ─── */
-    .value-section { padding: 5rem 0; }
-    .value-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
-    .value-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 1.8rem;
-      transition: all 0.35s; text-align: center;
-    }
-    .value-card:hover { border-color: rgba(99,179,255,0.3); transform: translateY(-6px); background: var(--surface2); }
-    .value-card-icon {
-      width: 60px; height: 60px; border-radius: 18px;
-      background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(34,211,238,0.08));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.6rem; color: var(--blue-bright); margin: 0 auto 1.2rem;
-    }
-    .value-card h4 { font-family: var(--font-display); font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .value-card p { color: var(--muted); font-size: 0.85rem; line-height: 1.55; }
+/* CUSTOM CARD — full width horizontal */
+.pcard.custom{grid-column:1/-1;flex-direction:row;align-items:stretch;border-color:rgba(245,158,11,.3);
+  background:linear-gradient(135deg,var(--surface),rgba(245,158,11,.03))}
+.pcard.custom:hover{border-color:rgba(245,158,11,.6);
+  box-shadow:0 28px 55px rgba(0,0,0,.4),0 0 40px rgba(245,158,11,.12)}
+.pcard.custom .cmedia{width:340px;flex-shrink:0;aspect-ratio:unset;border-radius:0}
+.pcard.custom .cbody{justify-content:center;padding:2rem 2.5rem}
+.pcard.custom .ctitle{font-size:1.6rem}
+.pcard.custom .cdesc{font-size:.93rem;max-width:600px}
+.pcard.custom .cfeats{margin-bottom:1rem}
 
-    /* ─── ROI STRIP ─── */
-    .roi-strip {
-      background: linear-gradient(135deg, var(--surface2), var(--surface));
-      border: 1px solid var(--border);
-      border-radius: 24px; padding: 2.5rem 3rem; margin: 2rem 0;
-    }
-    .roi-strip h3 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; margin-bottom: 1.5rem; text-align: center; }
-    .roi-items { display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; }
-    .roi-item { display: flex; align-items: center; gap: 10px; font-size: 0.95rem; }
-    .roi-item .from { color: var(--muted); text-decoration: line-through; }
-    .roi-item .arrow { color: var(--blue); font-size: 1.1rem; }
-    .roi-item .to { color: var(--green); font-weight: 700; font-family: var(--font-display); }
+/* MODAL */
+.modal-ov{position:fixed;inset:0;z-index:2000;background:rgba(4,8,15,.93);
+  backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:center;
+  padding:1rem;opacity:0;pointer-events:none;transition:opacity .3s}
+.modal-ov.open{opacity:1;pointer-events:all}
+.mbox{background:var(--surface);border:1px solid var(--border);border-radius:26px;
+  width:100%;max-width:960px;max-height:90vh;overflow-y:auto;
+  transform:translateY(28px) scale(.97);
+  transition:transform .4s cubic-bezier(.175,.885,.32,1.275);
+  scrollbar-width:thin;scrollbar-color:var(--blue) transparent}
+.modal-ov.open .mbox{transform:translateY(0) scale(1)}
+.mcl{position:sticky;top:1rem;z-index:10;float:right;
+  width:38px;height:38px;border-radius:50%;border:1px solid var(--border);
+  background:rgba(4,8,15,.9);color:var(--muted);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s;font-size:.9rem;margin:1rem 1rem -2rem auto}
+.mcl:hover{background:rgba(239,68,68,.2);color:#f87171;border-color:rgba(239,68,68,.4)}
 
-    /* ─── PORTFOLIO ACCORDION ─── */
-    .portfolio-section { padding: 5rem 0; }
-    .accordion-item { margin-bottom: 1.5rem; }
-    .accordion-header {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 1.4rem 2rem;
-      cursor: pointer;
-      display: flex; justify-content: space-between; align-items: center;
-      transition: all 0.3s; user-select: none;
-      position: relative; overflow: hidden;
-    }
-    .accordion-header::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(90deg, rgba(59,130,246,0.05), transparent);
-      opacity: 0; transition: 0.3s;
-    }
-    .accordion-header:hover::before { opacity: 1; }
-    .accordion-header:hover { border-color: rgba(99,179,255,0.3); }
-    .accordion-header.open-header { border-radius: 18px 18px 0 0; border-bottom-color: transparent; background: var(--surface2); }
-    .accordion-title { font-family: var(--font-display); font-size: 1.3rem; font-weight: 800; display: flex; align-items: center; gap: 12px; }
-    .accordion-tag { font-size: 0.7rem; padding: 4px 10px; border-radius: 40px; background: rgba(59,130,246,0.15); color: var(--blue-bright); font-weight: 700; letter-spacing: 0.08em; }
-    .accordion-chevron { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--muted); transition: all 0.35s; flex-shrink: 0; }
-    .accordion-header:hover .accordion-chevron { border-color: var(--blue); color: var(--blue-bright); }
-    .accordion-header.open-header .accordion-chevron { background: var(--blue); border-color: var(--blue); color: white; transform: rotate(180deg); }
-    .accordion-body {
-      max-height: 0; overflow: hidden;
-      transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-      background: var(--surface2);
-      border: 1px solid var(--border); border-top: none;
-      border-radius: 0 0 18px 18px;
-    }
-    .accordion-body.open { max-height: 4000px; }
-    .accordion-inner { padding: 2rem; }
+/* GALLERY */
+.mgal{position:relative;aspect-ratio:16/9;overflow:hidden;border-radius:14px;margin:1.4rem 1.4rem 0;cursor:zoom-in}
+.gslides{display:flex;transition:transform .4s ease;height:100%}
+.gslide{min-width:100%;height:100%}
+.gslide img{width:100%;height:100%;object-fit:cover;display:block}
+.gslide iframe{width:100%;height:100%;border:none;display:block}
+.gnav{position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;
+  border-radius:50%;background:rgba(4,8,15,.8);backdrop-filter:blur(8px);
+  border:1px solid var(--border);color:#fff;display:flex;align-items:center;
+  justify-content:center;cursor:pointer;transition:all .2s;font-size:.85rem}
+.gnav:hover{background:var(--blue);border-color:var(--blue)}
+.gnav.prev{left:.8rem}.gnav.next{right:.8rem}
+.gdots{position:absolute;bottom:.8rem;left:50%;transform:translateX(-50%);display:flex;gap:5px}
+.gdot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer;transition:all .2s}
+.gdot.active{background:#fff;transform:scale(1.3)}
+.gtabs{display:flex;gap:7px;padding:.7rem 1.4rem 0}
+.gtab{padding:5px 15px;border-radius:40px;border:1px solid var(--border);
+  font-family:var(--fd);font-size:.73rem;font-weight:700;cursor:pointer;
+  transition:all .25s;color:var(--muted);background:transparent}
+.gtab.active{background:var(--blue);border-color:var(--blue);color:#fff}
 
-    /* ─── PORTFOLIO GRID ─── */
-    .port-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-    .port-card {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 18px; overflow: hidden;
-      transition: all 0.3s;
-    }
-    .port-card:hover { transform: translateY(-6px); border-color: rgba(99,179,255,0.25); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
-    .port-card-media {
-      width: 100%; aspect-ratio: 16/9; position: relative; overflow: hidden;
-      background: var(--surface);
-    }
-    .port-card-media iframe,
-    .port-card-media img {
-      width: 100%; height: 100%; display: block; object-fit: cover;
-    }
-    .port-media-stack { display: flex; flex-direction: column; }
-    .port-media-item { position: relative; }
-    .port-media-item img { width: 100%; display: block; object-fit: cover; height: 160px; }
-    .port-media-label {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      background: linear-gradient(transparent, rgba(4,8,15,0.9));
-      padding: 1.5rem 1rem 0.7rem;
-      font-size: 0.78rem; font-weight: 600; color: var(--muted);
-    }
-    .port-card-head {
-      padding: 1rem 1.2rem 0.5rem;
-      border-top: 1px solid var(--border);
-    }
-    .port-card-head h4 { font-family: var(--font-display); font-size: 1rem; font-weight: 800; color: var(--text); margin-bottom: 0.3rem; }
-    .port-card-desc { padding: 0 1.2rem 1.2rem; font-size: 0.83rem; color: var(--muted); line-height: 1.55; }
+/* MODAL CONTENT */
+.mc{padding:1.4rem}
+.mtitle{font-family:var(--fd);font-size:1.7rem;font-weight:800;margin-bottom:.35rem}
+.mcat{color:var(--blue-bright);font-size:.83rem;font-weight:600;margin-bottom:1.1rem}
+.mdesc{color:#9db4cc;font-size:.95rem;line-height:1.75;margin-bottom:1.4rem}
+.mfeats{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:.7rem;margin-bottom:1.4rem}
+.mfeat{background:var(--surface2);border:1px solid var(--border);border-radius:11px;
+  padding:.75rem .9rem;display:flex;align-items:flex-start;gap:9px}
+.mfi{color:var(--green);font-size:.82rem;margin-top:2px;flex-shrink:0}
+.mft{font-size:.83rem;color:var(--text);line-height:1.4}
 
-    /* ─── CONTACT ─── */
-    .contact-section { padding: 5rem 0 3rem; }
-    .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem; margin-top: 3rem; }
-    .contact-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 1.8rem;
-      text-align: center; text-decoration: none; color: var(--text);
-      transition: all 0.35s; display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
-      position: relative; overflow: hidden;
-    }
-    .contact-card::before {
-      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
-      transform: scaleX(0); transition: 0.35s;
-    }
-    .contact-card.tg::before { background: #2AABEE; }
-    .contact-card.wa::before { background: #25D366; }
-    .contact-card.em::before { background: var(--blue); }
-    .contact-card.li::before { background: #0A66C2; }
-    .contact-card:hover { transform: translateY(-8px); border-color: rgba(99,179,255,0.3); background: var(--surface2); }
-    .contact-card:hover::before { transform: scaleX(1); }
-    .contact-card .cc-icon { font-size: 2.2rem; }
-    .contact-card.tg .cc-icon { color: #2AABEE; }
-    .contact-card.wa .cc-icon { color: #25D366; }
-    .contact-card.em .cc-icon { color: var(--blue-bright); }
-    .contact-card.li .cc-icon { color: #60a5fa; }
-    .contact-card h4 { font-family: var(--font-display); font-size: 1rem; font-weight: 700; }
-    .contact-card p { font-size: 0.8rem; color: var(--muted); }
-    .contact-note { text-align: center; color: var(--muted); font-size: 0.85rem; margin-top: 1.5rem; }
+/* DEAL IN MODAL */
+.mdeal{background:linear-gradient(135deg,rgba(245,158,11,.12),rgba(239,68,68,.05));
+  border:1px solid rgba(245,158,11,.35);border-radius:15px;padding:1.4rem;
+  margin-bottom:1.4rem;position:relative;overflow:hidden}
+.mdeal::before{content:'';position:absolute;inset:0;
+  background:conic-gradient(from 0deg,transparent 70%,rgba(245,158,11,.07) 80%,transparent 90%);
+  animation:rconic 8s linear infinite;pointer-events:none}
+@keyframes rconic{to{transform:rotate(360deg)}}
+.dh{font-family:var(--fd);font-size:1rem;font-weight:800;color:var(--accent);
+  margin-bottom:.5rem;position:relative;z-index:1;display:flex;align-items:center;gap:7px}
+.db{color:#d4a84b;font-size:.9rem;line-height:1.65;position:relative;z-index:1}
 
-    /* ─── FOOTER ─── */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 2rem 1.5rem; text-align: center;
-      color: var(--muted); font-size: 0.82rem;
-    }
+/* CONTACT CHOICE */
+.cct{font-family:var(--fd);font-size:.95rem;font-weight:700;text-align:center;margin-bottom:.9rem}
+.cbtns{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.cbtn{display:flex;align-items:center;gap:11px;padding:.9rem 1.1rem;border-radius:13px;
+  border:1px solid var(--border);text-decoration:none;background:var(--surface2);
+  color:var(--text);transition:all .3s;cursor:pointer}
+.cbtn:hover{transform:translateY(-3px)}
+.cbtn.tg:hover{background:rgba(42,171,238,.1);border-color:#2AABEE;box-shadow:0 8px 22px rgba(42,171,238,.15)}
+.cbtn.wa:hover{background:rgba(37,211,102,.1);border-color:#25D366;box-shadow:0 8px 22px rgba(37,211,102,.15)}
+.cbtn.em:hover{background:rgba(59,130,246,.1);border-color:var(--blue);box-shadow:0 8px 22px rgba(59,130,246,.15)}
+.cbtn.li:hover{background:rgba(10,102,194,.1);border-color:#0A66C2;box-shadow:0 8px 22px rgba(10,102,194,.15)}
+.cbico{font-size:1.4rem;flex-shrink:0}
+.cbtn.tg .cbico{color:#2AABEE}.cbtn.wa .cbico{color:#25D366}
+.cbtn.em .cbico{color:var(--blue-bright)}.cbtn.li .cbico{color:#60a5fa}
+.cbinfo h5{font-family:var(--fd);font-size:.85rem;font-weight:700}
+.cbinfo span{font-size:.72rem;color:var(--muted)}
 
-    /* ─── ANIMATIONS ─── */
-    @keyframes fadeSlideUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .reveal {
-      opacity: 0; transform: translateY(40px);
-      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
-    }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-    .reveal-delay-1 { transition-delay: 0.1s; }
-    .reveal-delay-2 { transition-delay: 0.2s; }
-    .reveal-delay-3 { transition-delay: 0.3s; }
-    .reveal-delay-4 { transition-delay: 0.4s; }
+/* LIGHTBOX */
+.lb{position:fixed;inset:0;z-index:5000;background:rgba(0,0,0,.96);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .25s}
+.lb.open{opacity:1;pointer-events:all}
+.lb-stage{width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.lb-stage img{max-width:90vw;max-height:90vh;object-fit:contain;
+  transform-origin:center;transition:none;cursor:grab;user-select:none}
+.lb-stage img.dragging{cursor:grabbing}
+.lb-bar{position:fixed;top:0;left:0;right:0;padding:1rem 1.5rem;
+  display:flex;align-items:center;justify-content:space-between;
+  background:linear-gradient(rgba(0,0,0,.7),transparent)}
+.lb-hint{position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);
+  font-size:.75rem;color:rgba(255,255,255,.4);pointer-events:none}
+.lb-btn{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.2);
+  background:rgba(0,0,0,.6);color:#fff;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s;font-size:.85rem}
+.lb-btn:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.4)}
+.lb-btns{display:flex;gap:.5rem}
+.lb-zoom{font-size:.75rem;color:rgba(255,255,255,.5);font-family:var(--fd);font-weight:700}
 
-    /* ─── TICKER ─── */
-    .ticker-wrap { overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1rem 0; margin: 2rem 0; }
-    .ticker-inner { display: flex; gap: 3rem; white-space: nowrap; animation: ticker 20s linear infinite; }
-    .ticker-inner:hover { animation-play-state: paused; }
-    .ticker-item { font-family: var(--font-display); font-size: 0.85rem; font-weight: 700; letter-spacing: 0.08em; color: var(--muted); display: flex; align-items: center; gap: 10px; }
-    .ticker-item .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--blue); }
-    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+/* AI IMPACT SECTION */
+.impact-s{padding:5rem 0}
+.impact-intro{text-align:center;max-width:720px;margin:0 auto 4rem}
+.impact-lead{font-size:clamp(1.1rem,2.5vw,1.35rem);color:#9db4cc;line-height:1.75;margin-top:1rem}
+.impact-lead strong{color:var(--text)}
 
-    /* ─── MOBILE ─── */
-    @media (max-width: 700px) {
-      .lang-toggle { top: 12px; right: 12px; }
-      .lang-option { padding: 5px 10px; font-size: 0.72rem; }
-      .about-wrap { padding: 2rem 1.5rem; gap: 2rem; }
-      .accordion-title { font-size: 1.05rem; }
-      .roi-strip { padding: 1.8rem 1.5rem; }
-      .stats-bar { border-radius: 16px; }
-      .stat-item { padding: 1.4rem 1rem; }
-      .stat-num { font-size: 1.9rem; }
-    }
-  </style>
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-bottom:4rem}
+@media(max-width:900px){.why-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.why-grid{grid-template-columns:1fr}}
+
+.why-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;
+  padding:2rem 1.8rem;position:relative;overflow:hidden;
+  transition:transform .3s,box-shadow .3s,border-color .3s}
+.why-card:hover{transform:translateY(-6px);border-color:rgba(99,179,255,.35);
+  box-shadow:0 20px 50px rgba(0,0,0,.35),0 0 30px rgba(59,130,246,.08)}
+.why-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--wc-grad,linear-gradient(90deg,var(--blue),var(--cyan)));
+  transform:scaleX(0);transition:.35s;transform-origin:left}
+.why-card:hover::before{transform:scaleX(1)}
+.wc-icon{width:52px;height:52px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;margin-bottom:1.2rem;flex-shrink:0}
+.wc-title{font-family:var(--fd);font-size:1.05rem;font-weight:800;
+  color:var(--text);margin-bottom:.6rem;line-height:1.25}
+.wc-body{font-size:.88rem;color:var(--muted);line-height:1.65}
+.wc-stat{display:inline-flex;align-items:center;gap:6px;margin-top:1rem;
+  background:rgba(59,130,246,.09);border:1px solid rgba(59,130,246,.2);
+  border-radius:40px;padding:4px 12px;font-family:var(--fd);
+  font-size:.72rem;font-weight:700;color:var(--blue-bright)}
+
+.stories-title{font-family:var(--fd);font-size:clamp(1.5rem,3vw,2rem);font-weight:800;
+  text-align:center;margin-bottom:2.5rem;line-height:1.2}
+
+.stories-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;margin-bottom:1rem}
+@media(max-width:700px){.stories-grid{grid-template-columns:1fr}}
+
+.story-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;
+  padding:2rem 1.8rem;display:flex;flex-direction:column;gap:.9rem;
+  transition:transform .3s,border-color .3s,box-shadow .3s}
+.story-card:hover{transform:translateY(-5px);border-color:rgba(99,179,255,.3);
+  box-shadow:0 16px 45px rgba(0,0,0,.3)}
+.story-top{display:flex;align-items:center;gap:12px}
+.story-flag{font-size:1.6rem;flex-shrink:0}
+.story-co{font-family:var(--fd);font-size:.85rem;font-weight:800;color:var(--text)}
+.story-tag{font-size:.72rem;color:var(--muted);margin-top:2px}
+.story-body{font-size:.88rem;color:#8fa8c8;line-height:1.7}
+.story-body strong{color:var(--text)}
+.story-result{display:flex;flex-wrap:wrap;gap:7px;margin-top:.4rem}
+.sr-badge{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);
+  border-radius:40px;padding:3px 11px;font-family:var(--fd);
+  font-size:.7rem;font-weight:700;color:var(--green);
+  display:flex;align-items:center;gap:5px}
+
+.impact-cta-bar{background:linear-gradient(135deg,rgba(59,130,246,.1),rgba(167,139,250,.08));
+  border:1px solid rgba(59,130,246,.2);border-radius:20px;
+  padding:2.5rem 2rem;text-align:center;margin-top:3.5rem}
+.impact-cta-bar p{color:var(--muted);font-size:.95rem;line-height:1.65;max-width:620px;margin:.6rem auto 1.5rem}
+.impact-cta-bar h3{font-family:var(--fd);font-size:1.4rem;font-weight:800;color:var(--text)}
+
+/* ABOUT */
+.about-s{padding:3.5rem 0}
+.awrap{display:flex;flex-wrap:wrap;gap:3rem;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-radius:26px;padding:2.5rem;
+  position:relative;overflow:hidden}
+.awrap::before{content:'';position:absolute;top:0;right:0;width:380px;height:380px;
+  background:radial-gradient(circle,rgba(59,130,246,.06),transparent 60%);pointer-events:none}
+.aimg{flex:0 0 auto;position:relative}
+.aimg img{width:175px;height:175px;border-radius:22px;object-fit:cover;
+  border:2px solid rgba(59,130,246,.3);box-shadow:0 0 55px rgba(59,130,246,.15)}
+.abadge{position:absolute;bottom:-10px;right:-10px;background:var(--blue);color:#fff;
+  border-radius:11px;padding:5px 11px;font-family:var(--fd);font-size:.73rem;font-weight:700;
+  border:2px solid var(--bg);white-space:nowrap}
+.atxt{flex:1;min-width:260px}
+.atxt h2{font-family:var(--fd);font-size:1.8rem;font-weight:800;margin-bottom:.25rem}
+.atxt .age{color:var(--blue-bright);font-size:.93rem;font-weight:400}
+.atxt p{color:#9db4cc;line-height:1.7;margin-top:.8rem;font-size:.93rem}
+.atxt p strong{color:var(--text)}
+
+/* CONTACT */
+.contact-s{padding:3.5rem 0 3rem}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:1.1rem;margin-top:2.5rem}
+.ccard{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.6rem;text-align:center;text-decoration:none;color:var(--text);
+  transition:all .35s;display:flex;flex-direction:column;align-items:center;gap:.55rem;
+  position:relative;overflow:hidden}
+.ccard::before{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;transform:scaleX(0);transition:.35s}
+.ccard.tg::before{background:#2AABEE}.ccard.wa::before{background:#25D366}
+.ccard.em::before{background:var(--blue)}.ccard:not(.tg):not(.wa):not(.em)::before{background:#e1306c}
+.ccard:hover{transform:translateY(-7px);border-color:rgba(99,179,255,.3);background:var(--surface2)}
+.ccard:hover::before{transform:scaleX(1)}
+.ccico{font-size:2.1rem}
+.ccard.tg .ccico{color:#2AABEE}.ccard.wa .ccico{color:#25D366}
+.ccard.em .ccico{color:var(--blue-bright)}
+.ccard h4{font-family:var(--fd);font-size:.95rem;font-weight:700}
+.ccard p{font-size:.78rem;color:var(--muted)}
+footer{border-top:1px solid var(--border);padding:1.8rem 1.5rem;text-align:center;color:var(--muted);font-size:.8rem}
+
+/* REVEAL */
+.rv{opacity:0;transform:translateY(38px);transition:opacity .7s ease-out,transform .7s ease-out}
+.rv.vis{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+.d4{transition-delay:.4s}.d5{transition-delay:.5s}.d6{transition-delay:.6s}
+
+/* ─── AI CHAT WIDGET ─── */
+.ai-bubble{position:fixed;bottom:28px;right:28px;z-index:3000;
+  width:62px;height:62px;cursor:pointer;border:none;background:none;padding:0}
+.ai-ring{position:absolute;border-radius:50%;border:2px solid rgba(59,130,246,.45);
+  animation:aring 2.4s ease-out infinite}
+.ai-ring.r1{inset:-7px;animation-delay:0s}
+.ai-ring.r2{inset:-15px;animation-delay:.6s}
+.ai-ring.r3{inset:-23px;animation-delay:1.2s}
+@keyframes aring{0%{opacity:.8;transform:scale(1)}100%{opacity:0;transform:scale(1.35)}}
+.ai-inner{position:absolute;inset:0;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.45rem;
+  box-shadow:0 8px 28px rgba(59,130,246,.5);transition:transform .3s}
+.ai-bubble:hover .ai-inner{transform:scale(1.1) rotate(-10deg)}
+.ai-tip{position:absolute;bottom:70px;right:0;background:var(--surface);
+  border:1px solid var(--border);border-radius:12px;padding:8px 14px;
+  font-size:.78rem;font-weight:600;color:var(--text);white-space:nowrap;
+  box-shadow:0 8px 25px rgba(0,0,0,.3);pointer-events:none;
+  animation:tipbounce 3s ease-in-out infinite 2s;opacity:0;animation-fill-mode:forwards}
+@keyframes tipbounce{0%{opacity:0;transform:translateY(5px)}15%{opacity:1;transform:translateY(0)}85%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(5px)}}
+
+/* CHAT PANEL */
+.chat-panel{position:fixed;bottom:108px;right:16px;z-index:3000;
+  width:370px;height:530px;
+  background:var(--surface2);border:1px solid rgba(99,179,255,.2);border-radius:22px;
+  display:flex;flex-direction:column;
+  box-shadow:0 20px 60px rgba(0,0,0,.55),0 0 40px rgba(59,130,246,.08);
+  transform:translateY(18px) scale(.96);opacity:0;pointer-events:none;
+  transition:all .35s cubic-bezier(.175,.885,.32,1.275);overflow:hidden}
+.chat-panel.open{transform:translateY(0) scale(1);opacity:1;pointer-events:all}
+.ch-head{background:linear-gradient(135deg,#1e3a5f,#2d1b69);
+  padding:1rem 1.2rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.ch-info{display:flex;align-items:center;gap:.75rem}
+.ch-av{width:38px;height:38px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.05rem}
+.ch-name{font-family:var(--fd);font-size:.9rem;font-weight:700;color:#fff}
+.ch-st{display:flex;align-items:center;gap:5px;font-size:.72rem;color:rgba(255,255,255,.65);margin-top:1px}
+.stdt{width:6px;height:6px;border-radius:50%;background:#10b981;animation:stpulse 2s ease-in-out infinite}
+@keyframes stpulse{0%,100%{opacity:1}50%{opacity:.4}}
+.ch-close{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.2);
+  background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  transition:all .2s;font-size:.8rem}
+.ch-close:hover{background:rgba(255,255,255,.18);color:#fff}
+.ch-msgs{flex:1;overflow-y:auto;padding:.9rem 1rem;display:flex;flex-direction:column;gap:.7rem;
+  scrollbar-width:thin;scrollbar-color:rgba(59,130,246,.3) transparent}
+.msg{display:flex;gap:.5rem;align-items:flex-end;max-width:90%}
+.msg.ai{align-self:flex-start}
+.msg.user{align-self:flex-end;flex-direction:row-reverse}
+.msg-av{width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:.75rem;flex-shrink:0}
+.msg-bub{padding:.65rem .9rem;border-radius:14px;font-size:.83rem;line-height:1.55;max-width:100%}
+.msg.ai .msg-bub{background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.2);color:var(--text);border-bottom-left-radius:4px}
+.msg.user .msg-bub{background:linear-gradient(135deg,var(--blue),#5b21b6);color:#fff;border-bottom-right-radius:4px}
+.msg-typing{display:flex;gap:4px;align-items:center;padding:.65rem .9rem;
+  background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.2);border-radius:14px;border-bottom-left-radius:4px}
+.td{width:6px;height:6px;border-radius:50%;background:var(--blue-bright);animation:tdot 1.2s ease-in-out infinite}
+.td:nth-child(2){animation-delay:.2s}.td:nth-child(3){animation-delay:.4s}
+@keyframes tdot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+.ch-foot{padding:.75rem;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:.55rem;flex-shrink:0}
+.ch-inp-row{display:flex;gap:.5rem;align-items:center}
+.ch-inp{flex:1;background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.2);
+  border-radius:12px;padding:.6rem .9rem;font-size:.83rem;color:var(--text);
+  font-family:var(--fb);outline:none;transition:border-color .2s}
+.ch-inp:focus{border-color:var(--blue)}
+.ch-inp::placeholder{color:var(--muted);font-size:.8rem}
+.ch-send{width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;border:none;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  transition:all .2s;font-size:.85rem;flex-shrink:0}
+.ch-send:hover{transform:scale(1.1)}
+.ch-save{background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.3);color:var(--green);
+  border-radius:10px;padding:.5rem .9rem;font-size:.77rem;font-weight:600;
+  cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s;font-family:var(--fb)}
+.ch-save:hover{background:rgba(16,185,129,.2);border-color:var(--green)}
+.ch-save.sent{color:#60a5fa;border-color:rgba(96,165,250,.3);background:rgba(96,165,250,.1)}
+
+/* RUSSIAN LANG FIXES */
+.ru .ctitle{font-size:.96rem}
+.ru .ccta{font-size:.73rem;padding:.6rem 1rem}
+.ru .ctrial{font-size:.65rem}
+.ru .cft{font-size:.62rem;padding:2px 7px}
+.ru .htitle{font-size:clamp(2.2rem,5.8vw,5rem)}
+.ru .chip{font-size:.72rem;padding:6px 12px}
+.ru .ccta span{display:none}
+.ru .ccta::after{content:'→'}
+.ru .pcard.custom .ctitle{font-size:1.35rem}
+.ru .ccat{font-size:.6rem}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .pgrid{grid-template-columns:repeat(2,1fr)}
+  .pcard.custom{flex-direction:column}
+  .pcard.custom .cmedia{width:100%;aspect-ratio:16/9}
+  .pcard.custom .cbody{padding:1.5rem}
+  .pcard.custom .ctitle{font-size:1.3rem}
+}
+@media(max-width:768px){
+  .lang-toggle{top:12px;right:12px}
+  .lang-option{padding:5px 10px;font-size:.7rem}
+  .hf{display:none}
+  .awrap{padding:1.8rem;gap:2rem}
+  .mbox{border-radius:18px}
+  .cbtns{grid-template-columns:1fr}
+  .mfeats{grid-template-columns:1fr}
+  .chat-panel{width:calc(100vw - 2rem);right:1rem;bottom:100px}
+  .pgrid{grid-template-columns:1fr}
+  .pcard.custom{grid-column:1}
+  .pcard.custom .cmedia{width:100%}
+}
+@media(max-width:480px){
+  .htitle{font-size:2.2rem}
+  .mtitle{font-size:1.3rem}
+  .sbar{flex-direction:column}
+  .si{border-right:none;border-bottom:1px solid var(--border)}
+  .si:last-child{border-bottom:none}
+  .ai-bubble{bottom:16px;right:16px}
+  .chat-panel{bottom:92px}
+}
+</style>
 </head>
 <body>
-<canvas id="canvas-bg"></canvas>
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<div class="orb orb-3"></div>
+<canvas id="cvs"></canvas>
+<div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="orb o4"></div>
 
-<!-- LANG TOGGLE -->
 <div class="lang-toggle" id="langToggle">
   <div class="lang-option" data-lang="en">EN</div>
   <div class="lang-option" data-lang="ro">RO</div>
   <div class="lang-option" data-lang="ru">РУ</div>
 </div>
 
-<div class="wrapper">
+<!-- LIGHTBOX -->
+<div class="lb" id="lb">
+  <div class="lb-bar">
+    <div class="lb-zoom" id="lbZoomLbl">100%</div>
+    <div class="lb-btns">
+      <button class="lb-btn" onclick="lbZ(.3)" title="Zoom in"><i class="fas fa-magnifying-glass-plus"></i></button>
+      <button class="lb-btn" onclick="lbZ(-.3)" title="Zoom out"><i class="fas fa-magnifying-glass-minus"></i></button>
+      <button class="lb-btn" onclick="lbReset()" title="Reset"><i class="fas fa-compress"></i></button>
+      <button class="lb-btn" onclick="closeLb()" title="Close"><i class="fas fa-xmark"></i></button>
+    </div>
+  </div>
+  <div class="lb-stage" id="lbStage"><img id="lbImg" src="" alt=""></div>
+  <div class="lb-hint" id="lbHint">Scroll to zoom · Drag to pan · Double-click to reset</div>
+</div>
 
-  <!-- ─── HERO ─── -->
-  <section class="hero-section">
-    <div class="container" style="display:flex;flex-direction:column;align-items:center;">
-      <div class="hero-eyebrow"><span class="dot"></span><span data-t="badge">AI Automation Architect</span></div>
-      <h1 class="hero-title">
-        <span class="line" data-t="heroLine1">Your business is bleeding</span>
-        <span class="line gradient-text" data-t="heroLine2">time & money every day.</span>
-        <span class="line" data-t="heroLine3">I stop the leak with AI.</span>
+<!-- MODAL -->
+<div class="modal-ov" id="modal">
+  <div class="mbox" id="mbox">
+    <button class="mcl" id="mcl"><i class="fas fa-xmark"></i></button>
+    <div id="minner"></div>
+  </div>
+</div>
+
+<!-- AI CHAT BUBBLE -->
+<button class="ai-bubble" id="aiBubble" onclick="toggleChat()">
+  <div class="ai-ring r1"></div>
+  <div class="ai-ring r2"></div>
+  <div class="ai-ring r3"></div>
+  <div class="ai-inner"><i class="fas fa-robot"></i></div>
+  <div class="ai-tip" id="aiTip" data-t="aiTip"></div>
+</button>
+
+<!-- CHAT PANEL -->
+<div class="chat-panel" id="chatPanel">
+  <div class="ch-head">
+    <div class="ch-info">
+      <div class="ch-av"><i class="fas fa-robot"></i></div>
+      <div>
+        <div class="ch-name" data-t="aiName"></div>
+        <div class="ch-st"><span class="stdt"></span><span data-t="aiOnline"></span></div>
+      </div>
+    </div>
+    <button class="ch-close" onclick="toggleChat()"><i class="fas fa-xmark"></i></button>
+  </div>
+  <div class="ch-msgs" id="chMsgs"></div>
+  <div class="ch-foot">
+    <div class="ch-inp-row">
+      <input class="ch-inp" id="chInp" type="text" data-t-ph="aiPh">
+      <button class="ch-send" id="chSend"><i class="fas fa-paper-plane"></i></button>
+    </div>
+    <button class="ch-save" id="chSave" style="display:none" onclick="saveChat()">
+      <i class="fas fa-share-nodes"></i> <span data-t="aiSave"></span>
+    </button>
+  </div>
+</div>
+
+<div class="wrapper">
+  <section class="hero">
+    <div class="hf"><div class="chip"><i class="fas fa-code" style="color:#f59e0b"></i> Dev since age 15</div></div>
+    <div class="hf"><div class="chip"><i class="fas fa-robot" style="color:#60a5fa"></i> n8n + AI Agents</div></div>
+    <div class="hf"><div class="chip"><i class="fas fa-globe" style="color:#10b981"></i> European Market</div></div>
+    <div class="hf"><div class="chip"><i class="fab fa-instagram" style="color:#a78bfa"></i> Building in public</div></div>
+    <div class="container" style="display:flex;flex-direction:column;align-items:center;position:relative;z-index:1">
+      <div class="eyebrow"><span class="edot"></span><span data-t="badge"></span></div>
+      <h1 class="htitle">
+        <span class="line" data-t="h1"></span>
+        <span class="line gt" data-t="h2"></span>
+        <span class="line" data-t="h3"></span>
       </h1>
-      <p class="hero-subtitle"><span data-t="heroSub">I design <strong>AI agents & intelligent automations</strong> that eliminate costly manual work — saving companies <strong>up to 80% on operational costs</strong> and reclaiming 20+ hours every week. Your team stops drowning in routine and starts driving real growth.</span></p>
-      <div class="hero-actions">
-        <button class="btn-primary" id="ctaBtn"><i class="fas fa-rocket"></i> <span data-t="ctaBtn">Get my free audit →</span></button>
-        <button class="btn-secondary" id="portfolioBtn"><i class="fas fa-play-circle"></i> <span data-t="seeWork">See my work</span></button>
+      <p class="hsub" data-t="hsub"></p>
+      <div class="hbtns">
+        <button class="btnp" id="shopBtn"><i class="fas fa-store"></i> <span data-t="cta1"></span></button>
+        <button class="btns" id="contactBtn"><i class="fas fa-comments"></i> <span data-t="cta2"></span></button>
       </div>
     </div>
   </section>
 
   <div class="container">
-
-    <!-- STATS BAR -->
-    <div class="stats-bar reveal">
-      <div class="stat-item"><div class="stat-num" id="counter-40">0</div><div class="stat-label" data-t="stat1l">AI Agents Built</div></div>
-      <div class="stat-item"><div class="stat-num" id="counter-2000">0</div><div class="stat-label" data-t="stat2l">Work Hours Saved</div></div>
-      <div class="stat-item"><div class="stat-num" id="counter-80">0</div><div class="stat-label" data-t="stat3l">Max Cost Reduction</div></div>
-      <div class="stat-item"><div class="stat-num">24/7</div><div class="stat-label" data-t="stat4l">AI Never Sleeps</div></div>
+    <div class="sbar rv">
+      <div class="si"><div class="snum" id="c40">0</div><div class="slbl" data-t="s1"></div></div>
+      <div class="si"><div class="snum" id="c2k">0</div><div class="slbl" data-t="s2"></div></div>
+      <div class="si"><div class="snum" id="c80">0</div><div class="slbl" data-t="s3"></div></div>
+      <div class="si"><div class="snum">24/7</div><div class="slbl" data-t="s4"></div></div>
     </div>
+    <div class="tkw"><div class="tki" id="ticker"></div></div>
 
-    <!-- TICKER -->
-    <div class="ticker-wrap">
-      <div class="ticker-inner" id="tickerInner"></div>
-    </div>
+    <section class="impact-s" id="impact">
 
-    <!-- ─── PAIN ─── -->
-    <section class="pain-section">
-      <div class="section-label" data-t="painLabel">The problem</div>
-      <h2 class="section-title" data-t="painTitle">Your team is stuck in the machine</h2>
-      <p class="section-desc" data-t="painDesc">Every hour your people spend on repetitive tasks is an hour NOT spent on growth. Here's what AI eliminates — starting week one.</p>
-      <div class="pain-grid">
-        <div class="pain-card reveal reveal-delay-1">
-          <div class="pain-card-icon"><i class="fas fa-dollar-sign"></i></div>
-          <h3 data-t="pain1t">$15,000+/month in salary</h3>
-          <p data-t="pain1d">You're paying full-time wages for data entry, manual reporting, CRM cleanup, and copy-paste work that AI handles in seconds — for a fraction of the cost.</p>
-          <span class="tag" data-t="pain1tag">💸 Wasted budget</span>
-        </div>
-        <div class="pain-card reveal reveal-delay-2">
-          <div class="pain-card-icon"><i class="fas fa-hourglass-half"></i></div>
-          <h3 data-t="pain2t">60% of the workday: pure routine</h3>
-          <p data-t="pain2d">Emails, lead filtering, scheduling, ticket sorting — it's not strategy, it's survival. Your best people are buried under tasks a smart system can handle automatically.</p>
-          <span class="tag" data-t="pain2tag">⏳ Stolen hours</span>
-        </div>
-        <div class="pain-card reveal reveal-delay-3">
-          <div class="pain-card-icon"><i class="fas fa-chart-line"></i></div>
-          <h3 data-t="pain3t">Competitors moving faster</h3>
-          <p data-t="pain3d">While you're manually processing, AI-powered businesses are already responding to leads, closing deals, and generating reports — all in real time, all without lifting a finger.</p>
-          <span class="tag" data-t="pain3tag">🚀 Falling behind</span>
-        </div>
+      <div class="impact-intro rv">
+        <div class="slabel" style="justify-content:center" data-t="impLbl"></div>
+        <h2 class="stitle" data-t="impTitle"></h2>
+        <p class="impact-lead" data-t="impLead"></p>
       </div>
-    </section>
 
-    <!-- ─── ABOUT ─── -->
-    <section class="about-section" id="about">
-      <div class="about-wrap reveal">
-        <div class="about-img-wrap">
-          <img src="your-instagram-photo.jpg" alt="Dmitry Buyanov" onerror="this.src='https://placehold.co/400x400/0b1220/3b82f6?text=DB'">
-          <div class="about-badge-float">⚡ 40+ Projects</div>
+      <div class="why-grid">
+        <div class="why-card rv d1" style="--wc-grad:linear-gradient(90deg,#3b82f6,#22d3ee)">
+          <div class="wc-icon" style="background:rgba(59,130,246,.12);color:#60a5fa"><i class="fas fa-clock"></i></div>
+          <div class="wc-title" data-t="wc1t"></div>
+          <div class="wc-body" data-t="wc1b"></div>
+          <div class="wc-stat"><i class="fas fa-arrow-up"></i><span data-t="wc1s"></span></div>
         </div>
-        <div class="about-text">
-          <h2 data-t="aboutName">Dmitry Buyanov <span class="age" data-t="aboutAge">— 22 y.o. AI Architect</span></h2>
-          <p data-t="aboutP1">I've spent the last 2 years deep in the automation trenches — building <strong>40+ production AI agents</strong> for companies across Russia, Ukraine, Kazakhstan, and Belarus. Together we've recovered <strong>2,000+ work hours</strong> and slashed operational costs by up to <strong>80%</strong>. Real systems. Real ROI.</p>
-          <p style="margin-top:0.8rem;" data-t="aboutP2">Now I'm bringing that same power to the <strong>European market</strong>. I know what breaks, what works, and how to ship fast — without charging agency prices.</p>
-          <div class="about-offer">
-            <div class="offer-label" data-t="offerLabel">🔥 Limited Launch Offer</div>
-            <p data-t="offerText">First <strong>10 European clients</strong> get up to <strong>50% off</strong> — elite AI automation at startup prices. I'm building my EU portfolio. Your timing is perfect.</p>
-          </div>
+        <div class="why-card rv d2" style="--wc-grad:linear-gradient(90deg,#10b981,#22d3ee)">
+          <div class="wc-icon" style="background:rgba(16,185,129,.12);color:#10b981"><i class="fas fa-coins"></i></div>
+          <div class="wc-title" data-t="wc2t"></div>
+          <div class="wc-body" data-t="wc2b"></div>
+          <div class="wc-stat"><i class="fas fa-arrow-down"></i><span data-t="wc2s"></span></div>
         </div>
-      </div>
-    </section>
-
-    <!-- ─── VALUE PROPS ─── -->
-    <section class="value-section">
-      <div class="section-label" data-t="valueLabel">Why it matters</div>
-      <h2 class="section-title" data-t="valueTitle">What you actually get</h2>
-      <div class="value-grid">
-        <div class="value-card reveal reveal-delay-1">
-          <div class="value-card-icon"><i class="fas fa-clock"></i></div>
-          <h4 data-t="v1t">20+ hours back per week</h4>
-          <p data-t="v1d">Every automated task is an hour your team reclaims for strategy, sales, and things that actually move the needle.</p>
-        </div>
-        <div class="value-card reveal reveal-delay-2">
-          <div class="value-card-icon"><i class="fas fa-users"></i></div>
-          <h4 data-t="v2t">Scale without headcount</h4>
-          <p data-t="v2d">Handle 10× the volume with the same team. AI agents are your tireless, always-available digital workforce.</p>
-        </div>
-        <div class="value-card reveal reveal-delay-3">
-          <div class="value-card-icon"><i class="fas fa-bolt"></i></div>
-          <h4 data-t="v3t">Runs 24/7, never burns out</h4>
-          <p data-t="v3d">No sick days, no mistakes from fatigue, no overtime cost. Your automated systems keep working while you sleep.</p>
-        </div>
-        <div class="value-card reveal reveal-delay-4">
-          <div class="value-card-icon"><i class="fas fa-chart-pie"></i></div>
-          <h4 data-t="v4t">Data, not guesswork</h4>
-          <p data-t="v4d">Real-time dashboards and automated reports so you always know exactly what's happening — no chasing for updates.</p>
+        <div class="why-card rv d3" style="--wc-grad:linear-gradient(90deg,#a78bfa,#60a5fa)">
+          <div class="wc-icon" style="background:rgba(167,139,250,.12);color:#a78bfa"><i class="fas fa-bolt"></i></div>
+          <div class="wc-title" data-t="wc3t"></div>
+          <div class="wc-body" data-t="wc3b"></div>
+          <div class="wc-stat"><i class="fas fa-chart-line"></i><span data-t="wc3s"></span></div>
         </div>
       </div>
 
-      <!-- ROI STRIP -->
-      <div class="roi-strip reveal" style="margin-top:3rem;">
-        <h3 data-t="roiTitle">🚀 What AI replaces — and what you gain</h3>
-        <div class="roi-items">
-          <div class="roi-item">
-            <span class="from" data-t="r1from">$5k/mo operator</span>
-            <span class="arrow">→</span>
-            <span class="to" data-t="r1to">$800 AI agent</span>
-          </div>
-          <div class="roi-item">
-            <span class="from" data-t="r2from">30h/wk manual work</span>
-            <span class="arrow">→</span>
-            <span class="to" data-t="r2to">1h weekly review</span>
-          </div>
-          <div class="roi-item">
-            <span class="from" data-t="r3from">Slow lead follow-up</span>
-            <span class="arrow">→</span>
-            <span class="to" data-t="r3to">Instant AI response</span>
-          </div>
-          <div class="roi-item">
-            <span class="from" data-t="r4from">Missed insights</span>
-            <span class="arrow">→</span>
-            <span class="to" data-t="r4to">Automated reports</span>
-          </div>
-        </div>
-      </div>
-    </section>
+      <div class="stories-title rv" data-t="storiesTitle"></div>
 
-    <!-- ─── PORTFOLIO ─── -->
-    <section class="portfolio-section" id="portfolio">
-      <div class="section-label" data-t="portLabel">Live work</div>
-      <h2 class="section-title" data-t="portTitle">Real automations. Real ROI.</h2>
-      <p class="section-desc" data-t="portDesc">Each case below is a live system, not a demo. Average payback period: under 3 weeks.</p>
-
-      <!-- ACCORDION: AUTOMATIONS -->
-      <div class="accordion-item" style="margin-top:2.5rem;">
-        <div class="accordion-header" id="hAuto">
-          <div class="accordion-title">
-            🤖 <span data-t="autoTitle">AI AUTOMATIONS</span>
-            <span class="accordion-tag" data-t="autoTag">3 CASES</span>
-          </div>
-          <div class="accordion-chevron"><i class="fas fa-chevron-down"></i></div>
-        </div>
-        <div class="accordion-body" id="bAuto">
-          <div class="accordion-inner">
-            <div class="port-grid">
-              <!-- Case 1 -->
-              <div class="port-card reveal">
-                <div class="port-card-head">
-                  <h4 data-t="a1name">⚡ Lead Autopilot</h4>
-                </div>
-                <div class="port-card-desc" data-t="a1desc">Form submission triggers AI: reads data → logs to Google Sheets → alerts via Telegram → sends a hyper-personalized email reply — all in under 90 seconds, 24/7.</div>
-                <div class="port-media-stack">
-                  <div class="port-media-item">
-                    <img src="1_n8n.jpg" alt="n8n workflow" onerror="this.src='https://placehold.co/600x220/0b1220/3b82f6?text=n8n+Workflow'">
-                    <div class="port-media-label" data-t="a1s1">🔧 n8n: webhook → AI classifier → routing logic</div>
-                  </div>
-                  <div class="port-media-item">
-                    <img src="1_gmail.jpg" alt="AI email" onerror="this.src='https://placehold.co/600x220/0b1220/22d3ee?text=AI+Email+Reply'">
-                    <div class="port-media-label" data-t="a1s2">📧 AI-personalized email sent to lead automatically</div>
-                  </div>
-                  <div class="port-media-item">
-                    <img src="1_tz.jpg" alt="Client review" onerror="this.src='https://placehold.co/600x220/0b1220/10b981?text=Client+TZ+%26+Review'">
-                    <div class="port-media-label" data-t="a1s3">⭐ Client brief + review (saved 40h/month)</div>
-                  </div>
-                </div>
-              </div>
-              <!-- Case 2 -->
-              <div class="port-card reveal reveal-delay-1">
-                <div class="port-card-head">
-                  <h4 data-t="a2name">🎥 Meeting Secretary</h4>
-                </div>
-                <div class="port-card-desc" data-t="a2desc">Every meeting auto-transcribed, summarized by LLM, and turned into action items — pushed to Notion and Slack before the coffee gets cold.</div>
-                <div class="port-media-stack">
-                  <div class="port-media-item">
-                    <img src="2_n8n.jpg" alt="n8n meeting" onerror="this.src='https://placehold.co/600x220/0b1220/3b82f6?text=n8n+Meeting+Flow'">
-                    <div class="port-media-label" data-t="a2s1">⚙️ n8n: Zoom audio → OpenAI → Notion push</div>
-                  </div>
-                  <div class="port-media-item">
-                    <img src="2_docs.jpg" alt="Google Doc" onerror="this.src='https://placehold.co/600x220/0b1220/22d3ee?text=Google+Docs+Summary'">
-                    <div class="port-media-label" data-t="a2s2">📄 Structured notes + next-step tasks in Google Docs</div>
-                  </div>
-                  <div class="port-media-item">
-                    <img src="2_tz.jpg" alt="Review" onerror="this.src='https://placehold.co/600x220/0b1220/10b981?text=Review+%26+TZ'">
-                    <div class="port-media-label" data-t="a2s3">⭐ Client specification + 5-star review</div>
-                  </div>
-                </div>
-              </div>
-              <!-- Case 3 -->
-              <div class="port-card reveal reveal-delay-2">
-                <div class="port-card-head">
-                  <h4 data-t="a3name">📬 Smart Email Sorter</h4>
-                </div>
-                <div class="port-card-desc" data-t="a3desc">Gmail connected to AI that reads, classifies (invoice / complaint / lead), drafts a reply or fires a Telegram alert — inbox zero without touching a single email manually.</div>
-                <div class="port-media-stack">
-                  <div class="port-media-item">
-                    <img src="3_n8n.jpg" alt="n8n email" onerror="this.src='https://placehold.co/600x220/0b1220/3b82f6?text=n8n+Email+Flow'">
-                    <div class="port-media-label" data-t="a3s1">🧩 n8n IMAP trigger + GPT-4 classifier + routing</div>
-                  </div>
-                  <div class="port-media-item">
-                    <img src="3_docs.jpg" alt="Stats" onerror="this.src='https://placehold.co/600x220/0b1220/22d3ee?text=Sheets+Stats'">
-                    <div class="port-media-label" data-t="a3s2">📊 Real-time stats in Sheets + filtered Gmail inbox</div>
-                  </div>
-                  <div class="port-media-item">
-                    <img src="3_tz.jpg" alt="TZ" onerror="this.src='https://placehold.co/600x220/0b1220/10b981?text=Client+TZ'">
-                    <div class="port-media-label" data-t="a3s3">📌 Client brief + feedback (saved 25h/month)</div>
-                  </div>
-                </div>
-              </div>
+      <div class="stories-grid">
+        <div class="story-card rv d1">
+          <div class="story-top">
+            <div class="story-flag">🇩🇪</div>
+            <div>
+              <div class="story-co" data-t="st1co"></div>
+              <div class="story-tag" data-t="st1tag"></div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <!-- ACCORDION: AGENTS -->
-      <div class="accordion-item">
-        <div class="accordion-header" id="hAgents">
-          <div class="accordion-title">
-            🧠 <span data-t="agentsTitle">AI AGENTS</span>
-            <span class="accordion-tag" data-t="agentsTag">2 CASES</span>
+          <div class="story-body" data-t="st1body"></div>
+          <div class="story-result">
+            <div class="sr-badge"><i class="fas fa-check"></i><span data-t="st1r1"></span></div>
+            <div class="sr-badge"><i class="fas fa-check"></i><span data-t="st1r2"></span></div>
           </div>
-          <div class="accordion-chevron"><i class="fas fa-chevron-down"></i></div>
         </div>
-        <div class="accordion-body" id="bAgents">
-          <div class="accordion-inner">
-            <div class="port-grid">
-              <!-- Agent 1 -->
-              <div class="port-card reveal">
-                <div class="port-card-head">
-                  <h4 data-t="ag1name">📊 Daily Business Intelligence Briefing</h4>
-                </div>
-                <div class="port-card-desc" data-t="ag1desc">An autonomous agent that runs every morning — scrapes relevant data sources, processes KPIs through an LLM, and emails a crisp executive briefing. Your team starts the day informed, not overwhelmed.</div>
-                <div class="port-media-stack">
-                  <div class="port-media-item">
-                    <img src="agent1_n8n.jpg" alt="n8n BI agent" onerror="this.src='https://placehold.co/600x220/0b1220/3b82f6?text=n8n+BI+Agent+Flow'">
-                    <div class="port-media-label" data-t="ag1s1">🔧 n8n: scheduled trigger → data pull → LLM synthesis → send</div>
-                  </div>
-                  <div class="port-media-item">
-                    <img src="agent1_s.jpg" alt="Email briefing" onerror="this.src='https://placehold.co/600x220/0b1220/22d3ee?text=Email+Briefing+Output'">
-                    <div class="port-media-label" data-t="ag1s2">📧 Daily briefing email delivered to inbox every morning</div>
-                  </div>
-                  <div class="port-media-item">
-                    <img src="agent1_tz.jpg" alt="Client review" onerror="this.src='https://placehold.co/600x220/0b1220/10b981?text=Client+TZ+%26+Review'">
-                    <div class="port-media-label" data-t="ag1s3">📋 Client brief + review (saves 2h daily across team)</div>
-                  </div>
-                </div>
-              </div>
-              <!-- Agent 2 -->
-              <div class="port-card reveal reveal-delay-1">
-                <div class="port-card-head">
-                  <h4 data-t="ag2name">✉️ Smart Email Triage & Auto-Reply Agent</h4>
-                </div>
-                <div class="port-card-desc" data-t="ag2desc">Connects to your inbox, reads every email, classifies intent, drafts context-aware replies for approval or sends automatically based on confidence — turning email from a black hole into a handled asset.</div>
-                <div class="port-media-stack">
-                  <div class="port-media-item">
-                    <img src="agent2_n8n.jpg" alt="n8n email agent" onerror="this.src='https://placehold.co/600x220/0b1220/3b82f6?text=n8n+Email+Agent'">
-                    <div class="port-media-label" data-t="ag2s1">🕸️ n8n: IMAP → intent detection → reply generation → Gmail</div>
-                  </div>
-                  <div class="port-media-item">
-                    <img src="agent2_gmail.jpg" alt="Email inbox" onerror="this.src='https://placehold.co/600x220/0b1220/22d3ee?text=Clean+Inbox+Output'">
-                    <div class="port-media-label" data-t="ag2s2">📬 Auto-drafted or sent replies with classification tags</div>
-                  </div>
-                  <div class="port-media-item">
-                    <img src="agent2_tz.jpg" alt="TZ and review" onerror="this.src='https://placehold.co/600x220/0b1220/10b981?text=Client+TZ+%26+Review'">
-                    <div class="port-media-label" data-t="ag2s3">📌 Client brief + review (30h/month reclaimed)</div>
-                  </div>
-                </div>
-              </div>
+
+        <div class="story-card rv d2">
+          <div class="story-top">
+            <div class="story-flag">🇳🇱</div>
+            <div>
+              <div class="story-co" data-t="st2co"></div>
+              <div class="story-tag" data-t="st2tag"></div>
             </div>
           </div>
+          <div class="story-body" data-t="st2body"></div>
+          <div class="story-result">
+            <div class="sr-badge"><i class="fas fa-check"></i><span data-t="st2r1"></span></div>
+            <div class="sr-badge"><i class="fas fa-check"></i><span data-t="st2r2"></span></div>
+          </div>
+        </div>
+
+        <div class="story-card rv d3">
+          <div class="story-top">
+            <div class="story-flag">🇫🇷</div>
+            <div>
+              <div class="story-co" data-t="st3co"></div>
+              <div class="story-tag" data-t="st3tag"></div>
+            </div>
+          </div>
+          <div class="story-body" data-t="st3body"></div>
+          <div class="story-result">
+            <div class="sr-badge"><i class="fas fa-check"></i><span data-t="st3r1"></span></div>
+            <div class="sr-badge"><i class="fas fa-check"></i><span data-t="st3r2"></span></div>
+          </div>
+        </div>
+
+        <div class="story-card rv d4">
+          <div class="story-top">
+            <div class="story-flag">🇷🇴</div>
+            <div>
+              <div class="story-co" data-t="st4co"></div>
+              <div class="story-tag" data-t="st4tag"></div>
+            </div>
+          </div>
+          <div class="story-body" data-t="st4body"></div>
+          <div class="story-result">
+            <div class="sr-badge"><i class="fas fa-check"></i><span data-t="st4r1"></span></div>
+            <div class="sr-badge"><i class="fas fa-check"></i><span data-t="st4r2"></span></div>
+          </div>
         </div>
       </div>
-      <p style="text-align:center;color:var(--muted);font-size:0.85rem;margin-top:1.5rem;" data-t="portFoot">Every case above is a deployed, live system — not a concept. Average ROI achieved within 3 weeks.</p>
+
+      <div class="impact-cta-bar rv">
+        <h3 data-t="impCtaH"></h3>
+        <p data-t="impCtaB"></p>
+        <button class="btnp" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
+          <i class="fas fa-comments"></i> <span data-t="cta2"></span>
+        </button>
+      </div>
+
     </section>
 
-    <!-- ─── CONTACT ─── -->
-    <section class="contact-section" id="contact">
-      <div style="text-align:center;">
-        <div class="section-label" style="justify-content:center;" data-t="contactLabel">Let's build</div>
-        <h2 class="section-title" data-t="contactTitle">Ready to stop the bleeding?</h2>
-        <p class="section-desc" style="margin:0 auto;" data-t="contactDesc">Tell me your biggest time-drain and I'll map out exactly how AI can eliminate it. Free consultation, no pressure. Pick your channel:</p>
+    <section class="about-s" id="about">
+      <div class="awrap rv">
+        <div class="aimg">
+          <img src="yan-photo.jpg" alt="Yan" onerror="this.src='https://placehold.co/400x400/0b1220/3b82f6?text=Y'">
+          <div class="abadge"><i class="fas fa-code"></i> Coder since 15</div>
+        </div>
+        <div class="atxt">
+          <h2><span data-t="aName"></span> <span class="age" data-t="aAge"></span></h2>
+          <p data-t="aP1"></p>
+          <p data-t="aP2"></p>
+        </div>
       </div>
-      <div class="contact-grid">
-        <a href="https://t.me/buyanovdmitriy" target="_blank" class="contact-card tg reveal reveal-delay-1">
-          <i class="fab fa-telegram cc-icon"></i>
-          <h4>Telegram</h4>
-          <p>@buyanovdmitriy</p>
-        </a>
-        <a href="https://wa.me/40743027858" target="_blank" class="contact-card wa reveal reveal-delay-2">
-          <i class="fab fa-whatsapp cc-icon"></i>
-          <h4>WhatsApp</h4>
-          <p>+40 743 027 858</p>
-        </a>
-        <a href="mailto:buyanov.vv@proton.me" class="contact-card em reveal reveal-delay-3">
-          <i class="fas fa-envelope cc-icon"></i>
-          <h4>Email</h4>
-          <p>buyanov.vv@proton.me</p>
-        </a>
-        <a href="https://www.linkedin.com/in/dmitry-buyanov/" target="_blank" class="contact-card li reveal reveal-delay-4">
-          <i class="fab fa-linkedin cc-icon"></i>
-          <h4>LinkedIn</h4>
-          <p>in/dmitry-buyanov</p>
-        </a>
-      </div>
-      <p class="contact-note" data-t="contactNote">⚡ I respond within 12 hours. Let's automate your business.</p>
     </section>
 
+    <section class="shop-s" id="shop">
+      <div class="shop-hd">
+        <div class="slabel" style="justify-content:center" data-t="shopLbl"></div>
+        <h2 class="stitle" data-t="shopTitle"></h2>
+        <p class="sdesc" style="max-width:580px;margin:0 auto" data-t="shopDesc"></p>
+        <div class="deal-banner rv">
+          <div class="deal-ico"><i class="fas fa-fire"></i></div>
+          <div class="deal-txt">
+            <strong data-t="dealH"></strong>
+            <p data-t="dealB"></p>
+          </div>
+        </div>
+      </div>
+      <div class="pgrid" id="pgrid"></div>
+    </section>
+
+    <section class="contact-s" id="contact">
+      <div style="text-align:center">
+        <div class="slabel" style="justify-content:center" data-t="cLbl"></div>
+        <h2 class="stitle" data-t="cTitle"></h2>
+        <p class="sdesc" style="margin:0 auto;max-width:500px" data-t="cDesc"></p>
+      </div>
+      <div class="cgrid">
+        <a href="https://wa.me/40743027858" target="_blank" class="ccard wa rv d1">
+          <i class="fab fa-whatsapp ccico"></i><h4>WhatsApp</h4><p>+40 743 027 858</p>
+        </a>
+        <a href="mailto:byyan08.info@gmail.com" class="ccard em rv d2">
+          <i class="fas fa-envelope ccico"></i><h4>Email</h4><p>byyan08.info@gmail.com</p>
+        </a>
+        <a href="https://instagram.com/by.yan08" target="_blank" class="ccard rv d3" style="--cc:#e1306c">
+          <i class="fab fa-instagram ccico" style="color:#e1306c"></i><h4>Instagram</h4><p>@by.yan08</p>
+        </a>
+      </div>
+      <p style="text-align:center;color:var(--muted);font-size:.82rem;margin-top:1.4rem" data-t="cNote"></p>
+    </section>
   </div>
-
-  <footer>
-    <span data-t="footer">© 2025 Dmitry Buyanov — AI Automation Architect. Stop paying for manual work.</span>
-  </footer>
+  <footer><span data-t="foot"></span></footer>
 </div>
 
 <script>
-// ─── TRANSLATIONS ───
+// ╔══════════════════════════════╗
+// ║  CONFIGURATION — EDIT THESE  ║
+// ╚══════════════════════════════╝
+// 1. Get FREE Gemini key → https://aistudio.google.com/
+const GEMINI_KEY = 'YOUR_GEMINI_API_KEY';
+// 2. Telegram bot token (optional, not used currently)
+const TG_TOKEN = 'YOUR_BOT_TOKEN';
+// 3. Send any msg to your bot, then open:
+//    https://api.telegram.org/botYOUR_TOKEN/getUpdates  →  copy "id" from result
+const TG_CHAT = 'YOUR_CHAT_ID';
+
+// ── PRODUCT (single agency card) ──
+const PRODUCTS = [
+  {id:'p1',fa:'fa-robot',col:'#3b82f6',isOffer:true,isCustom:true,
+   cover:'offer-cover.jpg',
+   ytId:'YOUR_YOUTUBE_ID',
+   imgs:['offer-cover.jpg'],
+   en:{name:'AI Automation for Your Business',cat:'Custom AI Agency',tag:'Free Offer',
+     desc:'We study your workflow, pinpoint the highest-ROI automation opportunities, and build a custom AI system that runs 24/7. Lead handling, email, content, reports — all on autopilot while you focus on growth.',
+     feats:['Free business audit & roadmap','100% custom-built automation','n8n + AI agents','Connects to your existing tools','Live in 5–14 days','Ongoing support & updates']},
+   ru:{name:'ИИ-автоматизация для вашего бизнеса',cat:'ИИ-агентство',tag:'Скачать оффер',
+     desc:'Изучаем ваш бизнес, находим точки с максимальным ROI и строим кастомную AI-систему, работающую 24/7. Лиды, почта, контент, отчёты — всё на автопилоте, пока вы занимаетесь ростом.',
+     feats:['Бесплатный аудит и роадмап','100% кастомная автоматизация','n8n + AI-агенты','Интеграция с вашими инструментами','Запуск за 5–14 дней','Постоянная поддержка']},
+   ro:{name:'Automatizare AI pentru Afacerea Ta',cat:'Agenție AI',tag:'Ofertă Gratuită',
+     desc:'Studiem fluxul tău, identificăm oportunitățile cu cel mai mare ROI și construim un sistem AI custom care funcționează 24/7. Lead-uri, email, conținut, rapoarte — totul pe pilot automat, tu te concentrezi pe creștere.',
+     feats:['Audit și roadmap gratuit','Automatizare 100% personalizată','n8n + agenți AI','Integrare cu instrumentele existente','Live în 5–14 zile','Suport și actualizări continue']}}
+];
+
 const T = {
-  en: {
-    badge:"AI Automation Architect",
-    heroLine1:"Your business is bleeding",
-    heroLine2:"time & money every day.",
-    heroLine3:"I stop the leak with AI.",
-    heroSub:"I design <strong>AI agents & intelligent automations</strong> that eliminate costly manual work — saving companies <strong>up to 80% on operational costs</strong> and reclaiming 20+ hours every week. Your team stops drowning in routine and starts driving real growth.",
-    ctaBtn:"Get my free audit →",
-    seeWork:"See my work",
-    stat1l:"AI Agents Built",stat2l:"Work Hours Saved",stat3l:"Max Cost Reduction",stat4l:"AI Never Sleeps",
-    painLabel:"The problem",painTitle:"Your team is stuck in the machine",
-    painDesc:"Every hour your people spend on repetitive tasks is an hour NOT spent on growth. Here's what AI eliminates — starting week one.",
-    pain1t:"$15,000+/month in salary",pain1d:"You're paying full-time wages for data entry, manual reporting, CRM cleanup, and copy-paste work that AI handles in seconds — for a fraction of the cost.",pain1tag:"💸 Wasted budget",
-    pain2t:"60% of the workday: pure routine",pain2d:"Emails, lead filtering, scheduling, ticket sorting — it's not strategy, it's survival. Your best people are buried under tasks a smart system can handle automatically.",pain2tag:"⏳ Stolen hours",
-    pain3t:"Competitors moving faster",pain3d:"While you're manually processing, AI-powered businesses are already responding to leads, closing deals, and generating reports — all in real time, all without lifting a finger.",pain3tag:"🚀 Falling behind",
-    aboutName:"Dmitry Buyanov",aboutAge:"— 22 y.o. AI Architect",
-    aboutP1:"I've spent the last 2 years deep in the automation trenches — building <strong>40+ production AI agents</strong> for companies across Russia, Ukraine, Kazakhstan, and Belarus. Together we've recovered <strong>2,000+ work hours</strong> and slashed operational costs by up to <strong>80%</strong>. Real systems. Real ROI.",
-    aboutP2:"Now I'm bringing that same power to the <strong>European market</strong>. I know what breaks, what works, and how to ship fast — without charging agency prices.",
-    offerLabel:"🔥 Limited Launch Offer",offerText:"First <strong>10 European clients</strong> get up to <strong>50% off</strong> — elite AI automation at startup prices. I'm building my EU portfolio. Your timing is perfect.",
-    valueLabel:"Why it matters",valueTitle:"What you actually get",
-    v1t:"20+ hours back per week",v1d:"Every automated task is an hour your team reclaims for strategy, sales, and things that actually move the needle.",
-    v2t:"Scale without headcount",v2d:"Handle 10× the volume with the same team. AI agents are your tireless, always-available digital workforce.",
-    v3t:"Runs 24/7, never burns out",v3d:"No sick days, no mistakes from fatigue, no overtime cost. Your automated systems keep working while you sleep.",
-    v4t:"Data, not guesswork",v4d:"Real-time dashboards and automated reports so you always know exactly what's happening — no chasing for updates.",
-    roiTitle:"🚀 What AI replaces — and what you gain",
-    r1from:"$5k/mo operator",r1to:"$800 AI agent",r2from:"30h/wk manual work",r2to:"1h weekly review",
-    r3from:"Slow lead follow-up",r3to:"Instant AI response",r4from:"Missed insights",r4to:"Automated reports",
-    portLabel:"Live work",portTitle:"Real automations. Real ROI.",portDesc:"Each case below is a live system, not a demo. Average payback period: under 3 weeks.",
-    autoTitle:"AI AUTOMATIONS",autoTag:"3 CASES",
-    a1name:"⚡ Lead Autopilot",a1desc:"Form submission triggers AI: reads data → logs to Google Sheets → alerts via Telegram → sends a hyper-personalized email reply — all in under 90 seconds, 24/7.",
-    a1s1:"🔧 n8n: webhook → AI classifier → routing logic",a1s2:"📧 AI-personalized email sent to lead automatically",a1s3:"⭐ Client brief + review (saved 40h/month)",
-    a2name:"🎥 Meeting Secretary",a2desc:"Every meeting auto-transcribed, summarized by LLM, and turned into action items — pushed to Notion and Slack before the coffee gets cold.",
-    a2s1:"⚙️ n8n: Zoom audio → OpenAI → Notion push",a2s2:"📄 Structured notes + next-step tasks in Google Docs",a2s3:"⭐ Client specification + 5-star review",
-    a3name:"📬 Smart Email Sorter",a3desc:"Gmail connected to AI that reads, classifies (invoice / complaint / lead), drafts a reply or fires a Telegram alert — inbox zero without touching a single email manually.",
-    a3s1:"🧩 n8n IMAP trigger + GPT-4 classifier + routing",a3s2:"📊 Real-time stats in Sheets + filtered Gmail inbox",a3s3:"📌 Client brief + feedback (saved 25h/month)",
-    agentsTitle:"AI AGENTS",agentsTag:"2 CASES",
-    ag1name:"📊 Daily Business Intelligence Briefing",ag1desc:"An autonomous agent that runs every morning — scrapes relevant data sources, processes KPIs through an LLM, and emails a crisp executive briefing. Your team starts the day informed, not overwhelmed.",
-    ag1s1:"🔧 n8n: scheduled trigger → data pull → LLM synthesis → send",ag1s2:"📧 Daily briefing email delivered to inbox every morning",ag1s3:"📋 Client brief + review (saves 2h daily across team)",
-    ag2name:"✉️ Smart Email Triage & Auto-Reply Agent",ag2desc:"Connects to your inbox, reads every email, classifies intent, drafts context-aware replies for approval or sends automatically based on confidence — turning email from a black hole into a handled asset.",
-    ag2s1:"🕸️ n8n: IMAP → intent detection → reply generation → Gmail",ag2s2:"📬 Auto-drafted or sent replies with classification tags",ag2s3:"📌 Client brief + review (30h/month reclaimed)",
-    portFoot:"Every case above is a deployed, live system — not a concept. Average ROI achieved within 3 weeks.",
-    contactLabel:"Let's build",contactTitle:"Ready to stop the bleeding?",contactDesc:"Tell me your biggest time-drain and I'll map out exactly how AI can eliminate it. Free consultation, no pressure. Pick your channel:",
-    contactNote:"⚡ I respond within 12 hours. Let's automate your business.",
-    footer:"© 2025 Dmitry Buyanov — AI Automation Architect. Stop paying for manual work.",
-    tickers:["80% cost reduction","40+ agents deployed","2000+ hours saved","24/7 operation","Lead autopilot","Meeting secretary","Email triage","Business intelligence","CRM automation","AI-powered growth"]
+  en:{
+    badge:'AI Automation Agency',h1:'Automate your business.',h2:'Grow without limits.',h3:'AI works — you win.',
+    hsub:'We build <strong>custom AI automations</strong> for European businesses and startups. Lead handling, email, content, reports — all on autopilot. <strong>First audit is free.</strong>',
+    cta1:'See the Offer',cta2:'Free Consultation',
+    s1:'Max Hours Freed / Month',s2:'Days to Go Live',s3:'Max Cost Reduction',s4:'AI Never Sleeps',
+    shopLbl:'What We Do',shopTitle:'One agency. Custom AI automation for your business.',
+    shopDesc:'We analyze your workflow, identify the highest-ROI opportunities, and build a system that runs 24/7.',
+    dealH:'Free Business Audit',
+    dealB:'Tell us about your business — we\'ll map out exactly which processes can be automated and what ROI to expect. No commitment, no pressure.',
+    order:'Get Offer',orderC:'Download Offer',trial:'Free audit',trialC:'Download Offer',
+    chooseC:'How would you like to reach us?',
+    offerDl:'Download Full Offer',offerDlDesc:'Read the full breakdown of how we work, what we build, and what results to expect.',
+    impLbl:'Why it matters',
+    impTitle:'AI automation isn\'t the future. It\'s happening now.',
+    impLead:'Every hour your team spends on repetitive tasks is an hour <strong>not spent on growth</strong>. AI automation gives you back the two most valuable resources in business: <strong>time and money</strong>. Here\'s what that actually looks like.',
+    wc1t:'Time — your scarcest asset',wc1b:'The average SMB spends 40–60% of its working hours on manual processes: sorting emails, logging data, following up on leads, compiling reports. That\'s half your team\'s capacity consumed by work a machine can do in seconds.',wc1s:'Up to 40h freed per person / month',
+    wc2t:'Money that leaks every day',wc2b:'Manual errors, missed follow-ups, slow response times, redundant staff for repetitive roles — these silently drain profit. Businesses that automate cut operational costs by 30–80% without sacrificing quality or headcount.',wc2s:'30–80% operational cost reduction',
+    wc3t:'Speed as a competitive edge',wc3b:'Your competitor responds to a lead in 4 hours. Your AI responds in 90 seconds — with a personalized message. In 2025, speed isn\'t a nice-to-have. It\'s the difference between winning a deal and losing it.',wc3s:'10× faster client response',
+    storiesTitle:'Real stories. European businesses that made the shift.',
+    st1co:'Logistics startup, Berlin',st1tag:'🇩🇪 Germany · 12-person team',
+    st1body:'A Berlin-based freight coordination startup was drowning in <strong>manual email processing</strong> — each shipment required 6–8 back-and-forth emails. They automated the entire intake-to-confirmation flow with n8n + AI. Two months later their ops team handles <strong>3× the volume</strong> with no new hires.',
+    st1r1:'3× volume, same team',st1r2:'Email processing: 0 min/shipment',
+    st2co:'E-commerce brand, Amsterdam',st2tag:'🇳🇱 Netherlands · D2C fashion',
+    st2body:'An Amsterdam fashion brand was losing potential customers to slow support — average first reply was <strong>6 hours</strong>. They deployed an AI support agent that handles 80% of queries instantly, in Dutch and English. Customer satisfaction went up, refund rate dropped. The team now focuses on creative, not tickets.',
+    st2r1:'80% queries resolved by AI',st2r2:'Reply time: 6h → under 2 min',
+    st3co:'SaaS company, Paris',st3tag:'🇫🇷 France · B2B software',
+    st3body:'A Parisian B2B SaaS was spending <strong>20 hours a week</strong> manually pulling CRM data, writing meeting summaries, and updating Notion. An AI agent now listens to every call, writes the summary, updates the CRM, and schedules the next touchpoint — automatically. The sales team reclaimed <strong>an entire workday every week</strong>.',
+    st3r1:'20h/week reclaimed',st3r2:'CRM always up to date',
+    st4co:'Marketing agency, Bucharest',st4tag:'🇷🇴 Romania · SMB agency',
+    st4body:'A Bucharest marketing agency was manually producing client reports — <strong>3 hours each</strong>, every week, per client. They built an automated reporting pipeline that pulls data from Google Ads, Meta, and Analytics, generates an AI-written summary, and emails it to clients. What took 3 hours now takes <strong>4 minutes</strong>.',
+    st4r1:'Report time: 3h → 4 min',st4r2:'Clients get weekly auto-reports',
+    impCtaH:'Your business is next.',
+    impCtaB:'Every business has processes that are eating time and money right now. The question isn\'t whether to automate — it\'s where to start. Write to us and we\'ll map it out for free.',
+    aName:'Yan',aAge:'— 18 y.o., AI Agency Founder',
+    aP1:'Started coding at <strong>15 years old</strong>, deep in AI automation since 2023. Now launching <strong>Aucta AI</strong> — a hands-on agency building custom AI systems for European businesses and startups.',
+    aP2:'I document everything on <strong>Instagram</strong> — the builds, the failures, the wins. If you want real AI automation without corporate price tags, you\'re in the right place.',
+    cLbl:'Contact',cTitle:'Ready to automate?',
+    cDesc:'Tell me about your workflow — I\'ll map out exactly how AI can handle it. Free, no pressure.',
+    cNote:'⚡ Response within 12 hours. Let\'s automate your business.',
+    foot:'© 2025 Yan — Aucta AI Agency.',
+    aiTip:'AI helps you find your automation',aiName:'Maya — AI Advisor',aiOnline:'Online now',
+    aiPh:'Describe your business...',aiSave:'Send summary to Yan',
+    aiSent:'Sent! Yan will contact you.',
+    tickers:['Custom AI systems','n8n + AI agents','European market','Building in public','Lead automation','Email automation','Content autopilot','24/7 operation','80% cost reduction','No code required','Fast deployment','Free audit']
   },
-  ro: {
-    badge:"Arhitect Automatizări AI",
-    heroLine1:"Afacerea ta pierde",
-    heroLine2:"timp și bani în fiecare zi.",
-    heroLine3:"Eu opresc scurgerea cu AI.",
-    heroSub:"Construiesc <strong>agenți AI și automatizări inteligente</strong> care elimină munca manuală costisitoare — economisind companiilor <strong>până la 80% din costuri operaționale</strong> și recuperând 20+ ore pe săptămână. Echipa ta iese din rutină și se concentrează pe creștere.",
-    ctaBtn:"Obține auditul meu gratuit →",
-    seeWork:"Vezi portofoliul",
-    stat1l:"Agenți AI Construiți",stat2l:"Ore de Muncă Economisite",stat3l:"Reducere Maximă Costuri",stat4l:"AI Nu Doarme Niciodată",
-    painLabel:"Problema",painTitle:"Echipa ta e blocată în rutină",
-    painDesc:"Fiecare oră petrecută pe sarcini repetitive este o oră pierdută pentru creștere. Asta elimină AI — chiar din prima săptămână.",
-    pain1t:"$15.000+/lună în salarii irosите",pain1d:"Plătești salarii întregi pentru introducere date, raportare manuală, curățare CRM — muncă pe care AI o face în secunde, la o fracțiune din cost.",pain1tag:"💸 Buget irosit",
-    pain2t:"60% din ziua de lucru: pură rutină",pain2d:"Emailuri, filtrare lead-uri, programări, sortare tickete — nu e strategie, e supraviețuire. Oamenii tăi buni sunt îngropați sub sarcini pe care un sistem inteligent le rezolvă automat.",pain2tag:"⏳ Ore furate",
-    pain3t:"Concurenții se mișcă mai repede",pain3d:"În timp ce procesezi manual, afacerile AI răspund deja la lead-uri, închid deals și generează rapoarte — în timp real, fără să ridice un deget.",pain3tag:"🚀 Rămâi în urmă",
-    aboutName:"Dmitry Buyanov",aboutAge:"— Arhitect AI, 22 ani",
-    aboutP1:"Am petrecut ultimii 2 ani în automatizări — construind <strong>40+ agenți AI</strong> pentru companii din Rusia, Ucraina, Kazahstan și Belarus. Împreună am recuperat <strong>2.000+ ore de muncă</strong> și am redus costurile cu până la <strong>80%</strong>. Sisteme reale. ROI real.",
-    aboutP2:"Acum aduc aceeași putere pe <strong>piața europeană</strong>. Știu ce funcționează și livrez rapid — fără prețuri de agenție.",
-    offerLabel:"🔥 Ofertă Limitată de Lansare",offerText:"Primii <strong>10 clienți europeni</strong> primesc până la <strong>50% reducere</strong> — automatizare AI de elită la prețuri de startup. Îmi construiesc portofoliul EU. Momentul tău e perfect.",
-    valueLabel:"De ce contează",valueTitle:"Ce primești concret",
-    v1t:"20+ ore înapoi pe săptămână",v1d:"Fiecare sarcină automatizată este o oră pe care echipa ta o recâștigă pentru strategie și vânzări.",
-    v2t:"Scalare fără angajări",v2d:"Gestionează de 10× mai mult cu aceeași echipă. Agenții AI sunt forța ta de muncă nelimitată.",
-    v3t:"Funcționează 24/7, fără epuizare",v3d:"Fără concedii medicale, fără greșeli din oboseală. Sistemele tale lucrează cât tu dormi.",
-    v4t:"Date, nu presupuneri",v4d:"Dashboarduri în timp real și rapoarte automate — mereu știi exact ce se întâmplă.",
-    roiTitle:"🚀 Ce înlocuiește AI — și ce câștigi",
-    r1from:"Operator $5k/lună",r1to:"Agent AI $800",r2from:"30h/săpt muncă manuală",r2to:"1h revizuire săptămânală",
-    r3from:"Follow-up lent la lead-uri",r3to:"Răspuns AI instant",r4from:"Insight-uri ratate",r4to:"Rapoarte automate",
-    portLabel:"Muncă reală",portTitle:"Automatizări reale. ROI real.",portDesc:"Fiecare caz de mai jos este un sistem live, nu o demonstrație. Perioadă medie de recuperare: sub 3 săptămâni.",
-    autoTitle:"AUTOMATIZĂRI AI",autoTag:"3 CAZURI",
-    a1name:"⚡ Autopilot Lead-uri",a1desc:"Formularul declanșează AI: citește datele → înregistrează în Sheets → alertă Telegram → trimite email personalizat — totul în sub 90 de secunde, 24/7.",
-    a1s1:"🔧 n8n: webhook → clasificator AI → rutare",a1s2:"📧 Email personalizat trimis automat lead-ului",a1s3:"⭐ Brief client + review (economisit 40h/lună)",
-    a2name:"🎥 Secretar de Întâlniri",a2desc:"Fiecare întâlnire transcrisă automat, rezumată de LLM și transformată în acțiuni — trimise în Notion și Slack înainte să se răcească cafeaua.",
-    a2s1:"⚙️ n8n: audio Zoom → OpenAI → Notion",a2s2:"📄 Note structurate + acțiuni în Google Docs",a2s3:"⭐ Specificații client + recenzie 5 stele",
-    a3name:"📬 Clasificator Inteligent Email",a3desc:"Gmail conectat la AI care citește, clasifică (factură / reclamație / lead), redactează răspuns sau trimite alertă Telegram — inbox zero fără a atinge manual un email.",
-    a3s1:"🧩 n8n trigger IMAP + clasificator GPT-4",a3s2:"📊 Statistici în Sheets + Gmail filtrat",a3s3:"📌 Brief client + feedback (economisit 25h/lună)",
-    agentsTitle:"AGENȚI AI",agentsTag:"2 CAZURI",
-    ag1name:"📊 Daily Business Intelligence Briefing",ag1desc:"Un agent autonom care rulează în fiecare dimineață — extrage date relevante, procesează KPI-uri prin LLM și trimite un briefing executiv clar. Echipa ta începe ziua informată, nu copleșită.",
-    ag1s1:"🔧 n8n: trigger programat → extragere date → sinteză LLM → trimitere",ag1s2:"📧 Email de briefing livrat în inbox în fiecare dimineață",ag1s3:"📋 Brief client + review (economisește 2h zilnic echipei)",
-    ag2name:"✉️ Smart Email Triage & Auto-Reply Agent",ag2desc:"Se conectează la căsuța ta, citește fiecare email, clasifică intenția, redactează răspunsuri contextuale pentru aprobare sau trimite automat în funcție de încredere — transformând emailul dintr-o gaură neagră într-un activ gestionat.",
-    ag2s1:"🕸️ n8n: IMAP → detectare intenție → generare răspuns → Gmail",ag2s2:"📬 Răspunsuri auto-redactate sau trimise cu etichete de clasificare",ag2s3:"📌 Brief client + review (30h/lună recâștigate)",
-    portFoot:"Fiecare caz de mai sus este un sistem desfășurat, live — nu un concept. ROI mediu atins în 3 săptămâni.",
-    contactLabel:"Să construim",contactTitle:"Gata să oprești pierderea?",contactDesc:"Spune-mi cel mai mare consumator de timp al tău și voi mapa exact cum poate AI să îl elimine. Consultație gratuită, fără presiune. Alege canalul:",
-    contactNote:"⚡ Răspund în 12 ore. Hai să automatizăm afacerea ta.",
-    footer:"© 2025 Dmitry Buyanov — Arhitect Automatizări AI. Nu mai plăti pentru muncă manuală.",
-    tickers:["80% reducere costuri","40+ agenți deployați","2000+ ore economisite","Funcționare 24/7","Autopilot lead-uri","Secretar de întâlniri","Triaj email","Business intelligence","Automatizare CRM","Creștere cu AI"]
+  ru:{
+    badge:'ИИ-Агентство Aucta AI',h1:'Автоматизируй свой бизнес.',h2:'Расти без ограничений.',h3:'AI работает — ты побеждаешь.',
+    hsub:'Строим <strong>кастомные AI-автоматизации</strong> для европейских бизнесов и стартапов. Лиды, почта, контент, отчёты — всё на автопилоте. <strong>Первый аудит бесплатно.</strong>',
+    cta1:'Смотреть оффер',cta2:'Консультация бесплатно',
+    s1:'Макс. часов освобождено / мес',s2:'Дней до запуска',s3:'Макс. снижение затрат',s4:'AI никогда не спит',
+    shopLbl:'Что мы делаем',shopTitle:'Одно агентство. Кастомная AI-автоматизация для вашего бизнеса.',
+    shopDesc:'Анализируем процессы, находим точки с максимальным ROI и строим систему, работающую 24/7.',
+    dealH:'Бесплатный аудит бизнеса',
+    dealB:'Расскажите о своём бизнесе — покажем какие процессы можно автоматизировать и какой ROI ожидать. Без обязательств, без давления.',
+    order:'Получить оффер',orderC:'Скачать оффер',trial:'Бесплатный аудит',trialC:'Скачать оффер',
+    chooseC:'Как вам удобнее связаться?',
+    offerDl:'Скачать полный оффер',offerDlDesc:'Читайте подробный разбор как мы работаем, что строим и каких результатов ожидать.',
+    impLbl:'Почему это важно',
+    impTitle:'ИИ-автоматизация — это не будущее. Это происходит сейчас.',
+    impLead:'Каждый час, который ваша команда тратит на рутину — это час, <strong>не потраченный на рост</strong>. AI-автоматизация возвращает два самых ценных ресурса в бизнесе: <strong>время и деньги</strong>. Вот как это выглядит на практике.',
+    wc1t:'Время — ваш самый редкий ресурс',wc1b:'Средний малый и средний бизнес тратит 40–60% рабочего времени на ручные процессы: сортировка почты, ввод данных, фолоу-апы, составление отчётов. Это половина мощности команды — на то, что машина делает за секунды.',wc1s:'До 40 часов возвращается на человека / месяц',
+    wc2t:'Деньги, которые утекают каждый день',wc2b:'Ошибки вручную, пропущенные лиды, медленный ответ клиентам, лишний персонал для рутины — всё это молча съедает прибыль. Бизнесы, внедрившие автоматизацию, снижают операционные расходы на 30–80% без потери качества.',wc2s:'Снижение операционных затрат на 30–80%',
+    wc3t:'Скорость как конкурентное преимущество',wc3b:'Конкурент отвечает лиду через 4 часа. Ваш AI — за 90 секунд, с персонализированным сообщением. В 2025 году скорость — не приятный бонус. Это разница между выигранной и проигранной сделкой.',wc3s:'Ответ клиенту в 10× быстрее',
+    storiesTitle:'Реальные истории. Европейские бизнесы, которые сделали шаг.',
+    st1co:'Логистический стартап, Берлин',st1tag:'🇩🇪 Германия · команда 12 человек',
+    st1body:'Берлинский стартап по координации грузоперевозок тонул в <strong>ручной обработке email</strong> — каждая отправка требовала 6–8 писем туда-обратно. Автоматизировали весь поток от приёма заявки до подтверждения через n8n + AI. Через два месяца команда обрабатывала <strong>в 3 раза больше заказов</strong> без новых сотрудников.',
+    st1r1:'Объём ×3, та же команда',st1r2:'Обработка email: 0 мин/заказ',
+    st2co:'E-commerce бренд, Амстердам',st2tag:'🇳🇱 Нидерланды · D2C мода',
+    st2body:'Амстердамский fashion-бренд терял клиентов из-за медленной поддержки — среднее первое время ответа <strong>6 часов</strong>. Внедрили AI-агента поддержки, который закрывает 80% запросов мгновенно, на нидерландском и английском. Удовлетворённость выросла, процент возвратов снизился. Команда теперь занимается креативом, а не тикетами.',
+    st2r1:'80% запросов закрывает AI',st2r2:'Ответ: 6ч → меньше 2 минут',
+    st3co:'SaaS-компания, Париж',st3tag:'🇫🇷 Франция · B2B ПО',
+    st3body:'Парижский B2B SaaS тратил <strong>20 часов в неделю</strong> на ручное обновление CRM, написание резюме встреч и обновление Notion. AI-агент теперь слушает каждый звонок, пишет резюме, обновляет CRM и ставит следующий контакт — автоматически. Команда продаж вернула себе <strong>целый рабочий день каждую неделю</strong>.',
+    st3r1:'20 часов/неделю возвращено',st3r2:'CRM всегда актуален',
+    st4co:'Маркетинговое агентство, Бухарест',st4tag:'🇷🇴 Румыния · агентство для МСБ',
+    st4body:'Бухарестское маркетинговое агентство вручную готовило клиентские отчёты — <strong>3 часа каждый</strong>, еженедельно, на каждого клиента. Построили автоматизированный пайплайн: данные из Google Ads, Meta и Analytics → AI-резюме → email клиенту. То, что занимало 3 часа, теперь занимает <strong>4 минуты</strong>.',
+    st4r1:'Отчёт: 3ч → 4 минуты',st4r2:'Клиенты получают авто-отчёты',
+    impCtaH:'Ваш бизнес — следующий.',
+    impCtaB:'В каждом бизнесе есть процессы, которые прямо сейчас съедают время и деньги. Вопрос не в том, автоматизировать ли — а в том, с чего начать. Напишите нам — составим карту бесплатно.',
+    aName:'Ян',aAge:'— 18 лет, основатель ИИ-агентства',
+    aP1:'Начал программировать в <strong>15 лет</strong>, с 2023-го углубился в AI-автоматизации. Сейчас запускаю <strong>Aucta AI</strong> — агентство кастомных AI-систем для европейских бизнесов и стартапов.',
+    aP2:'Всё документирую в <strong>Instagram</strong> — от сборки до запуска, с факапами и победами. Хочешь AI-автоматизацию без агентских ценников — ты на месте.',
+    cLbl:'Контакты',cTitle:'Готов автоматизировать?',
+    cDesc:'Расскажи о своём процессе — покажу как AI может его взять на себя. Бесплатно, без давления.',
+    cNote:'⚡ Отвечаю в течение 12 часов. Давай автоматизируем твой бизнес.',
+    foot:'© 2025 Ян — Aucta AI.',
+    aiTip:'AI поможет найти вашу автоматизацию',aiName:'Майя — AI-консультант',aiOnline:'Онлайн сейчас',
+    aiPh:'Опишите ваш бизнес...',aiSave:'Отправить итог Яну',
+    aiSent:'Отправлено! Ян свяжется с вами.',
+    tickers:['Кастомные AI-системы','n8n + AI-агенты','Европейский рынок','Строю публично','Автоматизация лидов','Автоматизация почты','Контент на автопилоте','Работа 24/7','Снижение затрат 80%','Запуск за 5–14 дней','Бесплатный аудит','ИИ-агентство']
   },
-  ru: {
-    badge:"Архитектор AI-автоматизаций",
-    heroLine1:"Твой бизнес теряет",
-    heroLine2:"время и деньги каждый день.",
-    heroLine3:"Я останавливаю утечку с помощью AI.",
-    heroSub:"Я создаю <strong>AI-агентов и интеллектуальные автоматизации</strong>, которые устраняют дорогостоящий ручной труд — экономя компаниям <strong>до 80% операционных расходов</strong> и возвращая 20+ часов каждую неделю. Твоя команда выходит из рутины и начинает двигать бизнес вперёд.",
-    ctaBtn:"Получить бесплатный аудит →",
-    seeWork:"Посмотреть работы",
-    stat1l:"Создано AI-агентов",stat2l:"Сохранено рабочих часов",stat3l:"Максимальное снижение затрат",stat4l:"AI никогда не спит",
-    painLabel:"Проблема",painTitle:"Твоя команда застряла в рутине",
-    painDesc:"Каждый час, потраченный на повторяющиеся задачи — это час, не потраченный на рост. Вот что AI устраняет уже с первой недели.",
-    pain1t:"$15 000+/месяц — на зарплаты впустую",pain1d:"Ты платишь полные зарплаты за ввод данных, ручные отчёты, чистку CRM — то, что AI делает за секунды и в разы дешевле.",pain1tag:"💸 Слитый бюджет",
-    pain2t:"60% рабочего дня — чистая рутина",pain2d:"Почта, фильтрация лидов, расписания, повторяющиеся тикеты — это не стратегия, это выживание. Лучшие люди закопаны в задачах, которые умная система решает автоматически.",pain2tag:"⏳ Украденные часы",
-    pain3t:"Конкуренты движутся быстрее",pain3d:"Пока ты обрабатываешь вручную, AI-компании уже отвечают лидам, закрывают сделки и генерируют отчёты — в реальном времени, без единого клика.",pain3tag:"🚀 Ты отстаёшь",
-    aboutName:"Дмитрий Буянов",aboutAge:"— Архитектор AI, 22 года",
-    aboutP1:"Последние 2 года я провёл в автоматизациях — создав <strong>40+ production AI-агентов</strong> для компаний из России, Украины, Казахстана и Беларуси. Вместе мы вернули <strong>2 000+ рабочих часов</strong> и сократили операционные расходы до <strong>80%</strong>. Живые системы. Реальный ROI.",
-    aboutP2:"Теперь я выхожу на <strong>европейский рынок</strong>. Я знаю, что ломается, что работает и как делать быстро — без агентских ценников.",
-    offerLabel:"🔥 Ограниченное предложение",offerText:"Первые <strong>10 европейских клиентов</strong> получают скидку до <strong>50%</strong> — элитная AI-автоматизация по стартап-ценам. Я собираю EU-портфолио. Твой момент — сейчас.",
-    valueLabel:"Почему это важно",valueTitle:"Что ты получаешь",
-    v1t:"20+ часов в неделю обратно",v1d:"Каждая автоматизированная задача — это час, который твоя команда тратит на стратегию и продажи, а не на рутину.",
-    v2t:"Масштаб без найма",v2d:"В 10 раз больше объёма той же командой. AI-агенты — твоя неограниченная рабочая сила.",
-    v3t:"Работает 24/7, не выгорает",v3d:"Нет больничных, нет ошибок от усталости, нет сверхурочных. Системы работают пока ты спишь.",
-    v4t:"Данные, а не догадки",v4d:"Дашборды в реальном времени и автоматические отчёты — ты всегда знаешь, что происходит.",
-    roiTitle:"🚀 Что AI заменяет — и что ты получаешь",
-    r1from:"Оператор $5к/мес",r1to:"AI-агент $800",r2from:"30ч/нед ручной работы",r2to:"1ч проверки в неделю",
-    r3from:"Медленный фолоу-ап по лидам",r3to:"Мгновенный AI-ответ",r4from:"Упущенные инсайты",r4to:"Автоматические отчёты",
-    portLabel:"Реальные работы",portTitle:"Живые автоматизации. Реальный ROI.",portDesc:"Каждый кейс ниже — это работающая система, не демо. Средний срок окупаемости: до 3 недель.",
-    autoTitle:"AI АВТОМАТИЗАЦИИ",autoTag:"3 КЕЙСА",
-    a1name:"⚡ Автопилот лидов",a1desc:"Заявка запускает AI: читает данные → логирует в Sheets → уведомляет Telegram → отправляет гиперперсонализированный email — всё за 90 секунд, 24/7.",
-    a1s1:"🔧 n8n: вебхук → AI-классификатор → маршрутизация",a1s2:"📧 AI-письмо лиду отправляется автоматически",a1s3:"⭐ ТЗ клиента + отзыв (сэкономлено 40ч/мес)",
-    a2name:"🎥 Секретарь встреч",a2desc:"Каждая встреча автоматически расшифрована, резюмирована LLM и превращена в задачи — отправлены в Notion и Slack пока кофе ещё горячий.",
-    a2s1:"⚙️ n8n: аудио Zoom → OpenAI → Notion",a2s2:"📄 Структурированный конспект + задачи в Google Docs",a2s3:"⭐ Техзадание клиента + отзыв 5 звёзд",
-    a3name:"📬 Умный сортировщик писем",a3desc:"Gmail подключён к AI, который читает, классифицирует (счёт / жалоба / лид), пишет черновик или отправляет алерт в Telegram — нулевой инбокс без ручного труда.",
-    a3s1:"🧩 n8n IMAP-триггер + GPT-4 классификатор",a3s2:"📊 Статистика в Sheets + отфильтрованный Gmail",a3s3:"📌 ТЗ клиента + отзыв (сэкономлено 25ч/мес)",
-    agentsTitle:"AI АГЕНТЫ",agentsTag:"2 КЕЙСА",
-    ag1name:"📊 Daily Business Intelligence Briefing",ag1desc:"Автономный агент, запускающийся каждое утро — собирает данные из нужных источников, обрабатывает KPI через LLM и отправляет чёткий брифинг руководству. Команда начинает день информированной, а не перегруженной.",
-    ag1s1:"🔧 n8n: расписание → сбор данных → синтез LLM → отправка",ag1s2:"📧 Ежедневный брифинг-письмо в инбокс каждое утро",ag1s3:"📋 ТЗ клиента + отзыв (экономит 2ч ежедневно на команду)",
-    ag2name:"✉️ Smart Email Triage & Auto-Reply Agent",ag2desc:"Подключается к почте, читает каждое письмо, определяет намерение, пишет контекстные ответы на согласование или отправляет автоматически — превращая почту из чёрной дыры в управляемый актив.",
-    ag2s1:"🕸️ n8n: IMAP → определение намерения → генерация ответа → Gmail",ag2s2:"📬 Авточерновики или отправленные письма с тегами классификации",ag2s3:"📌 ТЗ клиента + отзыв (возвращено 30ч/мес)",
-    portFoot:"Каждый кейс выше — это задеплоенная, живая система — не концепт. Средний ROI достигается за 3 недели.",
-    contactLabel:"Давай строить",contactTitle:"Готов остановить утечку?",contactDesc:"Расскажи мне о своей главной потере времени, и я покажу, как AI может её устранить. Бесплатная консультация, без давления. Выбери канал:",
-    contactNote:"⚡ Отвечаю в течение 12 часов. Давай автоматизируем твой бизнес.",
-    footer:"© 2025 Дмитрий Буянов — Архитектор AI-автоматизаций. Хватит платить за ручной труд.",
-    tickers:["Снижение затрат 80%","40+ агентов в продакшне","2000+ часов сохранено","Работа 24/7","Автопилот лидов","Секретарь встреч","Триаж почты","Бизнес-аналитика","Автоматизация CRM","Рост с AI"]
+  ro:{
+    badge:'Agenție AI Aucta',h1:'Automatizează-ți afacerea.',h2:'Crește fără limite.',h3:'AI muncește — tu câștigi.',
+    hsub:'Construim <strong>sisteme AI personalizate</strong> pentru afaceri și startup-uri europene. Lead-uri, email, conținut, rapoarte — totul pe pilot automat. <strong>Primul audit e gratuit.</strong>',
+    cta1:'Vezi Oferta',cta2:'Consultație Gratuită',
+    s1:'Ore Max. Eliberate / Lună',s2:'Zile până la Lansare',s3:'Reducere Max. Costuri',s4:'AI Nu Doarme',
+    shopLbl:'Ce Facem',shopTitle:'O singură agenție. Automatizare AI personalizată pentru afacerea ta.',
+    shopDesc:'Analizăm procesele, identificăm oportunitățile cu cel mai mare ROI și construim un sistem care funcționează 24/7.',
+    dealH:'Audit Gratuit al Afacerii',
+    dealB:'Spune-ne despre afacerea ta — vom mapa exact ce procese pot fi automatizate și ce ROI să aștepți. Fără angajament, fără presiune.',
+    order:'Obține Oferta',orderC:'Descarcă Oferta',trial:'Audit gratuit',trialC:'Descarcă Oferta',
+    chooseC:'Cum preferi să ne contactezi?',
+    offerDl:'Descarcă Oferta Completă',offerDlDesc:'Citește detaliat cum lucrăm, ce construim și ce rezultate să aștepți.',
+    impLbl:'De ce contează',
+    impTitle:'Automatizarea AI nu mai e viitorul. Se întâmplă acum.',
+    impLead:'Fiecare oră pe care echipa ta o petrece cu sarcini repetitive este o oră <strong>nefolosită pentru creștere</strong>. Automatizarea AI îți returnează cele mai valoroase resurse din afaceri: <strong>timp și bani</strong>. Iată cum arată în practică.',
+    wc1t:'Timpul — resursa ta cea mai rară',wc1b:'Un IMM mediu petrece 40–60% din orele de lucru pe procese manuale: sortare emailuri, introducere date, follow-up-uri, rapoarte. Asta înseamnă jumătate din capacitatea echipei consumată de muncă pe care o mașină o face în secunde.',wc1s:'Până la 40h eliberate per persoană / lună',
+    wc2t:'Bani care se scurg în fiecare zi',wc2b:'Erori manuale, lead-uri ratate, răspunsuri lente, personal redundant pentru sarcini repetitive — toate acestea erodează profitul în liniște. Afacerile care automatizează reduc costurile operaționale cu 30–80% fără să sacrifice calitatea.',wc2s:'Reducere costuri operaționale 30–80%',
+    wc3t:'Viteza ca avantaj competitiv',wc3b:'Concurentul tău răspunde unui lead în 4 ore. AI-ul tău răspunde în 90 de secunde — cu un mesaj personalizat. În 2025, viteza nu e un bonus plăcut. E diferența dintre un contract câștigat și unul pierdut.',wc3s:'Răspuns client de 10× mai rapid',
+    storiesTitle:'Povești reale. Afaceri europene care au făcut pasul.',
+    st1co:'Startup logistică, Berlin',st1tag:'🇩🇪 Germania · echipă de 12 persoane',
+    st1body:'Un startup berlinez de coordonare a transporturilor se îneca în <strong>procesarea manuală a emailurilor</strong> — fiecare transport necesita 6–8 emailuri dus-întors. Au automatizat întregul flux de la primire la confirmare cu n8n + AI. Două luni mai târziu, echipa gestionează <strong>de 3× mai mult volum</strong> fără angajări noi.',
+    st1r1:'Volum ×3, aceeași echipă',st1r2:'Procesare email: 0 min/transport',
+    st2co:'Brand e-commerce, Amsterdam',st2tag:'🇳🇱 Olanda · modă D2C',
+    st2body:'Un brand de modă din Amsterdam pierdea clienți din cauza suportului lent — primul răspuns mediu era <strong>6 ore</strong>. Au implementat un agent AI care rezolvă 80% din cereri instant, în olandeză și engleză. Satisfacția clienților a crescut, rata de returnări a scăzut. Echipa se ocupă acum de creație, nu de tichete.',
+    st2r1:'80% cereri rezolvate de AI',st2r2:'Răspuns: 6h → sub 2 minute',
+    st3co:'Companie SaaS, Paris',st3tag:'🇫🇷 Franța · software B2B',
+    st3body:'Un SaaS B2B parizian petrecea <strong>20 de ore pe săptămână</strong> actualizând manual CRM-ul, scriind rezumate ale întâlnirilor și actualizând Notion. Un agent AI ascultă acum fiecare apel, scrie rezumatul, actualizează CRM-ul și programează următor punct de contact — automat. Echipa de vânzări a recuperat <strong>o zi întreagă de lucru pe săptămână</strong>.',
+    st3r1:'20 ore/săptămână recuperate',st3r2:'CRM mereu actualizat',
+    st4co:'Agenție marketing, București',st4tag:'🇷🇴 România · agenție pentru IMM-uri',
+    st4body:'O agenție de marketing din București pregătea manual rapoarte pentru clienți — <strong>3 ore fiecare</strong>, săptămânal, per client. Au construit un pipeline automatizat: date din Google Ads, Meta și Analytics → rezumat AI → email către client. Ce dura 3 ore durează acum <strong>4 minute</strong>.',
+    st4r1:'Raport: 3h → 4 minute',st4r2:'Clienții primesc rapoarte automate',
+    impCtaH:'Afacerea ta urmează.',
+    impCtaB:'Fiecare afacere are procese care consumă timp și bani chiar acum. Întrebarea nu e dacă să automatizezi — ci de unde să începi. Scrie-ne și facem harta gratuit.',
+    aName:'Ian',aAge:'— 18 ani, fondator agenție AI',
+    aP1:'Am început să programez la <strong>15 ani</strong>, din 2023 m-am cufundat în automatizări AI. Acum lansez <strong>Aucta AI</strong> — o agenție de sisteme AI personalizate pentru afaceri și startup-uri europene.',
+    aP2:'Documentez totul pe <strong>Instagram</strong> — construcții, eșecuri, victorii. Vrei automatizare AI fără prețuri corporative — ești în locul potrivit.',
+    cLbl:'Contact',cTitle:'Gata să automatizezi?',
+    cDesc:'Spune-mi despre fluxul tău — voi mapa exact cum AI poate prelua totul. Gratuit, fără presiune.',
+    cNote:'⚡ Răspund în 12 ore. Hai să automatizăm afacerea ta.',
+    foot:'© 2025 Ian — Aucta AI.',
+    aiTip:'AI te ajută să găsești automatizarea ta',aiName:'Maya — Consultant AI',aiOnline:'Online acum',
+    aiPh:'Descrie afacerea ta...',aiSave:'Trimite rezumatul lui Ian',
+    aiSent:'Trimis! Ian te va contacta.',
+    tickers:['Sisteme AI personalizate','n8n + agenți AI','Piața europeană','Construiesc public','Automatizare lead-uri','Automatizare email','Conținut pe autopilot','24/7','Reducere 80% costuri','Lansare în 5–14 zile','Audit gratuit','Agenție AI']
   }
 };
 
 let lang = 'en';
 
-function applyLang(l) {
+function applyLang(l){
   lang = l;
+  const root = document.getElementById('htmlRoot');
+  root.className = l === 'ru' ? 'ru' : '';
   const d = T[l];
-  document.querySelectorAll('[data-t]').forEach(el => {
-    const k = el.dataset.t;
-    if (!d[k]) return;
-    const htmlKeys = ['heroSub','aboutP1','aboutP2','offerText'];
-    if (htmlKeys.includes(k)) el.innerHTML = d[k];
-    else el.textContent = d[k];
+  document.querySelectorAll('[data-t]').forEach(el=>{
+    const k = el.dataset.t; if(!d[k] && d[k]!=='') return;
+    const htmlK = ['hsub','aP1','aP2','impLead','wc1b','wc2b','wc3b','st1body','st2body','st3body','st4body','impCtaB'];
+    htmlK.includes(k) ? el.innerHTML=d[k] : el.textContent=d[k];
   });
-  document.querySelectorAll('.lang-option').forEach(o => o.classList.toggle('active', o.dataset.lang === l));
+  document.querySelectorAll('[data-t-ph]').forEach(el=>{
+    const k = el.dataset.tPh; if(d[k]) el.placeholder=d[k];
+  });
+  document.querySelectorAll('.lang-option').forEach(o=>o.classList.toggle('active',o.dataset.lang===l));
   buildTicker(d.tickers);
+  renderProducts();
+  updateChatIntro();
 }
 
-function buildTicker(items) {
-  const ti = document.getElementById('tickerInner');
-  const doubled = [...items, ...items];
-  ti.innerHTML = doubled.map(t => `<span class="ticker-item"><span class="dot"></span>${t}</span>`).join('');
+function buildTicker(items){
+  const ti = document.getElementById('ticker');
+  const db = [...items,...items];
+  ti.innerHTML = db.map(t=>`<span class="tkt"><span class="tkd"></span>${t}</span>`).join('');
 }
 
-// IP detect
-async function detectLang() {
+// ── RENDER PRODUCTS ──
+function renderProducts(){
+  const grid = document.getElementById('pgrid');
+  const d = T[lang];
+  grid.innerHTML = PRODUCTS.map((p,i)=>{
+    const pd = p[lang];
+    const isCustom = !!p.isCustom;
+    const num = String(i+1).padStart(2,'0');
+    const cardCls = isCustom ? 'pcard custom rv' : `pcard rv ${['d1','d2','d3','d4','d5','d6'][i%6]}`;
+    const hotLabel = isCustom
+      ? `<i class="fas fa-star"></i> ${pd.tag}`
+      : `<i class="fas fa-fire"></i> ${d.trial}`;
+
+    if(isCustom){
+      return `
+      <div class="${cardCls}" data-pid="${p.id}" onclick="openModal('${p.id}')">
+        <div class="cmedia">
+          <img src="${p.cover||p.imgs[0]}" alt="${pd.name}" onerror="this.src='https://placehold.co/640x360/0b1220/3b82f6?text=Aucta+AI'">
+          <div class="cmov"></div>
+          <div class="ccat">${pd.cat}</div>
+          <div class="chot" style="background:linear-gradient(135deg,#f59e0b,#d97706)">${hotLabel}</div>
+        </div>
+        <div class="cbody">
+          <div class="ctop">
+            <div class="cico" style="background:rgba(245,158,11,.15);color:#f59e0b">
+              <i class="fas ${p.fa}"></i>
+            </div>
+            <div class="ctitle">${pd.name}</div>
+          </div>
+          <div class="cdesc">${pd.desc}</div>
+          <div class="cfeats">${pd.feats.slice(0,4).map(f=>`<span class="cft"><i class="fas fa-check" style="color:var(--green);font-size:.6rem"></i> ${f}</span>`).join('')}</div>
+          <div class="cfoot">
+            <span class="ctrial" style="color:var(--accent)"><i class="fas fa-comments"></i> ${d.trialC}</span>
+            <button class="ccta gold" onclick="event.stopPropagation();openModal('${p.id}')">
+              <i class="fas fa-comments"></i> ${d.orderC}
+            </button>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    return `
+    <div class="${cardCls}" data-pid="${p.id}" onclick="openModal('${p.id}')">
+      <div class="cmedia">
+        <img src="${p.imgs[0]}" alt="${pd.name}" onerror="this.src='https://placehold.co/640x360/111c30/${p.col.slice(1)}?text=${encodeURIComponent(pd.name)}'">
+        <div class="cmov"></div>
+        <div class="cnum">#${num}</div>
+        <div class="ccat">${pd.cat}</div>
+        <div class="chot">${hotLabel}</div>
+      </div>
+      <div class="cbody">
+        <div class="ctop">
+          <div class="cico" style="background:${p.col}1a;color:${p.col}">
+            <i class="fas ${p.fa}"></i>
+          </div>
+          <div class="ctitle">${pd.name}</div>
+        </div>
+        <div class="cdesc">${pd.desc.substring(0,110)}…</div>
+        <div class="cfeats">${pd.feats.slice(0,3).map(f=>`<span class="cft">${f}</span>`).join('')}</div>
+        <div class="cfoot">
+          <span class="ctrial"><i class="fas fa-circle-check"></i> ${d.trial}</span>
+          <button class="ccta" onclick="event.stopPropagation();openModal('${p.id}')">
+            <i class="fas fa-bolt"></i> ${d.order}
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  document.querySelectorAll('.rv:not(.vis)').forEach(el=>rvObs.observe(el));
+}
+
+// ── MODAL ──
+let curSlide=0, curSlides=[], showVid=false;
+
+function openModal(pid){
+  const p = PRODUCTS.find(x=>x.id===pid);
+  if(!p) return;
+  const pd = p[lang], d = T[lang];
+  curSlides = p.imgs; curSlide = 0; showVid = false;
+
+  const coverSrc = p.cover || p.imgs[0];
+  const hasYt = p.ytId && p.ytId !== 'YOUR_YOUTUBE_ID';
+  const vidLabel = lang==='ru'?'Смотреть видео':lang==='ro'?'Vezi video':'Watch video';
+
+  document.getElementById('minner').innerHTML = `
+    <div class="mgal" id="mgal" style="cursor:default">
+      <div id="mMediaInner" style="width:100%;height:100%">
+        <img id="mCoverImg" src="${coverSrc}"
+          alt="${pd.name}"
+          onclick="openLb(this.src)"
+          style="width:100%;height:100%;object-fit:cover;display:block;cursor:zoom-in"
+          onerror="this.src='https://placehold.co/960x540/0b1220/3b82f6?text=Aucta+AI'">
+      </div>
+      ${hasYt ? `
+      <button onclick="playYt('${p.ytId}')"
+        style="position:absolute;bottom:1rem;right:1rem;
+               background:rgba(0,0,0,.75);backdrop-filter:blur(8px);
+               border:1px solid rgba(255,255,255,.2);border-radius:50px;
+               color:#fff;padding:.5rem 1.2rem;font-family:var(--fd);
+               font-size:.82rem;font-weight:700;cursor:pointer;
+               display:flex;align-items:center;gap:8px;transition:all .2s"
+        onmouseover="this.style.background='rgba(59,130,246,.85)'"
+        onmouseout="this.style.background='rgba(0,0,0,.75)'">
+        <i class="fab fa-youtube" style="color:#ff4444;font-size:1rem"></i> ${vidLabel}
+      </button>` : ''}
+    </div>
+    <div class="mc">
+      <div class="mtitle"><i class="fas ${p.fa}" style="color:${p.col};margin-right:.4rem"></i>${pd.name}</div>
+      <div class="mcat">${pd.cat} · ${pd.tag}</div>
+      <div class="mdesc">${pd.desc}</div>
+      <div class="mfeats">${pd.feats.map(f=>`<div class="mfeat"><i class="fas fa-check mfi"></i><span class="mft">${f}</span></div>`).join('')}</div>
+      ${p.isOffer?`
+      <div class="mdeal">
+        <div class="dh"><i class="fas fa-file-pdf"></i> ${d.offerDl}</div>
+        <div class="db">${d.offerDlDesc}</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:1.1rem">
+          <a href="offer/offer-en.pdf" download class="cbtn em" style="flex:1;min-width:160px">
+            <i class="fas fa-download cbico" style="color:var(--blue-bright)"></i><div class="cbinfo"><h5>English</h5><span>offer-en.pdf</span></div>
+          </a>
+          <a href="offer/offer-ru.pdf" download class="cbtn tg" style="flex:1;min-width:160px">
+            <i class="fas fa-download cbico" style="color:#2AABEE"></i><div class="cbinfo"><h5>Русский</h5><span>offer-ru.pdf</span></div>
+          </a>
+          <a href="offer/offer-ro.pdf" download class="cbtn wa" style="flex:1;min-width:160px">
+            <i class="fas fa-download cbico" style="color:#25D366"></i><div class="cbinfo"><h5>Română</h5><span>offer-ro.pdf</span></div>
+          </a>
+        </div>
+      </div>`:''}
+      <div class="cct">${d.chooseC}</div>
+      <div class="cbtns">
+        <a href="https://wa.me/40743027858?text=${encodeURIComponent(mkMsg(pd.name))}" target="_blank" class="cbtn wa">
+          <i class="fab fa-whatsapp cbico"></i><div class="cbinfo"><h5>WhatsApp</h5><span>+40 743 027 858</span></div>
+        </a>
+        <a href="mailto:byyan08.info@gmail.com?subject=${encodeURIComponent('AI Automation inquiry')}&body=${encodeURIComponent(mkMsg(pd.name))}" class="cbtn em">
+          <i class="fas fa-envelope cbico"></i><div class="cbinfo"><h5>Email</h5><span>byyan08.info@gmail.com</span></div>
+        </a>
+        <a href="https://instagram.com/by.yan08" target="_blank" class="cbtn" style="background:rgba(225,48,108,.08);border-color:rgba(225,48,108,.3)">
+          <i class="fab fa-instagram cbico" style="color:#e1306c"></i><div class="cbinfo"><h5>Instagram</h5><span>@by.yan08</span></div>
+        </a>
+      </div>
+    </div>`;
+
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function mkMsg(name){
+  if(lang==='ru') return `Привет! Хочу узнать подробнее об ИИ-автоматизации для моего бизнеса.`;
+  if(lang==='ro') return `Bună! Vreau să aflu mai multe despre automatizarea AI pentru afacerea mea.`;
+  return `Hi! I'd like to learn more about AI automation for my business.`;
+}
+
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow='';
+  const mi = document.getElementById('mMediaInner');
+  if(mi) mi.querySelectorAll('iframe').forEach(f=>{f.src=f.src;});
+}
+
+function playYt(ytId){
+  const mi = document.getElementById('mMediaInner');
+  if(!mi) return;
+  mi.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1"
+    allowfullscreen allow="autoplay"
+    style="width:100%;height:100%;border:none;display:block"></iframe>`;
+}
+function gNav(d){ if(showVid) return; gGo((curSlide+d+curSlides.length)%curSlides.length); }
+function gGo(n){
+  if(showVid) return;
+  curSlide=n;
+  const sl=document.getElementById('gsl'); if(sl) sl.style.transform=`translateX(-${n*100}%)`;
+  document.querySelectorAll('.gdot').forEach((d,i)=>d.classList.toggle('active',i===n));
+}
+function swTab(tab,pid){
+  const p=PRODUCTS.find(x=>x.id===pid);
+  document.getElementById('tPh').classList.toggle('active',tab==='ph');
+  document.getElementById('tVid').classList.toggle('active',tab==='vid');
+  const sl=document.getElementById('gsl'), dt=document.getElementById('gdots');
+  if(tab==='vid'){
+    showVid=true;
+    sl.innerHTML=`<div class="gslide"><iframe src="https://www.youtube.com/embed/${p.ytId}?autoplay=1" allowfullscreen allow="autoplay"></iframe></div>`;
+    sl.style.transform='translateX(0)'; dt.style.display='none';
+  } else {
+    showVid=false;
+    sl.innerHTML=p.imgs.map(img=>`<div class="gslide"><img src="${img}" alt="" onclick="openLb(this.src)" onerror="this.src='https://placehold.co/960x540/111c30/60a5fa?text=Preview'"></div>`).join('');
+    dt.style.display='flex'; gGo(curSlide);
+  }
+}
+
+document.getElementById('mcl').addEventListener('click',closeModal);
+document.getElementById('modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeLb();}});
+
+// ── LIGHTBOX ──
+let lbScale=1,lbX=0,lbY=0,lbDrag=false,lbSX,lbSY;
+
+function openLb(src){
+  const img=document.getElementById('lbImg');
+  img.src=src; lbScale=1; lbX=0; lbY=0;
+  updLb();
+  document.getElementById('lb').classList.add('open');
+}
+function closeLb(){document.getElementById('lb').classList.remove('open');}
+function lbZ(delta){
+  lbScale=Math.max(.5,Math.min(6,lbScale+delta));
+  if(lbScale===1){lbX=0;lbY=0;}
+  updLb();
+}
+function lbReset(){lbScale=1;lbX=0;lbY=0;updLb();}
+function updLb(){
+  const img=document.getElementById('lbImg');
+  img.style.transform=`translate(${lbX}px,${lbY}px) scale(${lbScale})`;
+  document.getElementById('lbZoomLbl').textContent=Math.round(lbScale*100)+'%';
+  img.style.cursor=lbScale>1?'grab':'zoom-in';
+}
+
+const lbStage=document.getElementById('lbStage');
+const lbImg=document.getElementById('lbImg');
+
+lbStage.addEventListener('wheel',e=>{
+  e.preventDefault();
+  lbZ(e.deltaY<0?.25:-.25);
+},{passive:false});
+
+lbStage.addEventListener('dblclick',lbReset);
+document.getElementById('lb').addEventListener('click',e=>{if(e.target===e.currentTarget||e.target===lbStage)closeLb();});
+
+lbImg.addEventListener('mousedown',e=>{
+  if(lbScale>1){lbDrag=true;lbSX=e.clientX-lbX;lbSY=e.clientY-lbY;lbImg.classList.add('dragging');}
+  e.preventDefault();
+});
+document.addEventListener('mousemove',e=>{
+  if(lbDrag){lbX=e.clientX-lbSX;lbY=e.clientY-lbSY;updLb();}
+});
+document.addEventListener('mouseup',()=>{lbDrag=false;lbImg.classList.remove('dragging');});
+
+// Touch pinch
+let ltDist=null;
+lbStage.addEventListener('touchstart',e=>{
+  if(e.touches.length===2){ltDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);}
+},{passive:true});
+lbStage.addEventListener('touchmove',e=>{
+  if(e.touches.length===2 && ltDist){
+    const nd=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+    lbScale=Math.max(.5,Math.min(6,lbScale*(nd/ltDist)));
+    ltDist=nd; updLb(); e.preventDefault();
+  }
+},{passive:false});
+
+// ── SCROLL REVEAL ──
+const rvObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');rvObs.unobserve(e.target);}});
+},{threshold:.07});
+document.querySelectorAll('.rv').forEach(el=>rvObs.observe(el));
+
+// ── COUNTERS ──
+function animC(id,target,suf,dur){
+  const el=document.getElementById(id); if(!el) return;
+  const s=performance.now();
+  (function step(n){
+    const p=Math.min((n-s)/dur,1), e=1-Math.pow(1-p,3);
+    el.textContent=Math.floor(e*target)+suf;
+    if(p<1) requestAnimationFrame(step);
+  })(s);
+}
+const sbObs=new IntersectionObserver(en=>{
+  if(en[0].isIntersecting){animC('c40',40,'+',1800);animC('c2k',14,'',1000);animC('c80',80,'%',1600);sbObs.disconnect();}
+},{threshold:.5});
+const sbEl=document.querySelector('.sbar'); if(sbEl) sbObs.observe(sbEl);
+
+// ── NAV ──
+document.getElementById('shopBtn').addEventListener('click',()=>document.getElementById('shop').scrollIntoView({behavior:'smooth'}));
+document.getElementById('contactBtn').addEventListener('click',()=>document.getElementById('contact').scrollIntoView({behavior:'smooth'}));
+document.getElementById('langToggle').addEventListener('click',e=>{
+  const o=e.target.closest('.lang-option');
+  if(o && o.dataset.lang!==lang) applyLang(o.dataset.lang);
+});
+
+// ── CANVAS PARTICLES ──
+const cvs=document.getElementById('cvs'),ctx=cvs.getContext('2d');
+let W,H,pts=[];
+function resize(){W=cvs.width=window.innerWidth;H=cvs.height=window.innerHeight;}
+resize(); window.addEventListener('resize',resize);
+class P{
+  constructor(){this.rs();}
+  rs(){this.x=Math.random()*W;this.y=Math.random()*H;this.r=Math.random()*1.3+.3;
+    this.vx=(Math.random()-.5)*.35;this.vy=(Math.random()-.5)*.35;this.a=Math.random()*.5+.1;}
+  u(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>W||this.y<0||this.y>H)this.rs();}
+  d(){ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle=`rgba(96,165,250,${this.a})`;ctx.fill();}
+}
+for(let i=0;i<130;i++)pts.push(new P());
+function conn(){
+  for(let i=0;i<pts.length;i++) for(let j=i+1;j<pts.length;j++){
+    const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
+    if(d<110){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);
+      ctx.strokeStyle=`rgba(59,130,246,${.07*(1-d/110)})`;ctx.lineWidth=.5;ctx.stroke();}
+  }
+}
+(function loop(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.u();p.d();});conn();requestAnimationFrame(loop);})();
+
+// ── GEMINI CHAT ──
+const GEMINI_URL=`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`;
+const SYS_PROMPT=`You are Maya, a friendly AI automation consultant for Aucta AI — a young hands-on agency founded by Yan, 18, building custom AI automation systems for European businesses and startups using n8n and AI agents.
+
+Your goal is to help potential clients discover how AI automation can transform their specific business.
+
+Your conversation flow:
+1. Warmly greet and ask about their business/project
+2. Ask what tasks take most of their time each day
+3. Identify their biggest bottlenecks and pain points
+4. Recommend 1-3 specific automation ideas with concrete ROI estimates (time saved, cost saved)
+5. Explain HOW the automation would work in their specific case
+6. Invite them to reach out to Yan directly or download the offer
+
+Rules:
+- ALWAYS respond in the EXACT SAME LANGUAGE the user writes in (Russian, English, or Romanian)
+- Keep responses concise — max 3 short paragraphs
+- Ask ONE focused question per response to keep conversation flowing
+- Be warm, enthusiastic, and genuinely helpful — not salesy
+- After 2-3 exchanges, give concrete recommendations with estimated hours saved
+- End each response with either a question or a clear next step
+- NEVER mention competitor tools or agencies`;
+
+let chatHistory=[];
+let chatOpen=false;
+let chatStarted=false;
+
+function toggleChat(){
+  chatOpen=!chatOpen;
+  document.getElementById('chatPanel').classList.toggle('open',chatOpen);
+  if(chatOpen && !chatStarted){startChat();}
+  if(chatOpen) document.getElementById('chInp').focus();
+}
+
+function updateChatIntro(){
+  if(!chatStarted) return;
+}
+
+function startChat(){
+  chatStarted=true;
+  chatHistory=[];
+  const d=T[lang];
+  const greet = lang==='ru'
+    ? 'Привет! Я Майя, AI-консультант по автоматизации. Я помогу вам понять, как именно можно автоматизировать ваш бизнес и сколько времени это сэкономит. \n\nРасскажите: чем занимается ваш бизнес или проект? Что занимает у вас больше всего времени каждый день?'
+    : lang==='ro'
+    ? 'Bună! Sunt Maya, consultantul AI pentru automatizări. Te voi ajuta să descoperi exact cum poți automatiza afacerea ta și cât timp vei economisi.\n\nSpune-mi: cu ce se ocupă afacerea sau proiectul tău? Ce îți ia cel mai mult timp în fiecare zi?'
+    : 'Hi! I\'m Maya, your AI automation advisor. I\'ll help you discover exactly how your business can be automated — and how much time and money you\'ll save.\n\nTell me: what does your business or project do? What takes up most of your time every day?';
+
+  addMsg('ai', greet);
+}
+
+function addMsg(role, text){
+  const msgs = document.getElementById('chMsgs');
+  const div = document.createElement('div');
+  div.className=`msg ${role}`;
+  if(role==='ai'){
+    div.innerHTML=`<div class="msg-av"><i class="fas fa-robot"></i></div><div class="msg-bub">${text.replace(/\n/g,'<br>')}</div>`;
+  } else {
+    div.innerHTML=`<div class="msg-bub">${text}</div>`;
+  }
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+
+  // show save button after 3 messages
+  if(chatHistory.length>=3){
+    document.getElementById('chSave').style.display='flex';
+  }
+}
+
+function addTyping(){
+  const msgs=document.getElementById('chMsgs');
+  const div=document.createElement('div');
+  div.className='msg ai'; div.id='typing';
+  div.innerHTML=`<div class="msg-av"><i class="fas fa-robot"></i></div><div class="msg-typing"><div class="td"></div><div class="td"></div><div class="td"></div></div>`;
+  msgs.appendChild(div); msgs.scrollTop=msgs.scrollHeight;
+}
+
+async function sendChat(){
+  const inp=document.getElementById('chInp');
+  const text=inp.value.trim(); if(!text) return;
+  inp.value=''; addMsg('user',text);
+  chatHistory.push({role:'user',parts:[{text}]});
+
+  addTyping();
+  document.getElementById('chSend').disabled=true;
+
   try {
-    const r = await fetch('https://ipapi.co/json/');
-    const d = await r.json();
-    const cis = ['RU','UA','BY','KZ','AM','AZ','KG','MD','TJ','TM','UZ','GE'];
-    if (cis.includes(d.country_code)) { applyLang('ru'); return; }
+    const resp = await fetch(GEMINI_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        system_instruction:{parts:[{text:SYS_PROMPT}]},
+        contents:chatHistory
+      })
+    });
+    const data=await resp.json();
+    const aiText=data.candidates?.[0]?.content?.parts?.[0]?.text || '...';
+    chatHistory.push({role:'model',parts:[{text:aiText}]});
+    document.getElementById('typing')?.remove();
+    addMsg('ai',aiText);
+  } catch(e){
+    document.getElementById('typing')?.remove();
+    const err = lang==='ru'?'Извините, произошла ошибка. Попробуйте снова.':lang==='ro'?'Scuze, a apărut o eroare. Încearcă din nou.':'Sorry, an error occurred. Please try again.';
+    addMsg('ai',err);
+  }
+  document.getElementById('chSend').disabled=false;
+}
+
+document.getElementById('chSend').addEventListener('click',sendChat);
+document.getElementById('chInp').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}});
+
+async function saveChat(){
+  const btn=document.getElementById('chSave');
+  const transcript=chatHistory.map(m=>`${m.role==='user'?'👤 Client':'🤖 Maya'}: ${m.parts[0].text}`).join('\n\n');
+  const header=`🤖 New AI Consultation — ${new Date().toLocaleString()}\n\n`;
+  const full=header+transcript;
+
+  // Send via email or WhatsApp fallback
+  try {
+    const sub = encodeURIComponent('AI Consultation Summary — Aucta AI');
+    const body = encodeURIComponent(full.substring(0, 2000));
+    window.open(`mailto:byyan08.info@gmail.com?subject=${sub}&body=${body}`, '_blank');
   } catch(e) {}
-  const bl = navigator.language || '';
-  if (bl.startsWith('ro')) { applyLang('ro'); return; }
+  btn.innerHTML=`<i class="fas fa-circle-check"></i> ${T[lang].aiSent}`;
+  btn.classList.add('sent');
+}
+
+// ── LANG DETECT ──
+async function detectLang(){
+  try{
+    const r=await fetch('https://ipapi.co/json/');
+    const d=await r.json();
+    const cis=['RU','UA','BY','KZ','AM','AZ','KG','MD','TJ','TM','UZ','GE'];
+    if(cis.includes(d.country_code)){applyLang('ru');return;}
+  }catch(e){}
+  if((navigator.language||'').startsWith('ro')){applyLang('ro');return;}
   applyLang('en');
 }
-
-// Lang toggle
-document.getElementById('langToggle').addEventListener('click', e => {
-  const opt = e.target.closest('.lang-option');
-  if (opt && opt.dataset.lang !== lang) applyLang(opt.dataset.lang);
-});
-
-// Accordion
-function setupAccordion(headerId, bodyId) {
-  const h = document.getElementById(headerId);
-  const b = document.getElementById(bodyId);
-  h.addEventListener('click', () => {
-    const open = b.classList.contains('open');
-    b.classList.toggle('open', !open);
-    h.classList.toggle('open-header', !open);
-  });
-}
-setupAccordion('hAuto','bAuto');
-setupAccordion('hAgents','bAgents');
-// open automations by default
-setTimeout(() => {
-  document.getElementById('bAuto').classList.add('open');
-  document.getElementById('hAuto').classList.add('open-header');
-}, 400);
-
-// CTA scroll
-document.getElementById('ctaBtn').addEventListener('click', () => {
-  document.getElementById('contact').scrollIntoView({ behavior:'smooth' });
-});
-document.getElementById('portfolioBtn').addEventListener('click', () => {
-  document.getElementById('portfolio').scrollIntoView({ behavior:'smooth' });
-});
-
-// Scroll reveal
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
-}, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-
-// Counter animation
-function animateCounter(id, target, suffix='', duration=2000) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  const start = performance.now();
-  function step(now) {
-    const p = Math.min((now - start) / duration, 1);
-    const ease = 1 - Math.pow(1 - p, 3);
-    el.textContent = Math.floor(ease * target) + suffix;
-    if (p < 1) requestAnimationFrame(step);
-  }
-  requestAnimationFrame(step);
-}
-const statsObs = new IntersectionObserver((entries) => {
-  if (entries[0].isIntersecting) {
-    animateCounter('counter-40', 40, '+');
-    animateCounter('counter-2000', 2000, '+');
-    animateCounter('counter-80', 80, '%');
-    statsObs.disconnect();
-  }
-}, { threshold: 0.5 });
-const statsEl = document.querySelector('.stats-bar');
-if (statsEl) statsObs.observe(statsEl);
-
-// ─── PARTICLE CANVAS ───
-const canvas = document.getElementById('canvas-bg');
-const ctx = canvas.getContext('2d');
-let W, H, particles = [];
-function resize() {
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-}
-resize();
-window.addEventListener('resize', resize);
-
-class Particle {
-  constructor() { this.reset(); }
-  reset() {
-    this.x = Math.random() * W;
-    this.y = Math.random() * H;
-    this.r = Math.random() * 1.2 + 0.3;
-    this.vx = (Math.random() - 0.5) * 0.3;
-    this.vy = (Math.random() - 0.5) * 0.3;
-    this.a = Math.random() * 0.5 + 0.1;
-  }
-  update() {
-    this.x += this.vx; this.y += this.vy;
-    if (this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
-  }
-  draw() {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(96,165,250,${this.a})`;
-    ctx.fill();
-  }
-}
-for (let i = 0; i < 120; i++) particles.push(new Particle());
-
-function drawConnections() {
-  for (let i = 0; i < particles.length; i++) {
-    for (let j = i + 1; j < particles.length; j++) {
-      const dx = particles[i].x - particles[j].x;
-      const dy = particles[i].y - particles[j].y;
-      const dist = Math.sqrt(dx*dx + dy*dy);
-      if (dist < 100) {
-        ctx.beginPath();
-        ctx.moveTo(particles[i].x, particles[i].y);
-        ctx.lineTo(particles[j].x, particles[j].y);
-        ctx.strokeStyle = `rgba(59,130,246,${0.06 * (1 - dist/100)})`;
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
-      }
-    }
-  }
-}
-
-function animCanvas() {
-  ctx.clearRect(0, 0, W, H);
-  particles.forEach(p => { p.update(); p.draw(); });
-  drawConnections();
-  requestAnimationFrame(animCanvas);
-}
-animCanvas();
-
-// Init
 detectLang();
 </script>
 </body>
